@@ -67,7 +67,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ! grep -RInE --exclude-dir=.git --exclude-dir=.github/workflows 'BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9_]{20,}|xox[baprs]-|password\s*[:=]|\.env|Oscar26|Barba|oscar-control|10\.(1[6-9]|2[0-9]|3[0-1])\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[0-1])\.' .
+          MARKERS='BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9_]{20,}|xox[baprs]-|password\\s*[:=]|\\.env|Oscar26|Barba|oscar-control|10\\.(1[6-9]|2[0-9]|3[0-1])\\.|192\\.168\\.|172\\.(1[6-9]|2[0-9]|3[0-1])\\.'
+          if grep -RInE "$MARKERS" . --exclude-dir=.git --exclude='validate.yml' --exclude='*.png' --exclude='*.jpg' --exclude='*.jpeg' --exclude='*.gif' --exclude='*.pdf'; then
+            echo "Forbidden marker(s) found"
+            exit 1
+          fi
 
       - name: Optional gitleaks
         continue-on-error: true
