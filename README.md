@@ -128,6 +128,14 @@ Contributions and review are welcome, especially for:
 
 Please use `CONTRIBUTING.md`, `SECURITY.md`, and the issue/PR templates when contributing.
 
+## Community contact
+
+If you are a system administrator, cyber-security administrator, DevSecOps/platform team member, Hermes user, or agent-runtime maintainer, your review and proposals are welcome.
+
+Use GitHub Issues in this repository for bug reports, governance proposals, and skill-compatibility reports. Use pull requests for concrete patches and discussions tied to code/docs changes.
+
+Repository contact point: GitHub repository issues and pull requests.
+
 ## Authorship and AI assistance
 
 Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
