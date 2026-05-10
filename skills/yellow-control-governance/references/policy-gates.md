@@ -1,16 +1,9 @@
-# Policy gates
+# Policy gates reference pointer
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
+This reference points to the canonical public documentation under `docs/`.
 
-Minimum gates:
-- Authority gate: required ADAL/CDEL/ESAL level present.
-- Scope gate: task is within approved scope.
-- Backup gate: checkpoint exists for live core changes.
-- Confidentiality gate: PCL handling compatible with target disclosure.
-- External onboarding gate: external target metadata and ownership controls documented.
+Primary document: `../../docs/policy-gates.md`
 
-Outcomes:
-- allow
-- defer (prerequisites missing but recoverable)
-- block (forbidden or out-of-authority)
+Use this file from the skill context when you need a stable relative link. The canonical policy content is maintained in the target document to avoid duplicated thin summaries.
+
+Public-safe note: examples remain fictional and redacted by design.

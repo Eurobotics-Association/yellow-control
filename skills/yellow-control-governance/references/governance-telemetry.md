@@ -1,17 +1,9 @@
-# Governance telemetry
+# Governance telemetry reference pointer
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
+This reference points to the canonical public documentation under `docs/`.
 
-Governance telemetry should be structured and machine-readable where possible.
+Primary document: `../../docs/governance-telemetry.md`
 
-Recommended fields:
-- timestamp
-- actor
-- requested_action
-- classification (ADAL/CDEL/ESAL/PCL)
-- gate_results
-- decision
-- rationale
-- rollback_reference
-- follow_up
+Use this file from the skill context when you need a stable relative link. The canonical policy content is maintained in the target document to avoid duplicated thin summaries.
+
+Public-safe note: examples remain fictional and redacted by design.
