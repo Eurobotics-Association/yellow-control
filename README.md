@@ -1,69 +1,115 @@
-# yellow-control
+# Yellow-Control
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
+Yellow-Control is a Hermes-compatible governance layer that helps teams run persistent autonomous agents with enforceable policy gates, classification controls, and checkpoint-first runtime safety.
 
-Yellow-control is a public-safe governance layer for persistent autonomous agents. It provides enforceable decision gates, authority and confidentiality classification, backup/rollback controls, and governance telemetry that can be integrated with Hermes-compatible agent operations.
+## Status
 
-This repository is the v0.1.0 early public release.
+v0.1.1 early operational release
+
+## What problem Yellow-Control solves
+
+Persistent agents can execute high-impact actions quickly, but governance can become inconsistent across teams and runtime environments. Yellow-Control provides a reusable control layer that standardizes decision gates, action classification, backup and rollback discipline, and governance telemetry so operators can make traceable, safer execution decisions.
+
+## Intended audience
+
+- System administrators
+- Cyber-security administrators
+- DevSecOps and platform teams
+- Agent-runtime maintainers
+
+This repository is not for casual toy-agent experimentation.
 
 ## At a glance
 
 | Component | Path | Purpose |
 |---|---|---|
-| Governance skill | `skills/yellow-control-governance/` | Hermes-compatible control skill with runtime governance rules and references |
-| Governance model | `docs/governance-model.md` | Core operating model and control boundaries |
-| Policy gates | `docs/policy-gates.md` | Gate logic for allow/defer/block execution decisions |
-| Backup and rollback | `docs/backup-and-rollback.md` | Checkpoint-first controls before risky runtime changes |
-| Telemetry | `docs/governance-telemetry.md` | Decision/event evidence model for governance observability |
-| External-service governance | `docs/external-service-governance.md` | Access and authority controls for external systems |
-| Runtime classification | `docs/runtime-classification.md` | ADAL/CDEL/ESAL/PCL classification reference |
-| Safe examples | `examples/` | Dry-run-first, non-production templates and wrappers |
+| Governance skill | `skills/yellow-control-governance/` | Hermes-compatible skill for policy-gated operation |
+| Governance model | `docs/governance-model.md` | Operating model and role boundaries |
+| Policy gates | `docs/policy-gates.md` | Allow/defer/block decision gates |
+| Backup and rollback | `docs/backup-and-rollback.md` | Checkpoint-first controls before risky changes |
+| Governance telemetry | `docs/governance-telemetry.md` | Decision and evidence reporting model |
+| External-service governance | `docs/external-service-governance.md` | Controls for external access and authority |
+| Runtime classification | `docs/runtime-classification.md` | ADAL/CDEL/ESAL/PCL classification model |
+| Safe examples | `examples/` | Dry-run-first, non-production templates |
 
-## Scope (v0.1.0)
+## Prerequisites
 
-v0.1.0 focuses on:
-- executable policy gates
-- mandatory backup/rollback checkpoints before core changes
-- authority classification such as ADAL/CDEL/ESAL/PCL
-- governance telemetry
-- external-service onboarding controls
-- Hermes-compatible skill packaging
+- Working Hermes Agent installation
+- Git installed
+- GitHub access for clone/fork/contribution
+- Hermes skills support enabled
+- Normal Hermes bundled skills available
+- Safe workspace for testing
+
+## Relationship to Hermes
+
+- Yellow-Control is Hermes-compatible.
+- Yellow-Control is not an official Hermes or Nous Research endorsement unless explicitly accepted by them.
 
 ## Governance flow
 
 ```mermaid
 flowchart TD
-    A[Requested Action] --> B[Classify ADAL/CDEL/ESAL/PCL]
-    B --> C{Prerequisites and Authority Valid?}
-    C -- No --> D[Defer or Block + Telemetry]
-    C -- Yes --> E{Risky or Runtime-Changing?}
-    E -- Yes --> F[Create Backup Checkpoint]
-    E -- No --> G[Execute Approved Action]
-    F --> G
-    G --> H[Post-Check and Rollback Readiness]
-    H --> I[Record Governance Telemetry]
+    A[Requested action] --> B[Classify ADAL/CDEL/ESAL/PCL]
+    B --> C{Authority and prerequisites valid?}
+    C -- No --> D[Defer or block]
+    D --> E[Record governance telemetry]
+    C -- Yes --> F{Runtime-changing or risky action?}
+    F -- Yes --> G[Create backup checkpoint]
+    G --> H[Execute approved action]
+    F -- No --> H
+    H --> I[Post-check and rollback readiness]
+    I --> E
 ```
 
-## Non-goals
+## Repository map
 
-- This is not a full agent runtime.
-- This is not a replacement for Hermes.
-- This is a governance layer and skill package that can be adapted to Hermes and similar agent systems.
+- `AGENTS.md` repository operation constraints
+- `CONTRIBUTING.md` contribution process and standards
+- `docs/governance-model.md` governance operating model
+- `docs/policy-gates.md` policy gate logic and outcomes
+- `docs/backup-and-rollback.md` backup and rollback controls
+- `docs/governance-telemetry.md` governance evidence and reporting
+- `docs/external-service-governance.md` external service authority rules
+- `docs/runtime-classification.md` ADAL/CDEL/ESAL/PCL reference
+- `skills/yellow-control-governance/SKILL.md` primary Hermes-compatible skill
+- `skills/yellow-control-governance/references/` detailed control references
+- `examples/hermes/` dry-run-first example maintenance wrapper and systemd units
+- `examples/notifications/` governance report notification template
 
-## Public-safe design principles
+## Fast links to governance topics
 
-- No secrets, tokens, or private runtime state.
-- No private hostnames, private IPs, or private repo paths.
-- Example-only operational artifacts with dry-run-first behavior.
-- Progressive disclosure: concise `SKILL.md`, details in `references/`.
+- ADAL/CDEL/ESAL/PCL classification: `docs/runtime-classification.md`
+- Policy gates and decision logic: `docs/policy-gates.md`
+- Backup and rollback controls: `docs/backup-and-rollback.md`
+- Telemetry and decision evidence: `docs/governance-telemetry.md`
+- External-service governance: `docs/external-service-governance.md`
+- Core governance model: `docs/governance-model.md`
+- Skill-level references:
+  - `skills/yellow-control-governance/references/adal-esal-pcl.md`
+  - `skills/yellow-control-governance/references/policy-gates.md`
+  - `skills/yellow-control-governance/references/backup-and-rollback.md`
+  - `skills/yellow-control-governance/references/governance-telemetry.md`
+
+## Related repository pattern
+
+- Public governance layer repository: `yellow-control` (this repo)
+- Future/sample external systems management repository: `yellow-external-systems-management` (pattern reference)
+- Future/sample backup runtime repository: `backup-hermes` (pattern reference)
+- Private runtime repositories for real infrastructure data: private by design and not included here
 
 ## Help wanted
 
 Contributions and review are welcome, especially for:
-- strengthening policy-gate test coverage and edge-case handling
-- expanding dry-run-first examples for additional deployment contexts
-- improving governance telemetry schemas and auditability
-- clarity edits that improve operator usability without weakening controls
 
-Please see `CONTRIBUTING.md` before opening pull requests.
+- policy-gate test fixtures and edge-case coverage
+- operator readability improvements in docs and references
+- additional dry-run-first examples for safe rollout
+- compatibility validation across Hermes runtime versions
+
+Please use `CONTRIBUTING.md`, `SECURITY.md`, and the issue/PR templates when contributing.
+
+## Authorship and AI assistance
+
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
