@@ -756,7 +756,7 @@ Oscar can request elevation but cannot grant it to itself.
 
 ## Operational context and authority
 
-See [Authority verification policy](authority-policy.md) for full authority-proof rules.
+See [Authority verification policy](governance-model.md) for full authority-proof rules.
 
 - `oscar` shell is a valid operational context for Oscar runtime maintenance.
 - `oscar` shell is not an authority escalation path.
@@ -766,7 +766,7 @@ See [Authority verification policy](authority-policy.md) for full authority-proo
 
 ## Current manual sudo exception
 
-See [runtime-agent first-pass bootstrap checklist](first-pass-bootstrap.md) for the exact current manual sudoers procedure (installation command, exact policy block, and validation steps).
+See [runtime-agent first-pass bootstrap checklist](runtime-maintenance-governance.md) for the exact current manual sudoers procedure (installation command, exact policy block, and validation steps).
 
 Oscar may have limited `NOPASSWD` sudo only for explicitly listed commands needed for security self-check operations.
 
