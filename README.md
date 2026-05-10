@@ -41,10 +41,29 @@ This repository is not for casual toy-agent experimentation.
 - Normal Hermes bundled skills available
 - Safe workspace for testing
 
-## Relationship to Hermes
+## Hermes / Nous Research alignment
 
 - Yellow-Control is Hermes-compatible.
-- Yellow-Control is not an official Hermes or Nous Research endorsement unless explicitly accepted by them.
+- Yellow-Control follows a skill-first structure.
+- `skills/yellow-control-governance/SKILL.md` is the primary entry point.
+- Progressive disclosure is used through `skills/yellow-control-governance/references/`.
+- Yellow-Control is not an official Hermes or Nous Research endorsement unless explicitly accepted by maintainers.
+
+## How to use with Hermes
+
+1. Clone this repository:
+
+   `git clone https://github.com/Eurobotics-Association/yellow-control.git`
+
+2. Primary skill path:
+
+   `skills/yellow-control-governance/SKILL.md`
+
+3. For skill installation/tap/loading steps, follow the current Hermes skills documentation for your installed Hermes version.
+
+4. Safe validation prompt:
+
+   "Classify this requested action with ADAL/CDEL/ESAL/PCL, run policy gates, and return allow/defer/block with rationale and required follow-up."
 
 ## Governance flow
 
@@ -79,17 +98,17 @@ flowchart TD
 
 ## Fast links to governance topics
 
-- ADAL/CDEL/ESAL/PCL classification: `docs/runtime-classification.md`
-- Policy gates and decision logic: `docs/policy-gates.md`
-- Backup and rollback controls: `docs/backup-and-rollback.md`
-- Telemetry and decision evidence: `docs/governance-telemetry.md`
-- External-service governance: `docs/external-service-governance.md`
-- Core governance model: `docs/governance-model.md`
+- ADAL/CDEL/ESAL/PCL classification: [docs/runtime-classification.md](docs/runtime-classification.md)
+- Policy gates and decision logic: [docs/policy-gates.md](docs/policy-gates.md)
+- Backup and rollback controls: [docs/backup-and-rollback.md](docs/backup-and-rollback.md)
+- Telemetry and decision evidence: [docs/governance-telemetry.md](docs/governance-telemetry.md)
+- External-service governance: [docs/external-service-governance.md](docs/external-service-governance.md)
+- Core governance model: [docs/governance-model.md](docs/governance-model.md)
 - Skill-level references:
-  - `skills/yellow-control-governance/references/adal-esal-pcl.md`
-  - `skills/yellow-control-governance/references/policy-gates.md`
-  - `skills/yellow-control-governance/references/backup-and-rollback.md`
-  - `skills/yellow-control-governance/references/governance-telemetry.md`
+  - [skills/yellow-control-governance/references/adal-esal-pcl.md](skills/yellow-control-governance/references/adal-esal-pcl.md)
+  - [skills/yellow-control-governance/references/policy-gates.md](skills/yellow-control-governance/references/policy-gates.md)
+  - [skills/yellow-control-governance/references/backup-and-rollback.md](skills/yellow-control-governance/references/backup-and-rollback.md)
+  - [skills/yellow-control-governance/references/governance-telemetry.md](skills/yellow-control-governance/references/governance-telemetry.md)
 
 ## Related repository pattern
 
