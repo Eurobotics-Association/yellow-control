@@ -1,0 +1,84 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - docs/**
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check markdown readability (not collapsed one-liners)
+        shell: bash
+        run: |
+          set -euo pipefail
+          bad=0
+          while IFS= read -r -d '' f; do
+            lines=$(wc -l < "$f" | tr -d ' ')
+            bytes=$(wc -c < "$f" | tr -d ' ')
+            if [ "$bytes" -gt 500 ] && [ "$lines" -lt 5 ]; then
+              echo "Collapsed markdown suspect: $f (lines=$lines bytes=$bytes)"
+              bad=1
+            fi
+          done < <(find . -type f -name '*.md' -print0)
+          [ "$bad" -eq 0 ]
+
+      - name: Validate SKILL.md frontmatter YAML
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          import yaml
+
+          p = pathlib.Path('skills/yellow-control-governance/SKILL.md')
+          text = p.read_text(encoding='utf-8')
+          if not text.startswith('---\n'):
+            raise SystemExit('SKILL.md missing opening frontmatter delimiter')
+          parts = text.split('\n---\n', 1)
+          if len(parts) != 2:
+            raise SystemExit('SKILL.md missing closing frontmatter delimiter')
+          frontmatter = yaml.safe_load(parts[0][4:])
+          required = ['name', 'description', 'version', 'author', 'license', 'platforms', 'metadata']
+          for key in required:
+            if key not in frontmatter:
+              raise SystemExit(f'Missing frontmatter key: {key}')
+          hermes = frontmatter.get('metadata', {}).get('hermes', {})
+          if 'category' not in hermes:
+            raise SystemExit('Missing metadata.hermes.category')
+          if 'tags' not in hermes or not isinstance(hermes['tags'], list) or not hermes['tags']:
+            raise SystemExit('Missing or empty metadata.hermes.tags')
+          print('Frontmatter YAML parse: OK')
+          PY
+
+      - name: Shell syntax checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' f; do
+            bash -n "$f"
+          done < <(find examples -type f -name '*.sh' -print0)
+
+      - name: Public-safety and secret marker scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          MARKERS='BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9_]{20,}|xox[baprs]-|password\\s*[:=]|\\.env|Oscar26|Barba|oscar-control|10\\.(1[6-9]|2[0-9]|3[0-1])\\.|192\\.168\\.|172\\.(1[6-9]|2[0-9]|3[0-1])\\.'
+          if grep -RInE "$MARKERS" . --exclude-dir=.git --exclude='validate.yml' --exclude='*.png' --exclude='*.jpg' --exclude='*.jpeg' --exclude='*.gif' --exclude='*.pdf'; then
+            echo "Forbidden marker(s) found"
+            exit 1
+          fi
+
+      - name: Optional gitleaks
+        continue-on-error: true
+        shell: bash
+        run: |
+          if command -v gitleaks >/dev/null 2>&1; then
+            gitleaks detect --no-git --source .
+          else
+            echo 'gitleaks not available; skipped'
+          fi
