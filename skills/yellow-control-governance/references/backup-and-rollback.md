@@ -1,14 +1,9 @@
-# Backup and rollback
+# Backup and rollback reference pointer
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
+This reference points to the canonical public documentation under `docs/`.
 
-Backup checkpoints are mandatory before live updates affecting core runtime behavior.
+Primary document: `../../docs/backup-and-rollback.md`
 
-Required pattern:
-1. create pre-change checkpoint
-2. verify checkpoint integrity and discoverability
-3. perform change
-4. record post-change status and rollback handle
+Use this file from the skill context when you need a stable relative link. The canonical policy content is maintained in the target document to avoid duplicated thin summaries.
 
-If checkpoint creation/verification fails, execution is deferred or blocked.
+Public-safe note: examples remain fictional and redacted by design.

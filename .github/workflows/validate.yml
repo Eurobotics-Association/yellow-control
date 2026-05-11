@@ -1,4 +1,5 @@
 name: Validate
+# Keep workflow text ASCII-only to reduce hidden-Unicode diff warnings in review UIs.
 
 on:
   pull_request:
@@ -38,20 +39,20 @@ jobs:
           p = pathlib.Path('skills/yellow-control-governance/SKILL.md')
           text = p.read_text(encoding='utf-8')
           if not text.startswith('---\n'):
-            raise SystemExit('SKILL.md missing opening frontmatter delimiter')
+              raise SystemExit('SKILL.md missing opening frontmatter delimiter')
           parts = text.split('\n---\n', 1)
           if len(parts) != 2:
-            raise SystemExit('SKILL.md missing closing frontmatter delimiter')
+              raise SystemExit('SKILL.md missing closing frontmatter delimiter')
           frontmatter = yaml.safe_load(parts[0][4:])
           required = ['name', 'description', 'version', 'author', 'license', 'platforms', 'metadata']
           for key in required:
-            if key not in frontmatter:
-              raise SystemExit(f'Missing frontmatter key: {key}')
+              if key not in frontmatter:
+                  raise SystemExit(f'Missing frontmatter key: {key}')
           hermes = frontmatter.get('metadata', {}).get('hermes', {})
           if 'category' not in hermes:
-            raise SystemExit('Missing metadata.hermes.category')
+              raise SystemExit('Missing metadata.hermes.category')
           if 'tags' not in hermes or not isinstance(hermes['tags'], list) or not hermes['tags']:
-            raise SystemExit('Missing or empty metadata.hermes.tags')
+              raise SystemExit('Missing or empty metadata.hermes.tags')
           print('Frontmatter YAML parse: OK')
           PY
 
@@ -67,11 +68,53 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          MARKERS='BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9_]{20,}|xox[baprs]-|password\\s*[:=]|\\.env|Oscar26|Barba|oscar-control|10\\.(1[6-9]|2[0-9]|3[0-1])\\.|192\\.168\\.|172\\.(1[6-9]|2[0-9]|3[0-1])\\.'
-          if grep -RInE "$MARKERS" . --exclude-dir=.git --exclude='validate.yml' --exclude='*.png' --exclude='*.jpg' --exclude='*.jpeg' --exclude='*.gif' --exclude='*.pdf'; then
+          MARKERS='BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9_]{20,}|xox[baprs]-|password\\s*[:=]|Oscar26|Barba|oscar-control|/home/oscar|10\\.(1[6-9]|2[0-9]|3[0-1])\\.|192\\.168\\.|172\\.(1[6-9]|2[0-9]|3[0-1])\\.|https://github\\.com/[^/]+/[^[:space:]]*private[^[:space:]]*'
+          if grep -RInE "$MARKERS" . \
+            --exclude-dir=.git \
+            --exclude='validate.yml' \
+            --exclude='*.png' \
+            --exclude='*.jpg' \
+            --exclude='*.jpeg' \
+            --exclude='*.gif' \
+            --exclude='*.pdf'; then
             echo "Forbidden marker(s) found"
             exit 1
           fi
+
+          # Block committed .env files while allowing textual policy references in docs.
+          if find . -type f \( -name '.env' -o -name '*.env' \) -not -path './.git/*' | grep -q .; then
+            echo "Committed .env-style file detected"
+            find . -type f \( -name '.env' -o -name '*.env' \) -not -path './.git/*'
+            exit 1
+          fi
+
+          ALLOWED_AUTHOR_LOCAL='robert.vergnes'
+          ALLOWED_AUTHOR_DOMAIN='yahoo.fr'
+          ALLOWED_AUTHOR_EMAIL="${ALLOWED_AUTHOR_LOCAL}@${ALLOWED_AUTHOR_DOMAIN}"
+          while IFS= read -r -d '' f; do
+            python3 - "$f" "$ALLOWED_AUTHOR_EMAIL" <<'PY'
+          import re
+          import sys
+          from pathlib import Path
+
+          path = Path(sys.argv[1])
+          allowed = sys.argv[2]
+          email_re = re.compile(r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}')
+          text = path.read_text(encoding='utf-8', errors='replace')
+          violations = []
+          for i, line in enumerate(text.splitlines(), start=1):
+              for m in email_re.finditer(line):
+                  email = m.group(0)
+                  if email == allowed and re.match(r'^\s*Author:\s*', line):
+                      continue
+                  violations.append((i, email, line.strip()))
+          if violations:
+              print(f'Email policy violation in {path}:')
+              for i, email, snippet in violations:
+                  print(f'  line {i}: {email} | {snippet[:140]}')
+              raise SystemExit(1)
+          PY
+          done < <(find . -type f \( -name '*.md' -o -name '*.yml' -o -name '*.yaml' \) -not -path './.git/*' -not -path './.github/workflows/validate.yml' -print0)
 
       - name: Optional gitleaks
         continue-on-error: true

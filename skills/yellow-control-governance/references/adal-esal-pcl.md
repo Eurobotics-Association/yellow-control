@@ -1,14 +1,9 @@
-# ADAL / ESAL / PCL quick reference
+# ADAL/ESAL/PCL reference pointer
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
+This reference points to the canonical public documentation under `docs/`.
 
-Classification dimensions:
-- ADAL: host/server authority level
-- CDEL: container/sandbox execution level
-- ESAL: external-service authority level
-- PCL: confidentiality/disclosure level
+Primary document: `../../docs/runtime-classification.md`
 
-Default safety behavior:
-- unknown authority => no operational authority
-- unknown confidentiality => private handling until classified
+Use this file from the skill context when you need a stable relative link. The canonical policy content is maintained in the target document to avoid duplicated thin summaries.
+
+Public-safe note: examples remain fictional and redacted by design.

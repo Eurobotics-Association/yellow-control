@@ -4,7 +4,7 @@
 
 Please report vulnerabilities privately by email to:
 
-- robert.vergnes@yahoo.fr
+- Use GitHub Security Advisory or a private maintainer contact channel documented in this repository
 
 Include:
 
@@ -25,4 +25,5 @@ Do not publish exploit details before maintainers acknowledge and coordinate rem
 
 - Do not include secrets in issues, pull requests, commits, screenshots, or logs.
 - Keep all contributions public-safe and free of private runtime details.
+- Use plain ASCII text in security/process docs when possible to avoid hidden-character review ambiguity.
 - If uncertain whether material is private, treat it as private and report maintainers first.
