@@ -1,4 +1,5 @@
 name: Validate
+# Keep workflow text ASCII-only to reduce hidden-Unicode diff warnings in review UIs.
 
 on:
   pull_request:

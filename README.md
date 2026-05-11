@@ -183,6 +183,7 @@ This v0.1.2 branch uses a source-preserving extraction approach:
 Review, issues, proposals, and discussions are welcome from system administrators, cyber-security administrators, DevSecOps/platform teams, Hermes users, and agent-runtime maintainers.
 
 Use GitHub Issues and pull requests in this repository.
+Public docs in this repository are maintained as UTF-8 with ASCII-only content for maximum review portability.
 
 ## Help wanted
 
