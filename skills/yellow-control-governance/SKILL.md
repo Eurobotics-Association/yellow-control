@@ -9,17 +9,17 @@ platforms:
  - macos
  - windows
 metadata:
- hermes:
- category: yellow-control
- tags:
- - governance
- - policy-enforcement
- - adal
- - cdel
- - esal
- - pcl
- - backup-gate
- - telemetry
+  hermes:
+    category: yellow-control
+    tags:
+      - governance
+      - policy-enforcement
+      - adal
+      - cdel
+      - esal
+      - pcl
+      - backup-gate
+      - telemetry
 ---
 
 # yellow-control-governance
