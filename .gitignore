@@ -1,0 +1,10 @@
+# Local private source workbench - never commit
+_private_sources/
+
+# Local temporary audit/output files
+tmp/
+
+# Local editor/system files
+.DS_Store
+*.swp
+*.swo
