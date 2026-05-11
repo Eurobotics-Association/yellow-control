@@ -6,8 +6,6 @@ Checklist for public skill submission readiness.
 
 # Yellow skill test protocol
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [Yellow skills development workflow], Oscar/Hermes and/or Codex [documentation]
 
 ## Purpose
 
@@ -115,8 +113,6 @@ Use this schema for each test:
 
 # Yellow skill development workflow
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [Yellow skills development workflow], Oscar/Hermes and/or Codex [documentation]
 
 ## Purpose and scope
 
@@ -136,12 +132,12 @@ It is a repository and runtime-governance workflow. It is **not** an external se
 2. Validate YAML front matter and metadata (`Author`, `Assisted-by`, routing references).
 3. Commit to fork, open PR, merge upstream, and sync local/fork/upstream.
 4. Run runtime deployment dry-run:
-   - `./scripts/deploy.sh skills --dry-run`
+ - `./scripts/deploy.sh skills --dry-run`
 5. Run prepare-merge (normal mode for mature runtimes):
-   - `./scripts/deploy.sh skills --prepare-merge`
+ - `./scripts/deploy.sh skills --prepare-merge`
 6. If runtime skill exists and differs, generate a clean semantic merge proposal under staging.
 7. Apply only reviewed target skill files (targeted manual apply), not generic bulk apply:
-   - `./scripts/apply-reviewed-skill.sh --skill <skill> --proposal <.../SKILL.md.merged.proposal.md>`
+ - `./scripts/apply-reviewed-skill.sh --skill <skill> --proposal <.../SKILL.md.merged.proposal.md>`
 8. Reset/reload Hermes session context (`/reset`) if needed so runtime uses updated guidance.
 9. Run behavior tests using `docs/skills/yellow-skill-test-protocol.md`.
 10. Feed findings back into repo source files; avoid runtime-only drift.

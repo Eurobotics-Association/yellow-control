@@ -14,12 +14,10 @@ description: Runtime reference for project/profile governance — project identi
 version: 0.1.0
 platforms: [linux]
 metadata:
-  hermes:
-    tags: [governance, project-management, profile-register, project-register, labels, canonical-id, cron-binding, self-registration]
-    related_skills: [yellow-control-governance, yellow-skill-registry]
+ hermes:
+ tags: [governance, project-management, profile-register, project-register, labels, canonical-id, cron-binding, self-registration]
+ related_skills: [yellow-control-governance, yellow-skill-registry]
 ---
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [skills architecture], Oscar/Hermes and/or Codex [implementation]
 
 # yellow-project-management
 
@@ -44,7 +42,7 @@ Use this skill before:
 - Profile = competence/work context.
 - Project = concrete repo/mission/work item.
 - External target = server, VM, VPS, service, API, dashboard, account, container host, or managed runtime.
-- Current governed work context: `oscar-dev` mapped to Hermes `default` runtime profile.
+- Current governed work context: `agent-dev` mapped to Hermes `default` runtime profile.
 - Project Register = reference register for project identity (not runtime authority).
 - Profile Register = reference register for profile/work-context mapping (not runtime authority).
 - External Access Register = reference register for external-target authority metadata (not runtime authority).
@@ -85,9 +83,9 @@ Runtime register root (runtime-agent):
 - Do not use or imply “source of truth/source-of-truth” language for runtime-agent runtime doctrine. Use: runtime state, backup snapshot, staging repo.
 - Treat runtime, deployed snapshot, and git worktree as separate layers; do not infer runtime state from repo state alone.
 - For register/export/audit tasks, use a mandatory three-layer check sequence: (1) live runtime state and active services/skills, (2) deployed snapshot layer (`<runtime-register-root>` when present), then (3) staging/worktree (`<private-workspace-path>`). Report drift explicitly by layer.
-- For runtime-agent Option D role split: `oscar-backup` is Oscar-owned runtime backup/rollback snapshots, `private-control-repo` is temporary Oscar-specific control/skill staging, and reusable Yellow development belongs in a separate `yellow-suite` repo.
+- For runtime-agent Option D role split: `runtime-backup` is Oscar-owned runtime backup/rollback snapshots, `private runtime governance repository` is temporary Oscar-specific control/skill staging, and reusable Yellow development belongs in a separate `yellow-suite` repo.
 - Do not push repo changes for runtime mechanisms that are not deployed/validated in runtime.
-- Do not develop `private-control-repo` abstractly when task intent is runtime operations; keep repo state synchronized to validated runtime behavior.
+- Do not develop `private runtime governance repository` abstractly when task intent is runtime operations; keep repo state synchronized to validated runtime behavior.
 - Do not invent missing classifications; unresolved authority remains no operational authority and unresolved confidentiality remains `PCL-2 Private`.
 - Proposal does not equal permission: proposed register, project, access, or skill changes are governance preparation only until approved by the Governance Authority or explicitly delegated Authorized Operator.
 - Treat typos as risks, not invitations to guess.
@@ -108,12 +106,10 @@ description: Informational governance skill for skill inventory, lifecycle state
 version: 0.1.0
 platforms: [linux]
 metadata:
-  hermes:
-    tags: [governance, skill-registry, lifecycle, inventory, reporting]
-    related_skills: [yellow-control-governance, yellow-project-management]
+ hermes:
+ tags: [governance, skill-registry, lifecycle, inventory, reporting]
+ related_skills: [yellow-control-governance, yellow-project-management]
 ---
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [architecture + governance], Oscar/Hermes and/or Codex [implementation]
 
 # yellow-skill-registry
 
@@ -169,8 +165,6 @@ Runtime register root (runtime-agent):
 
 # Yellow skills: proposed repo-managed assets
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [skills architecture], Oscar/Hermes and/or Codex [implementation]
 
 ## Purpose
 
@@ -239,7 +233,7 @@ These are governance concepts, not standalone skills.
 
 ## Yellow Control vs External Packages Management
 
-- **Hermes Yellow Control / `private-control-repo`**: global governance model, ADAL/CDEL/ESAL/PCL rules, Yellow skills, and register governance.
+- **Hermes Yellow Control / `private runtime governance repository`**: global governance model, ADAL/CDEL/ESAL/PCL rules, Yellow skills, and register governance.
 - **External Packages Management**: target-specific implementation packages (manifests, wrappers, sudoers snippets, install/rollback scripts, operational constraints).
 - For private package repositories, authenticated access checks (`gh auth status`, `gh repo view`, `git ls-remote` over SSH) should be attempted before declaring package inaccessibility.
 - If authenticated access succeeds during a requested dry-run simulation, continue the simulation flow automatically.
@@ -264,8 +258,6 @@ These are governance concepts, not standalone skills.
 
 # Skill Register
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [architecture + governance], Oscar/Hermes and/or Codex [implementation]
 
 ## Purpose
 

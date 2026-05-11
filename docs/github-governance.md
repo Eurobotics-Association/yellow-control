@@ -4,8 +4,6 @@ Public-safe repository governance.
 
 ## Repository controls
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.4 Thinking, Codex
 
 # GitHub safety
 
@@ -26,14 +24,14 @@ When work appears ready, Oscar requests submission/review rather than self-mergi
 - Runtime guards must use configured git remotes and authenticated transport where required.
 - Do not hardcode unauthenticated private HTTPS reachability checks for private GitHub repositories.
 - Hermes core maintenance dependency is Hermes upstream/origin reachability only.
-- private-control-repo fork/upstream reachability is maintenance-context dependent and non-blocking for Hermes core auto-update.
+- private runtime governance repository fork/upstream reachability is maintenance-context dependent and non-blocking for Hermes core auto-update.
 
 ## Autonomous maintenance guardrails
 
 - GitHub operational use for Oscar runtime workflows is ADAL-4.
 - Oscar may commit and push to branches in its own fork.
 - Oscar may prepare/open/update PRs to Eurobotics upstream.
-- Oscar must not merge into Eurobotics upstream/main without Robert approval.
+- Oscar must not merge into Eurobotics upstream/main without the owner approval.
 - Oscar must not push directly to Eurobotics main.
 - Oscar must not auto-merge PRs.
 - Oscar must not force-push shared/protected branches.
@@ -46,8 +44,6 @@ When work appears ready, Oscar requests submission/review rather than self-mergi
 Documentation must remain aligned with implementation changes in the same PR whenever behavior or controls change.
 
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.4 Thinking, Codex
 
 # Runtime governance sync boundaries
 
@@ -66,16 +62,16 @@ Runtime governance is composed of multiple aligned layers:
 The controlled deployment path supports these scopes:
 
 - `runtime-governance`:
-  - `profiles/global/SOUL.md` -> `$HERMES_HOME/SOUL.md`
-  - `AGENTS.md` -> `$HERMES_HOME/AGENTS.md`
-  - `README.md` -> `$HERMES_HOME/README.md`
-  - `config/*.yaml` -> `$HERMES_HOME/private-control-repo/config/`
-  - `docs/security/*.md` -> `$HERMES_HOME/private-control-repo/docs/security/`
-  - `docs/skills/*.md` -> `$HERMES_HOME/private-control-repo/docs/skills/`
+ - `profiles/global/SOUL.md` -> `$HERMES_HOME/SOUL.md`
+ - `AGENTS.md` -> `$HERMES_HOME/AGENTS.md`
+ - `README.md` -> `$HERMES_HOME/README.md`
+ - `config/*.yaml` -> `$HERMES_HOME/private runtime governance repository/config/`
+ - `docs/security/*.md` -> `$HERMES_HOME/private runtime governance repository/docs/security/`
+ - `docs/skills/*.md` -> `$HERMES_HOME/private runtime governance repository/docs/skills/`
 - `skills`:
-  - `skills/yellow-control-governance/SKILL.md` -> `$HERMES_HOME/skills/yellow-control-governance/SKILL.md`
-  - `skills/yellow-project-management/SKILL.md` -> `$HERMES_HOME/skills/yellow-project-management/SKILL.md`
-  - `skills/yellow-skill-registry/SKILL.md` -> `$HERMES_HOME/skills/yellow-skill-registry/SKILL.md`
+ - `skills/yellow-control-governance/SKILL.md` -> `$HERMES_HOME/skills/yellow-control-governance/SKILL.md`
+ - `skills/yellow-project-management/SKILL.md` -> `$HERMES_HOME/skills/yellow-project-management/SKILL.md`
+ - `skills/yellow-skill-registry/SKILL.md` -> `$HERMES_HOME/skills/yellow-skill-registry/SKILL.md`
 - `all`: includes `runtime-governance` and `skills`
 - Legacy compatibility scopes remain available: `soul`, `policy`, `prompts`
 
@@ -103,7 +99,7 @@ Mutable evidence is not deployed from git and should be kept under XDG state pat
 - Recommended files: `audit.tar.zst`, `audit.sha256`, `manifest.json`, `summary.md`, `findings.md`, `normalized-context.md`
 - `normalized-context.md` is the preferred compact context handoff for future work on the same target.
 - Raw tarballs/logs/secrets remain runtime-only and must not be committed.
-- Default retention is 3 months; incident/security evidence may be retained longer with Robert approval.
+- Default retention is 3 months; incident/security evidence may be retained longer with the owner approval.
 - Future audits should compare against the prior baseline and report meaningful drift.
 - Monthly recurring audits are persistent automation and require explicit approval before cron/systemd creation.
 - Legacy-looking paths under `<runtime-register-root>` are not the preferred current path.
@@ -133,8 +129,6 @@ Automatic runtime-to-git sync risks exfiltrating secrets, committing volatile ar
 
 # Yellow skill development workflow
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [Yellow skills development workflow], Oscar/Hermes and/or Codex [documentation]
 
 ## Purpose and scope
 
@@ -154,12 +148,12 @@ It is a repository and runtime-governance workflow. It is **not** an external se
 2. Validate YAML front matter and metadata (`Author`, `Assisted-by`, routing references).
 3. Commit to fork, open PR, merge upstream, and sync local/fork/upstream.
 4. Run runtime deployment dry-run:
-   - `./scripts/deploy.sh skills --dry-run`
+ - `./scripts/deploy.sh skills --dry-run`
 5. Run prepare-merge (normal mode for mature runtimes):
-   - `./scripts/deploy.sh skills --prepare-merge`
+ - `./scripts/deploy.sh skills --prepare-merge`
 6. If runtime skill exists and differs, generate a clean semantic merge proposal under staging.
 7. Apply only reviewed target skill files (targeted manual apply), not generic bulk apply:
-   - `./scripts/apply-reviewed-skill.sh --skill <skill> --proposal <.../SKILL.md.merged.proposal.md>`
+ - `./scripts/apply-reviewed-skill.sh --skill <skill> --proposal <.../SKILL.md.merged.proposal.md>`
 8. Reset/reload Hermes session context (`/reset`) if needed so runtime uses updated guidance.
 9. Run behavior tests using `docs/skills/yellow-skill-test-protocol.md`.
 10. Feed findings back into repo source files; avoid runtime-only drift.

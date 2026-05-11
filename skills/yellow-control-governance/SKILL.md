@@ -2,24 +2,24 @@
 name: yellow-control-governance
 description: Governance and policy-enforcement skill for persistent autonomous agents using action classification, backup gates, and enforceable control decisions.
 version: 0.1.2
-author: F.M. Robert Vergnes
+author: F.M. the owner Vergnes
 license: MIT
 platforms:
-  - linux
-  - macos
-  - windows
+ - linux
+ - macos
+ - windows
 metadata:
-  hermes:
-    category: yellow-control
-    tags:
-      - governance
-      - policy-enforcement
-      - adal
-      - cdel
-      - esal
-      - pcl
-      - backup-gate
-      - telemetry
+ hermes:
+ category: yellow-control
+ tags:
+ - governance
+ - policy-enforcement
+ - adal
+ - cdel
+ - esal
+ - pcl
+ - backup-gate
+ - telemetry
 ---
 
 # yellow-control-governance
@@ -86,12 +86,10 @@ description: Runtime reference for security/control-plane governance — privile
 version: 0.1.0
 platforms: [linux]
 metadata:
-  hermes:
-    tags: [governance, security, pam-iam, adal, cdel, esal, pcl, external-access, automation-guard, baseline-audit]
-    related_skills: [yellow-project-management, yellow-skill-registry]
+ hermes:
+ tags: [governance, security, pam-iam, adal, cdel, esal, pcl, external-access, automation-guard, baseline-audit]
+ related_skills: [yellow-project-management, yellow-skill-registry]
 ---
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [skills architecture], Oscar/Hermes and/or Codex [implementation]
 
 # yellow-control-governance
 
@@ -144,12 +142,12 @@ Reference: `references/public-safety-scan-self-match-guard.md` for avoiding self
 
 For all external services, external servers, external packages, SaaS accounts, remote hosts, API providers, and integrations:
 
-1. First check `oscar-external-systems-management` unless the task explicitly provides another reviewed source or explicitly states no pre-registration exists.
-2. Treat `oscar-external-systems-management` as a human-managed preparation source, not as a runtime register.
-3. Yellow-control must read and reconcile the pre-registration package with Robert's instruction; if the package conflicts with Robert's instruction, stop and report the mismatch.
+1. First check `agent-external-systems-management` unless the task explicitly provides another reviewed source or explicitly states no pre-registration exists.
+2. Treat `agent-external-systems-management` as a human-managed preparation source, not as a runtime register.
+3. Yellow-control must read and reconcile the pre-registration package with the owner's instruction; if the package conflicts with the owner's instruction, stop and report the mismatch.
 4. Yellow-control writes runtime-approved entries to `<runtime-register-root>` (especially `docs/security/external-access-register.md`).
 5. Oscar must not invent missing external-service metadata.
-6. Oscar must not directly modify the Eurobotics upstream `oscar-external-systems-management` repository; corrections must be proposed by PR through operator-owned fork/branch for Robert review.
+6. Oscar must not directly modify the Eurobotics upstream `agent-external-systems-management` repository; corrections must be proposed by PR through operator-owned fork/branch for the owner review.
 7. Take runtime backup before and after runtime register changes.
 
 external-target-a is one example only. This chain also applies to GitHub, Gmail/Himalaya, Telegram, OpenRouter, Browserbase, ZeroTier, OpenWebUI, local API servers, Cloudron hosts, and future external servers.
@@ -171,18 +169,18 @@ Runtime register root (runtime-agent):
 - Consult `docs/security/governance-levels-reference.md` before applying ADAL/CDEL/ESAL/PCL in decisions.
 - Consult the External Access Register before external, privileged, or security-sensitive actions.
 - For private GitHub External Package repositories, verify configured authenticated access methods before declaring inaccessibility:
-  - `gh auth status`
-  - `gh repo view OWNER/REPO`
-  - `git ls-remote git@github.com:OWNER/REPO.git HEAD`
-  - `git -C <repo> ls-remote --heads origin main`
-  - `git -C <repo> ls-remote --heads upstream main`
+ - `gh auth status`
+ - `gh repo view OWNER/REPO`
+ - `git ls-remote git@github.com:OWNER/REPO.git HEAD`
+ - `git -C <repo> ls-remote --heads origin main`
+ - `git -C <repo> ls-remote --heads upstream main`
 - HTTPS Git failure alone is not definitive if authenticated GH/SSH access exists.
 - For runtime maintenance guards, avoid hard-coding unauthenticated HTTPS private-repo checks as a blocking network gate. Prefer remote-aware checks (`origin`/`upstream`) and classify non-critical repo reachability checks as non-blocking when the maintenance objective is Hermes core update.
 - When runtime onboarding creates snapshot/supporting docs, immediately consolidate authoritative entries into canonical registers. Do not let snapshot docs become shadow authorities.
-- For runtime-agent doctrine, avoid using “source of truth/source-of-truth” to imply runtime authority. Runtime state is inspected live; `oscar-backup` stores rollback snapshots; `private-control-repo` is temporary staging.
+- For runtime-agent doctrine, avoid using “source of truth/source-of-truth” to imply runtime authority. Runtime state is inspected live; `runtime-backup` stores rollback snapshots; `private runtime governance repository` is temporary staging.
 - Use role-safe wording for GitHub governance references: prefer “Eurobotics upstream PR target” or “protected upstream repository”; reserve “authoritative” only when explicitly describing merge authority.
 - Canonical precedence for Oscar governance: external services in `docs/security/external-access-register.md`; skills in `config/skill-register.yaml` plus `docs/skills/skill-register.md`. Snapshot docs must carry explicit "supporting, not canonical" status headers.
-- In governance consolidation tasks, validate both documentation integrity and runtime alignment: `git diff --check`, no-secret pattern scan on diff, and maintenance dry-run (`/usr/local/bin/oscar-hermes-weekly-maintenance --dry-run --auto-update`) without executing real update.
+- In governance consolidation tasks, validate both documentation integrity and runtime alignment: `git diff --check`, no-secret pattern scan on diff, and maintenance dry-run (`/usr/local/bin/agent-hermes-weekly-maintenance --dry-run --auto-update`) without executing real update.
 - External Access Register entries may reference External Packages; consult the package manifest/wrappers before privileged or remote operational work when referenced.
 - If target access metadata is missing/incomplete, propose a register update before operational use.
 - Mark uncertain inferred metadata as `unknown` and report uncertainty explicitly.
@@ -202,7 +200,7 @@ Runtime register root (runtime-agent):
 - Before merging a public-governance PR derived from private/runtime sources, run a source-coverage audit matrix across runtime skill, private repo source set, and public branch content. Classify each source item as copied/summarized/sanitized/omitted/placeholder/missing, include omission risk, and recommend must-fix-before-merge vs can-wait.
 - During publication-readiness checks, verify `README.md` and `SKILL.md` from raw GitHub URLs (not local only): confirm real line counts, multiline frontmatter rendering, and absence of GitHub bidi/control-character warnings in the PR files view.
 - Do not overpromise exact Hermes install/tap/load commands unless they were tested against the currently installed Hermes version; when unverified, explicitly direct readers to current Hermes documentation for version-specific steps.
-- Preserve naming boundaries in delegation design docs: existing ADAL-2.5 wrappers remain `oscar-adal25-*`; ADAL-3T temporary wrappers/procedures must use `oscar-adal3t-*` naming to avoid authority ambiguity.
+- Preserve naming boundaries in delegation design docs: existing ADAL-2.5 wrappers remain `agent-adal25-*`; ADAL-3T temporary wrappers/procedures must use `agent-adal3t-*` naming to avoid authority ambiguity.
 - If repo AGENTS/governance checklist references a missing file, report the missing path and proceed with available required governance docs inside the approved scope; do not invent replacement doctrine.
 - Wrapper existence does not equal permission; capability does not equal authority.
 - Use `sudo -n`; never request the Governance Authority’s or Runtime Owner’s interactive sudo password.

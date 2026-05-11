@@ -4,8 +4,6 @@ Backup-first policy and rollback readiness.
 
 ## Backup policy
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore], Codex
 
 # Rollback guide
 
@@ -46,19 +44,17 @@ Use infrastructure-level recovery when needed:
 ```
 
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [deployment safety design], Oscar/Hermes and/or Codex [implementation]
 
 # Deployment workflow
 
 ## Philosophy
 
-`private-control-repo` governs reviewed control artifacts in git. Hermes runtime uses deployed copies from this repository and does not define governance source.
+`private runtime governance repository` governs reviewed control artifacts in git. Hermes runtime uses deployed copies from this repository and does not define governance source.
 
 The operating model is one-way promotion:
 
 1. Review and update governed files in git.
-2. Pull the latest changes on the host checkout (for example `/opt/private-control-repo`).
+2. Pull the latest changes on the host checkout (for example `/opt/private runtime governance repository`).
 3. Deploy only the required scope into the active runtime home.
 4. Verify runtime drift explicitly.
 
@@ -100,10 +96,10 @@ Dry-run reporting expectation (operator checklist):
 
 Supported scopes:
 
-- `runtime-governance`: SOUL/AGENTS/README + governed config/docs under `$HERMES_HOME/private-control-repo/...`
+- `runtime-governance`: SOUL/AGENTS/README + governed config/docs under `$HERMES_HOME/private runtime governance repository/...`
 - `skills`: targeted Yellow skills only:
-  - `$HERMES_HOME/skills/yellow-control-governance/SKILL.md`
-  - `$HERMES_HOME/skills/yellow-project-management/SKILL.md`
+ - `$HERMES_HOME/skills/yellow-control-governance/SKILL.md`
+ - `$HERMES_HOME/skills/yellow-project-management/SKILL.md`
 - `all`: includes `runtime-governance` + `skills`
 - Legacy compatibility scopes: `soul`, `policy`, `prompts`
 
@@ -114,14 +110,14 @@ Supported modes:
 - `--apply-staged`: **exception mode**, not routine; applies only when staged candidates were semantically reviewed and explicitly approved.
 
 Deploy is controlled copy/stage/apply with backups. It is **not** an automatic semantic merge.
-Sensitive differing files are backed up and staged for Oscar/Codex merge review with Robert approval before any apply decision.
+Sensitive differing files are backed up and staged for Oscar/Codex merge review with the owner approval before any apply decision.
 
 For mature/non-newborn runtimes, do not use `--apply-staged` as a bulk operation on sensitive governance files unless all of the following are true:
 
 1. staged candidates were reviewed;
 2. clean merged proposals were produced where needed;
 3. runtime-specific content was preserved or deliberately retired;
-4. Robert explicitly approved apply;
+4. the owner explicitly approved apply;
 5. backup and rollback path is known.
 
 Sensitive governance paths include:
@@ -130,9 +126,9 @@ Sensitive governance paths include:
 - `$HERMES_HOME/AGENTS.md`
 - `$HERMES_HOME/README.md`
 - `$HERMES_HOME/skills/*/SKILL.md`
-- `$HERMES_HOME/private-control-repo/config/*.yaml`
-- `$HERMES_HOME/private-control-repo/docs/security/*.md`
-- `$HERMES_HOME/private-control-repo/docs/skills/*.md`
+- `$HERMES_HOME/private runtime governance repository/config/*.yaml`
+- `$HERMES_HOME/private runtime governance repository/docs/security/*.md`
+- `$HERMES_HOME/private runtime governance repository/docs/skills/*.md`
 
 Missing runtime governance files may be copied during `--prepare-merge`.
 Existing different sensitive files must be staged, not overwritten.
@@ -148,7 +144,7 @@ Remote-audit evidence and other mutable runtime artifacts are not deployed from 
 
 `normalized-context.md` is the preferred compact context file for future work on the same target.
 
-Raw audit tarballs and host-local sensitive logs must not be committed to git. Default retention is 3 months; longer retention for incident/security evidence requires Robert approval.
+Raw audit tarballs and host-local sensitive logs must not be committed to git. Default retention is 3 months; longer retention for incident/security evidence requires the owner approval.
 
 Monthly recurring audits are persistent automation and require explicit approval before cron/systemd creation.
 
@@ -166,7 +162,7 @@ Backup target:
 
 Security constraints:
 
-- backup directory owner: `oscar:oscar`
+- backup directory owner: `agent:agent`
 - backup directory mode: `700`
 - artifact mode: `600` where practical
 - backups may contain sensitive runtime files and must never be committed, emailed, or sent to Telegram by default
@@ -174,11 +170,11 @@ Security constraints:
 
 Backup scope includes, when present:
 
-- private-control-repo git branch/HEAD/status/log and `git bundle --all`
-- private-control-repo working tree tarball (excluding `.git`, `.env`, caches, `node_modules`, `__pycache__`, `*.pyc`)
+- private runtime governance repository git branch/HEAD/status/log and `git bundle --all`
+- private runtime governance repository working tree tarball (excluding `.git`, `.env`, caches, `node_modules`, `__pycache__`, `*.pyc`)
 - Hermes critical runtime files (`SOUL.md`, `config.yaml`, `.env`, `auth.json`, checkpoints metadata)
 - Open WebUI critical runtime files (`open-webui.env`, user systemd unit, `webui.db`, `.webui_secret_key`)
-- privileged config snapshots (`/etc/sudoers.d/oscar-agent`, `/etc/sudoers.d/private-control-repo`) via `sudo -n`
+- privileged config snapshots (`/etc/sudoers.d/agent-runtime`, `/etc/sudoers.d/private runtime governance repository`) via `sudo -n`
 - runtime state report and `SHA256SUMS`
 
 ## Reviewed Yellow skill targeted apply helper
@@ -189,8 +185,8 @@ Example:
 
 ```bash
 ./scripts/apply-reviewed-skill.sh \
-  --skill yellow-control-governance \
-  --proposal <runtime-register-root>
+ --skill yellow-control-governance \
+ --proposal <runtime-register-root>
 ```
 
 Safety behavior:
@@ -239,12 +235,12 @@ Always review `runtime-state-report.txt`, `SHA256SUMS`, and `ROLLBACK-NOTES.txt`
 #!/usr/bin/env bash
 set -euo pipefail
 
-Author="F.M. Robert Vergnes / robert.vergnes@yahoo.fr"
-Assisted_by="ChatGPT: GPT-5.5 Thinking [deployment safety design], Oscar/Hermes and/or Codex [implementation]"
+Author="F.M. the owner Vergnes / robert.vergnes@yahoo.fr"
+Assisted_by="ChatGPT: GPT-5.5 Thinking [deployment safety design], governed agent / Hermes-compatible runtime and/or Codex [implementation]"
 
 DRY_RUN=0
 if [[ "${1:-}" == "--dry-run" ]]; then
-  DRY_RUN=1
+ DRY_RUN=1
 fi
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -253,18 +249,18 @@ TS="$(date -u +%Y%m%dT%H%M%SZ)"
 BACKUP_DIR="${BACKUP_BASE}/${TS}"
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
-  printf '%s\n' "$BACKUP_DIR"
-  exit 0
+ printf '%s\n' "$BACKUP_DIR"
+ exit 0
 fi
 
 # Mandatory sudo preflight before any sensitive backup copy work.
 if ! sudo -n true >/dev/null 2>&1; then
-  echo "ERROR: sudo -n preflight failed; non-interactive sudo is required before pre-apply backup. Remediation: restore oscar sudoers non-interactive access (for example /etc/sudoers.d/oscar-agent) and verify with: sudo -n true" >&2
-  exit 1
+ echo "ERROR: sudo -n preflight failed; non-interactive sudo is required before pre-apply backup. Remediation: restore agent sudoers non-interactive access (for example /etc/sudoers.d/agent-runtime) and verify with: sudo -n true" >&2
+ exit 1
 fi
 
 mkdir -p "$BACKUP_DIR"
-chown oscar:oscar "$BACKUP_BASE" "$BACKUP_DIR" 2>/dev/null || true
+chown agent:agent "$BACKUP_BASE" "$BACKUP_DIR" 2>/dev/null || true
 chmod 700 "$BACKUP_BASE" "$BACKUP_DIR"
 
 # Explicit backup subdirectories
@@ -272,53 +268,53 @@ mkdir -p "${BACKUP_DIR}/hermes" "${BACKUP_DIR}/open-webui" "${BACKUP_DIR}/system
 chmod 700 "${BACKUP_DIR}/hermes" "${BACKUP_DIR}/open-webui" "${BACKUP_DIR}/system"
 
 note_missing() {
-  local p="$1"
-  printf '%s\n' "$p" >>"${BACKUP_DIR}/missing-optional-files.txt"
+ local p="$1"
+ printf '%s\n' "$p" >>"${BACKUP_DIR}/missing-optional-files.txt"
 }
 
 safe_copy_if_present() {
-  local src="$1" dst="$2"
-  if [[ -f "$src" ]]; then
-    mkdir -p "$(dirname "$dst")"
-    cp "$src" "$dst"
-    chmod 600 "$dst" || true
-  else
-    note_missing "$src"
-  fi
+ local src="$1" dst="$2"
+ if [[ -f "$src" ]]; then
+ mkdir -p "$(dirname "$dst")"
+ cp "$src" "$dst"
+ chmod 600 "$dst" || true
+ else
+ note_missing "$src"
+ fi
 }
 
 sudo_copy_if_present() {
-  local src="$1" dst="$2"
-  if sudo -n test -f "$src" 2>/dev/null; then
-    mkdir -p "$(dirname "$dst")"
-    sudo -n cat "$src" >"$dst"
-    chmod 600 "$dst" || true
-  else
-    note_missing "$src"
-  fi
+ local src="$1" dst="$2"
+ if sudo -n test -f "$src" 2>/dev/null; then
+ mkdir -p "$(dirname "$dst")"
+ sudo -n cat "$src" >"$dst"
+ chmod 600 "$dst" || true
+ else
+ note_missing "$src"
+ fi
 }
 
 # 1) git metadata + bundle
 (
-  cd "$REPO_ROOT"
-  git branch --show-current >"${BACKUP_DIR}/private-control-repo-git-branch.txt"
-  git rev-parse HEAD >"${BACKUP_DIR}/private-control-repo-git-head.txt"
-  git status --short >"${BACKUP_DIR}/private-control-repo-git-status.txt"
-  git log --oneline -20 >"${BACKUP_DIR}/private-control-repo-git-log.txt"
-  git bundle create "${BACKUP_DIR}/private-control-repo-all.bundle" --all
+ cd "$REPO_ROOT"
+ git branch --show-current >"${BACKUP_DIR}/private runtime governance repository-git-branch.txt"
+ git rev-parse HEAD >"${BACKUP_DIR}/private runtime governance repository-git-head.txt"
+ git status --short >"${BACKUP_DIR}/private runtime governance repository-git-status.txt"
+ git log --oneline -20 >"${BACKUP_DIR}/private runtime governance repository-git-log.txt"
+ git bundle create "${BACKUP_DIR}/private runtime governance repository-all.bundle" --all
 
-  # 2) working tree tarball
-  tar \
-    --exclude='.git' \
-    --exclude='.env' \
-    --exclude='**/.env' \
-    --exclude='**/*.env' \
-    --exclude='**/node_modules' \
-    --exclude='**/__pycache__' \
-    --exclude='**/*.pyc' \
-    --exclude='**/.cache' \
-    -czf "${BACKUP_DIR}/private-control-repo-workingtree.tar.gz" \
-    .
+ # 2) working tree tarball
+ tar \
+ --exclude='.git' \
+ --exclude='.env' \
+ --exclude='**/.env' \
+ --exclude='**/*.env' \
+ --exclude='**/node_modules' \
+ --exclude='**/__pycache__' \
+ --exclude='**/*.pyc' \
+ --exclude='**/.cache' \
+ -czf "${BACKUP_DIR}/private runtime governance repository-workingtree.tar.gz" \
+ .
 )
 
 # 3) Hermes runtime files
@@ -327,10 +323,10 @@ safe_copy_if_present "<private-workspace-path> "${BACKUP_DIR}/hermes/config.yaml
 safe_copy_if_present "<private-workspace-path> "${BACKUP_DIR}/hermes/.env"
 safe_copy_if_present "<private-workspace-path> "${BACKUP_DIR}/hermes/auth.json"
 if [[ -d "<private-workspace-path> ]]; then
-  tar -czf "${BACKUP_DIR}/hermes/checkpoints-metadata.tar.gz" -C "<private-workspace-path> checkpoints
-  chmod 600 "${BACKUP_DIR}/hermes/checkpoints-metadata.tar.gz" || true
+ tar -czf "${BACKUP_DIR}/hermes/checkpoints-metadata.tar.gz" -C "<private-workspace-path> checkpoints
+ chmod 600 "${BACKUP_DIR}/hermes/checkpoints-metadata.tar.gz" || true
 else
-  note_missing "<private-workspace-path>
+ note_missing "<private-workspace-path>
 fi
 
 # 4) Open WebUI files
@@ -340,52 +336,52 @@ safe_copy_if_present "<private-workspace-path> "${BACKUP_DIR}/open-webui/webui.d
 safe_copy_if_present "<private-workspace-path> "${BACKUP_DIR}/open-webui/.webui_secret_key"
 
 # 5) sudoers and service config
-sudo_copy_if_present "/etc/sudoers.d/oscar-agent" "${BACKUP_DIR}/system/oscar-agent.sudoers"
-sudo_copy_if_present "/etc/sudoers.d/private-control-repo" "${BACKUP_DIR}/system/private-control-repo.sudoers"
+sudo_copy_if_present "/etc/sudoers.d/agent-runtime" "${BACKUP_DIR}/system/agent-runtime.sudoers"
+sudo_copy_if_present "/etc/sudoers.d/private runtime governance repository" "${BACKUP_DIR}/system/private runtime governance repository.sudoers"
 if [[ -d "<private-workspace-path> ]]; then
-  tar -czf "${BACKUP_DIR}/system/systemd-user-units.tar.gz" -C "<private-workspace-path> user
-  chmod 600 "${BACKUP_DIR}/system/systemd-user-units.tar.gz" || true
+ tar -czf "${BACKUP_DIR}/system/systemd-user-units.tar.gz" -C "<private-workspace-path> user
+ chmod 600 "${BACKUP_DIR}/system/systemd-user-units.tar.gz" || true
 else
-  note_missing "<private-workspace-path>
+ note_missing "<private-workspace-path>
 fi
 
 # 6) runtime report (no secret values)
-OSCAR_UID="$(id -u oscar)"
+OSCAR_UID="$(id -u agent)"
 {
-  echo "timestamp_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-  echo "hostname=$(hostname)"
-  echo "whoami=$(whoami)"
-  echo "id=$(id)"
-  echo "oscar_uid=${OSCAR_UID}"
-  echo
-  echo "[git]"
-  (cd "$REPO_ROOT" && echo "branch=$(git branch --show-current)" && echo "head=$(git rev-parse HEAD)" && git status --short)
-  echo
-  echo "[services-as-oscar]"
-  sudo -u oscar XDG_RUNTIME_DIR="/run/user/${OSCAR_UID}" systemctl --user status hermes-gateway.service --no-pager || true
-  sudo -u oscar XDG_RUNTIME_DIR="/run/user/${OSCAR_UID}" systemctl --user status open-webui.service --no-pager || true
-  echo
-  echo "[ports]"
-  ss -ltnp | grep -E ':3000\b|:8642\b' || true
-  echo
-  echo "[processes]"
-  ps -ef | grep -E 'hermes|open-webui' | grep -v grep || true
-  echo
-  echo "[docker-as-oscar]"
-  sudo -iu oscar bash -lc 'docker ps -a || true'
-  echo
-  echo "[sudo-check]"
-  sudo -n true && echo "sudo_n_true=ok" || echo "sudo_n_true=failed"
-  sudo -n -l || true
+ echo "timestamp_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+ echo "hostname=$(hostname)"
+ echo "whoami=$(whoami)"
+ echo "id=$(id)"
+ echo "oscar_uid=${OSCAR_UID}"
+ echo
+ echo "[git]"
+ (cd "$REPO_ROOT" && echo "branch=$(git branch --show-current)" && echo "head=$(git rev-parse HEAD)" && git status --short)
+ echo
+ echo "[services-as-agent]"
+ sudo -u agent XDG_RUNTIME_DIR="/run/user/${OSCAR_UID}" systemctl --user status hermes-gateway.service --no-pager || true
+ sudo -u agent XDG_RUNTIME_DIR="/run/user/${OSCAR_UID}" systemctl --user status open-webui.service --no-pager || true
+ echo
+ echo "[ports]"
+ ss -ltnp | grep -E ':3000\b|:8642\b' || true
+ echo
+ echo "[processes]"
+ ps -ef | grep -E 'hermes|open-webui' | grep -v grep || true
+ echo
+ echo "[docker-as-agent]"
+ sudo -iu agent bash -lc 'docker ps -a || true'
+ echo
+ echo "[sudo-check]"
+ sudo -n true && echo "sudo_n_true=ok" || echo "sudo_n_true=failed"
+ sudo -n -l || true
 } >"${BACKUP_DIR}/runtime-state-report.txt"
 
 # 7) checksums + rollback notes
 {
-  echo "Rollback baseline created at: ${BACKUP_DIR}"
-  echo "Suggested restore flow (manual, review-first):"
-  echo "1) Inspect runtime-state-report.txt and SHA256SUMS"
-  echo "2) Restore targeted files from ${BACKUP_DIR}/hermes, ${BACKUP_DIR}/open-webui, ${BACKUP_DIR}/system"
-  echo "3) Re-run service status and listener checks"
+ echo "Rollback baseline created at: ${BACKUP_DIR}"
+ echo "Suggested restore flow (manual, review-first):"
+ echo "1) Inspect runtime-state-report.txt and SHA256SUMS"
+ echo "2) Restore targeted files from ${BACKUP_DIR}/hermes, ${BACKUP_DIR}/open-webui, ${BACKUP_DIR}/system"
+ echo "3) Re-run service status and listener checks"
 } >"${BACKUP_DIR}/ROLLBACK-NOTES.txt"
 
 find "$BACKUP_DIR" -type f ! -name SHA256SUMS -print0 | xargs -0 sha256sum >"${BACKUP_DIR}/SHA256SUMS"
@@ -407,23 +403,23 @@ Use when asked to validate whether weekly Hermes maintenance will run, without e
 ## Runtime path discovery
 - `ls -l <private-workspace-path>`
 - `ls -l <private-workspace-path>`
-- `ls -l /usr/local/bin/oscar-hermes-check /usr/local/bin/oscar-hermes-update /usr/local/bin/oscar-hermes-weekly-maintenance`
+- `ls -l /usr/local/bin/agent-hermes-check /usr/local/bin/agent-hermes-update /usr/local/bin/agent-hermes-weekly-maintenance`
 
 ## Scheduler discovery
 - `crontab -l || true`
 - `sudo -n crontab -l -u root || true`
-- `grep -RInE 'hermes|oscar-hermes|weekly' /etc/cron.d /etc/crontab /etc/cron.daily /etc/cron.weekly 2>/dev/null || true`
-- `systemctl --user list-timers --all | grep -Ei 'hermes|oscar' || true`
-- `systemctl --user list-unit-files | grep -Ei 'hermes|oscar' || true`
-- `systemctl list-timers --all | grep -Ei 'hermes|oscar' || true`
+- `grep -RInE 'hermes|agent-hermes|weekly' /etc/cron.d /etc/crontab /etc/cron.daily /etc/cron.weekly 2>/dev/null || true`
+- `systemctl --user list-timers --all | grep -Ei 'hermes|agent' || true`
+- `systemctl --user list-unit-files | grep -Ei 'hermes|agent' || true`
+- `systemctl list-timers --all | grep -Ei 'hermes|agent' || true`
 
 ## Check-only execution
 - `./scripts/hermes-weekly-update-check.sh`
 - Capture exit code and whether output confirms:
-  - Hermes version
-  - config check status
-  - skills check status
-  - git maintenance mode disabled by default
+ - Hermes version
+ - config check status
+ - skills check status
+ - git maintenance mode disabled by default
 
 ## Supplemental health checks
 - `hermes --version`
@@ -442,8 +438,6 @@ If proposing a timer, document actual host timezone and whether schedule is loca
 
 ## Rollback policy
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore], Codex
 
 # Rollback guide
 

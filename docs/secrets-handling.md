@@ -6,8 +6,6 @@ Public-safe secrets governance extraction.
 
 # Secrets Management Policy (Skeleton)
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [repo governance review], Oscar/Hermes and/or Codex [documentation]
 
 ## Status
 
@@ -36,7 +34,7 @@ Provide a concise placeholder policy for secret classification, storage, and han
 - Do not inline Gmail app-password in Himalaya TOML auth commands.
 - Do not use nested `python -c` or layered one-liners for password extraction.
 - Use wrapper command path for Himalaya auth retrieval:
-  - `<private-workspace-path>`
+ - `<private-workspace-path>`
 - Wrapper must source env through Bash, strip whitespace, print only cleaned value to stdout, and fail with redacted error on missing/empty value.
 - Validation must not print secret values; use wrapper output length check only (`wc -c`).
 
@@ -69,8 +67,6 @@ Provide a concise placeholder policy for secret classification, storage, and han
 
 Status: supporting onboarding snapshot, not canonical source of truth. Canonical service entries live in docs/security/external-access-register.md. Canonical skill entries live in config/skill-register.yaml and docs/skills/skill-register.md.
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [architecture + governance], Oscar/Hermes and/or Codex [execution]
 
 ## Scope
 

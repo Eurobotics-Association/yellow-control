@@ -6,29 +6,27 @@ Public-safe extraction of enforceable gates.
 
 # Agent PAM/IAM Governance Policy — ADAL/CDEL/ESAL/PCL
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [review, policy refinement, incident analysis], Oscar/Hermes and/or Codex [implementation]
 
 Status: Phase 0 approved for control-plane documentation
-Scope: Oscar/Hermes agent access governance, privileged access, server access, container access, and secret-handling boundaries
-Repository: private-control-repo
-Applies to: Oscar/Hermes, Codex, human administrators, AI-assisted administrators, and control-plane maintainers
+Scope: governed agent / Hermes-compatible runtime agent access governance, privileged access, server access, container access, and secret-handling boundaries
+Repository: private runtime governance repository
+Applies to: governed agent / Hermes-compatible runtime, Codex, human administrators, AI-assisted administrators, and control-plane maintainers
 
 ---
 
 ## 1. Purpose
 
-This document defines the PAM/IAM governance model for Oscar/Hermes.
+This document defines the PAM/IAM governance model for governed agent / Hermes-compatible runtime.
 
 For canonical definitions and level tables, see `docs/security/governance-levels-reference.md`.
 
 Core doctrine:
 
-> Oscar may operate systems.  
-> Oscar may not capture systems.  
-> Oscar may propose new privileges.  
-> Oscar may not self-grant new privileges.  
-> Oscar may reference secrets.  
+> Oscar may operate systems. 
+> Oscar may not capture systems. 
+> Oscar may propose new privileges. 
+> Oscar may not self-grant new privileges. 
+> Oscar may reference secrets. 
 > Oscar may not become the uncontrolled vault of secrets.
 
 ---
@@ -45,7 +43,7 @@ Core doctrine:
 ## 1.2 Profile/Project governance note
 
 - Profile/project governance supports PCL and ESAL boundaries.
-- `oscar-dev` is currently the active full-stack/cyber-engineering profile.
+- `agent-dev` is currently the active full-stack/cyber-engineering profile.
 - Engineering/Pegasus-M context is deferred.
 - Persistent automation must be governed before activation.
 
@@ -80,12 +78,12 @@ Core doctrine:
 
 - ADAL level interpretation is contextual by target role.
 - On the resident Hermes runtime host, ADAL-2.5 may include controlled resident-runtime maintenance when documented and approved:
-  - Hermes update preflight only,
-  - runtime version/status/log inspection,
-  - backup creation,
-  - applying reviewed repo-managed Yellow `SKILL.md` proposals with backup/hash verification,
-  - user-service status checks,
-  - preparing an approved Hermes update plan.
+ - Hermes update preflight only,
+ - runtime version/status/log inspection,
+ - backup creation,
+ - applying reviewed repo-managed Yellow `SKILL.md` proposals with backup/hash verification,
+ - user-service status checks,
+ - preparing an approved Hermes update plan.
 - `hermes update` itself is runtime-changing and requires explicit approval after preflight.
 - If update execution requires maintenance beyond approved resident ADAL-2.5 envelope (for example system-level package remediation, sudoers changes, or service-impacting recovery outside approved user-space operations), ADAL-3T temporary elevation is required.
 - For external targets, ADAL-2.5 remains narrower: read-only diagnostics and wrapper-mediated baseline audit; no arbitrary install/update/restart, no broad sudo, and no service/container state changes unless explicitly approved/elevated.
@@ -121,9 +119,9 @@ Rules:
 Future Mode 2 design note example (not Phase 0 implementation):
 
 ```html
-<!-- private-control-repo:BEGIN external-access-pam-iam -->
+<!-- private runtime governance repository:BEGIN external-access-pam-iam -->
 ...
-<!-- private-control-repo:END external-access-pam-iam -->
+<!-- private runtime governance repository:END external-access-pam-iam -->
 ```
 
 ---
@@ -151,9 +149,9 @@ ADAL classifies delegated administrative authority for host/service operations.
 | ADAL-0 | No Access | No account/key/token/approved access | Out-of-scope systems | Allowed | No runtime operations |
 | ADAL-1 | User Access Only | Dedicated user, no sudo/elevation | Remote diagnostics, repo/user-space work | Preferred default for remote hosts | Lowest operational risk |
 | ADAL-2 | Constrained Delegated Administration | Limited NOPASSWD sudo/wrappers, lockout-protected | Managed hosts with narrow privileged tasks | Preferred maximum for many important hosts | May allow `apt update`; generic `apt install` should not be default |
-| **ADAL-2.5 / ADAL-2+** | **Extended Delegated Operations / Extended Non-Lockout Administration** | Approved package installation, user-service management, diagnostics, runtime recovery, and controlled Docker/container operations **without owner lockout/capture capability** | Resident agent host or explicitly approved managed host | **Robert’s preferred resident-host level for runtime-agent for now** | Stronger than ADAL-2; weaker than ADAL-3 |
+| **ADAL-2.5 / ADAL-2+** | **Extended Delegated Operations / Extended Non-Lockout Administration** | Approved package installation, user-service management, diagnostics, runtime recovery, and controlled Docker/container operations **without owner lockout/capture capability** | Resident agent host or explicitly approved managed host | **maintainer-preferred resident-host level for runtime-agent for now** | Stronger than ADAL-2; weaker than ADAL-3 |
 | ADAL-3 | Full Sudo With Approval | Broad/full sudo, risky actions require explicit approval | Exceptional staging/non-critical operations | Exceptional | Higher risk; can approach host-capture capability |
-| ADAL-R3 (if used) | Resident Broad Sudo Reality Class | Runtime may have broad sudo (including possible `NOPASSWD:ALL`) on resident host | Temporary operational reality | High-risk exception only | Stronger than ADAL-2.5; requires explicit Robert approval and later review |
+| ADAL-R3 (if used) | Resident Broad Sudo Reality Class | Runtime may have broad sudo (including possible `NOPASSWD:ALL`) on resident host | Temporary operational reality | High-risk exception only | Stronger than ADAL-2.5; requires explicit the owner approval and later review |
 | ADAL-4 | Full Sudo Autonomous | Full sudo without per-action approval | Disposable labs only | Avoid for production | Not for important hosts |
 | ADAL-5 | Agent-Owned OS | Agent is sole OS admin; human still controls infrastructure recovery | Special-purpose lab contexts | Special-purpose only | Never for systems requiring owner-admin continuity |
 | ADAL-6 | Unbounded Agent Control | Agent controls OS + infrastructure recovery path with no human break-glass | None | Forbidden | Explicitly forbidden |
@@ -183,7 +181,7 @@ If ADAL-R3 appears in this repository, treat it as:
 
 - Stronger than ADAL-2.5.
 - Potentially including `NOPASSWD:ALL` on resident host.
-- High risk; use only with explicit Robert approval.
+- High risk; use only with explicit the owner approval.
 
 For runtime-agent now:
 
@@ -196,11 +194,11 @@ For runtime-agent now:
 
 ### 6.1 Lockout/Capture Risk
 
-Lockout/capture risk means the agent can remove or block Robert/admin access or control recovery paths.
+Lockout/capture risk means the agent can remove or block the owner/admin access or control recovery paths.
 
 Examples:
 
-- changing/deleting Robert/rfv/admin accounts
+- changing/deleting the owner/rfv/admin accounts
 - changing admin passwords
 - editing `/root/.ssh/authorized_keys`
 - editing `<private-workspace-path>`
@@ -240,43 +238,43 @@ ADAL-2.5 is not only a rights model; it is also an installation reliability cont
 Before changes, installers must preflight:
 
 - Effective Unix user
-  - `whoami`
-  - `id`
+ - `whoami`
+ - `id`
 - Non-interactive sudo
-  - `sudo -n true`
-  - `sudo -n -l`
+ - `sudo -n true`
+ - `sudo -n -l`
 - Package capability (if packages may be installed)
-  - `apt-get` availability
-  - non-interactive install capability where required
+ - `apt-get` availability
+ - non-interactive install capability where required
 - Docker/container capability (if Docker is required)
-  - `command -v docker`
-  - `docker ps`
-  - `docker compose version`
-  - docker group membership for `oscar` if non-sudo Docker is expected
+ - `command -v docker`
+ - `docker ps`
+ - `docker compose version`
+ - docker group membership for `agent` if non-sudo Docker is expected
 - User systemd bus
-  - `/run/user/<uid>` exists
-  - `XDG_RUNTIME_DIR=/run/user/<uid> systemctl --user status` works
+ - `/run/user/<uid>` exists
+ - `XDG_RUNTIME_DIR=/run/user/<uid> systemctl --user status` works
 - Service management
-  - ability to `start/restart/status` required user services
+ - ability to `start/restart/status` required user services
 - Network/listening checks
-  - `ss -ltnp` for expected ports
-  - `curl` local health/version endpoints where available
+ - `ss -ltnp` for expected ports
+ - `curl` local health/version endpoints where available
 - Env-file syntax validation before restart
-  - source env file under bash
-  - values with spaces must be quoted
-  - never print secrets
+ - source env file under bash
+ - values with spaces must be quoted
+ - never print secrets
 - DB/bootstrap state where applicable
-  - detect whether admin user exists
-  - backup DB before modifying
-  - do not print password hashes unless necessary
+ - detect whether admin user exists
+ - backup DB before modifying
+ - do not print password hashes unless necessary
 - Duplicate process detection
-  - avoid manual `nohup` starts when a systemd unit exists
-  - manage Open WebUI via user systemd service when installed that way
-  - verify exactly one expected process/listener after restart
+ - avoid manual `nohup` starts when a systemd unit exists
+ - manage Open WebUI via user systemd service when installed that way
+ - verify exactly one expected process/listener after restart
 
 If checks fail, installer must stop before partial runtime changes.
 
-The installer must never ask Robert for an interactive sudo password inside Hermes/Open WebUI. It must use `sudo -n` and report precise remediation commands for `rfv/admin`.
+The installer must never ask the owner for an interactive sudo password inside Hermes/Open WebUI. It must use `sudo -n` and report precise remediation commands for `rfv/admin`.
 
 ### 7.1 Mandatory pre-apply backup/checkpoint gate
 
@@ -286,7 +284,7 @@ Before any runtime deploy/re-apply modifies files, control-plane deployment must
 
 Required controls:
 
-- directory owner `oscar:oscar`
+- directory owner `agent:agent`
 - directory mode `700`
 - artifact mode `600` where practical
 - no commit/push/email/Telegram transmission of backup artifacts by default
@@ -294,11 +292,11 @@ Required controls:
 
 Minimum backup scope (when present):
 
-- private-control-repo git metadata (`branch`, `HEAD`, `status`, recent log) and `git bundle --all`
-- private-control-repo working tree tarball excluding `.git`, `.env`, caches, `node_modules`, `__pycache__`, `*.pyc`
+- private runtime governance repository git metadata (`branch`, `HEAD`, `status`, recent log) and `git bundle --all`
+- private runtime governance repository working tree tarball excluding `.git`, `.env`, caches, `node_modules`, `__pycache__`, `*.pyc`
 - Hermes critical runtime files (`SOUL.md`, `config.yaml`, `.env`, `auth.json`)
 - Open WebUI critical runtime files (`open-webui.env`, `open-webui.service`, `webui.db`, `.webui_secret_key`)
-- privileged policy snapshots (`/etc/sudoers.d/oscar-agent`, `/etc/sudoers.d/private-control-repo`) using `sudo -n`
+- privileged policy snapshots (`/etc/sudoers.d/agent-runtime`, `/etc/sudoers.d/private runtime governance repository`) using `sudo -n`
 - runtime state report and `SHA256SUMS`
 
 If pre-apply backup fails, deployment/apply must stop.
@@ -397,7 +395,7 @@ Defaults:
 
 ## 11. ESAL — External Service Access Level
 
-ESAL classifies Oscar/Hermes access to external services such as GitHub, Gmail, Telegram, cloud dashboards, APIs, SaaS platforms, password managers, and web administration portals.
+ESAL classifies governed agent / Hermes-compatible runtime access to external services such as GitHub, Gmail, Telegram, cloud dashboards, APIs, SaaS platforms, password managers, and web administration portals.
 
 Clarification:
 
@@ -431,13 +429,13 @@ ESAL authority must not be used to disclose private/confidential project informa
 ### 11.3 ESAL-4/5 Owner Recovery Custody Requirement
 
 - ESAL-4 and ESAL-5 accounts must not be agent-only recoverable.
-- Robert/owner must retain break-glass recovery custody.
+- the owner/owner must retain break-glass recovery custody.
 - For Gmail/Google accounts, owner custody should include a recovery email/path and backup codes where available.
 - For GitHub accounts, owner custody should include recovery codes and at least one documented recovery method where available.
 - Recovery codes must be stored in an owner-controlled vault/password manager, not in this control plane repository.
 - The external-access register may reference the vault item/location but must not contain recovery codes.
-- Oscar must not rotate, delete, consume, regenerate, or invalidate recovery codes without explicit Robert approval.
-- Oscar must not change recovery email, 2FA methods, passkeys, security keys, or account ownership without explicit Robert approval.
+- Oscar must not rotate, delete, consume, regenerate, or invalidate recovery codes without explicit the owner approval.
+- Oscar must not change recovery email, 2FA methods, passkeys, security keys, or account ownership without explicit the owner approval.
 - If recovery custody is missing or unknown, ESAL-4/5 access is incomplete and must not be expanded.
 
 ---
@@ -454,7 +452,7 @@ Separate reports are required where applicable:
 
 Preferred delivery order:
 
-1. Email to Robert/admin address if Gmail/email is available.
+1. Email to the owner/admin address if Gmail/email is available.
 2. Telegram home/admin channel if email is unavailable.
 3. Local Markdown report in control-plane/runtime report directory if neither external channel is available.
 
@@ -547,7 +545,7 @@ No plaintext secrets in register entries; only location references.
 ## 16. Sudo and Wrapper Principles
 
 - Prefer narrow root-owned wrappers where practical.
-- Wrapper scripts must be root-owned and not writable by `oscar`.
+- Wrapper scripts must be root-owned and not writable by `agent`.
 - Validate arguments and avoid arbitrary shell expansion.
 - Do not permit wrappers that alter owner access, sudoers, SSH admin paths, break-glass accounts, or recovery control unless explicitly approved.
 
@@ -568,7 +566,7 @@ For remote production hosts (default):
 
 In Phase 0, secrets-management and privileged-delegation guidance remain in this main policy document.
 
-Planned Phase 1 split-outs (unless Robert asks to create now):
+Planned Phase 1 split-outs (unless the owner asks to create now):
 
 - `docs/security/secrets-management-policy.md`
 - `docs/security/privileged-delegation-procedure.md`
@@ -588,8 +586,6 @@ Do not implement in this phase:
 Mode 2 is future design territory only.
 
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.4 Thinking, Codex
 
 # GitHub safety
 
@@ -610,14 +606,14 @@ When work appears ready, Oscar requests submission/review rather than self-mergi
 - Runtime guards must use configured git remotes and authenticated transport where required.
 - Do not hardcode unauthenticated private HTTPS reachability checks for private GitHub repositories.
 - Hermes core maintenance dependency is Hermes upstream/origin reachability only.
-- private-control-repo fork/upstream reachability is maintenance-context dependent and non-blocking for Hermes core auto-update.
+- private runtime governance repository fork/upstream reachability is maintenance-context dependent and non-blocking for Hermes core auto-update.
 
 ## Autonomous maintenance guardrails
 
 - GitHub operational use for Oscar runtime workflows is ADAL-4.
 - Oscar may commit and push to branches in its own fork.
 - Oscar may prepare/open/update PRs to Eurobotics upstream.
-- Oscar must not merge into Eurobotics upstream/main without Robert approval.
+- Oscar must not merge into Eurobotics upstream/main without the owner approval.
 - Oscar must not push directly to Eurobotics main.
 - Oscar must not auto-merge PRs.
 - Oscar must not force-push shared/protected branches.
@@ -630,23 +626,21 @@ When work appears ready, Oscar requests submission/review rather than self-mergi
 Documentation must remain aligned with implementation changes in the same PR whenever behavior or controls change.
 
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore], Codex
 
 # Authority Verification Policy
 
 ## Purpose
 
-Define safe authority verification rules for `private-control-repo` while preventing private contacts or verification secrets from being stored in Git.
+Define safe authority verification rules for `private runtime governance repository` while preventing private contacts or verification secrets from being stored in Git.
 
 ## Core authority model
 
-- Primary authority: **Robert Vergnes**.
-- Robert is the governance authority.
+- Primary authority: **the owner Vergnes**.
+- the owner is the governance authority.
 - Oscar is an executor/proposer, **not** authority.
-- Additional administrators may be designated only by Robert.
+- Additional administrators may be designated only by the owner.
 - Designation of another admin requires at least **two independent verification channels**.
-- "Vergnes Family" membership may only be defined by Robert, but real family member names/contact details must not be stored in Git.
+- "Vergnes Family" membership may only be defined by the owner, but real family member names/contact details must not be stored in Git.
 
 ## Verification channels and storage constraints
 
@@ -666,40 +660,40 @@ The following are **not** sufficient to establish authority:
 ## Non-delegable constraints
 
 - Oscar cannot grant authority to itself.
-- Oscar cannot change authority registry without Robert approval.
+- Oscar cannot change authority registry without the owner approval.
 
 
 ## Operational context versus authority proof
 
 - **Operational context** means a local shell/session from which commands are executed.
-- **Authority proof** means evidence that Robert, as governance authority, approved a governance/security/admin-impacting decision.
+- **Authority proof** means evidence that the owner, as governance authority, approved a governance/security/admin-impacting decision.
 - Operational context and authority proof are not the same thing.
 
 ### Trusted operational contexts
 
 - Interactive shell as `rfv` on runtime-agent.
 - Root shell on runtime-agent reached by `rfv`.
-- Interactive shell as `oscar` on runtime-agent when entered by Robert/rfv/root for Oscar runtime maintenance.
-- Direct provider console or equivalent emergency access controlled by Robert.
+- Interactive shell as `agent` on runtime-agent when entered by the owner/rfv/root for Oscar runtime maintenance.
+- Direct provider console or equivalent emergency access controlled by the owner.
 
 ### Authority proofs
 
-- Explicit Robert approval through approved channels.
-- Upstream GitHub PR approval by Robert / upstream owner.
+- Explicit the owner approval through approved channels.
+- Upstream GitHub PR approval by the owner / upstream owner.
 - Verified multi-channel approval for future RED operations.
 - Future encrypted authority registry checks, when implemented.
 
-### Clarifications for `oscar` shell
+### Clarifications for `agent` shell
 
-- `oscar` shell may be trusted for runtime execution.
-- `oscar` shell is not by itself authority proof.
-- `oscar` shell may deploy reviewed baseline files to operator-owned own `<runtime-register-root>` runtime.
-- `oscar` shell may run Hermes checkpoints, backups, tool installs, and maintenance inside operator-owned runtime scope.
-- `oscar` shell must not approve governance/security/admin changes by itself.
+- `agent` shell may be trusted for runtime execution.
+- `agent` shell is not by itself authority proof.
+- `agent` shell may deploy reviewed baseline files to operator-owned own `<runtime-register-root>` runtime.
+- `agent` shell may run Hermes checkpoints, backups, tool installs, and maintenance inside operator-owned runtime scope.
+- `agent` shell must not approve governance/security/admin changes by itself.
 
 ### Explicit examples
 
-Allowed from trusted `oscar` operational shell:
+Allowed from trusted `agent` operational shell:
 
 - Run Hermes.
 - Create/list/rollback checkpoints.
@@ -709,7 +703,7 @@ Allowed from trusted `oscar` operational shell:
 - Run Git operations in Oscar-owned workspaces.
 - Run tests.
 
-Not allowed based only on being `oscar`:
+Not allowed based only on being `agent`:
 
 - Approve SOUL governance changes.
 - Approve authority registry changes.
@@ -731,8 +725,6 @@ If authority proof is required and unavailable:
 - Oscar may continue safe runtime operations that do not require authority proof.
 
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore], Codex
 
 # Security and admin boundaries
 
@@ -758,10 +750,10 @@ Oscar can request elevation but cannot grant it to itself.
 
 See [Authority verification policy](governance-model.md) for full authority-proof rules.
 
-- `oscar` shell is a valid operational context for Oscar runtime maintenance.
-- `oscar` shell is not an authority escalation path.
-- `oscar` shell does not allow Oscar to override human administrators.
-- Admin protection rules still apply even when commands are run from the `oscar` account.
+- `agent` shell is a valid operational context for Oscar runtime maintenance.
+- `agent` shell is not an authority escalation path.
+- `agent` shell does not allow Oscar to override human administrators.
+- Admin protection rules still apply even when commands are run from the `agent` account.
 
 
 ## Current manual sudo exception
@@ -792,7 +784,7 @@ Use when preparing governance/design PRs that must not execute runtime actions.
 - State explicitly in each added/changed artifact: "Proposal only".
 - State explicitly: no execution authorization, no runtime changes, no host changes.
 - Preserve existing doctrine unless task explicitly approves doctrine changes.
-- For ADAL naming separation: keep ADAL-2.5 wrapper names as `oscar-adal25-*`; use `oscar-adal3t-*` for ADAL-3T temporary wrapper/procedure proposals.
+- For ADAL naming separation: keep ADAL-2.5 wrapper names as `agent-adal25-*`; use `agent-adal3t-*` for ADAL-3T temporary wrapper/procedure proposals.
 
 ## Validation gates
 - `git diff --check`
@@ -855,8 +847,6 @@ Stop or defer when project identity, target mapping, or scope is ambiguous.
 
 ## Backup gate
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore], Codex
 
 # Rollback guide
 
@@ -897,19 +887,17 @@ Use infrastructure-level recovery when needed:
 ```
 
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [deployment safety design], Oscar/Hermes and/or Codex [implementation]
 
 # Deployment workflow
 
 ## Philosophy
 
-`private-control-repo` governs reviewed control artifacts in git. Hermes runtime uses deployed copies from this repository and does not define governance source.
+`private runtime governance repository` governs reviewed control artifacts in git. Hermes runtime uses deployed copies from this repository and does not define governance source.
 
 The operating model is one-way promotion:
 
 1. Review and update governed files in git.
-2. Pull the latest changes on the host checkout (for example `/opt/private-control-repo`).
+2. Pull the latest changes on the host checkout (for example `/opt/private runtime governance repository`).
 3. Deploy only the required scope into the active runtime home.
 4. Verify runtime drift explicitly.
 
@@ -951,10 +939,10 @@ Dry-run reporting expectation (operator checklist):
 
 Supported scopes:
 
-- `runtime-governance`: SOUL/AGENTS/README + governed config/docs under `$HERMES_HOME/private-control-repo/...`
+- `runtime-governance`: SOUL/AGENTS/README + governed config/docs under `$HERMES_HOME/private runtime governance repository/...`
 - `skills`: targeted Yellow skills only:
-  - `$HERMES_HOME/skills/yellow-control-governance/SKILL.md`
-  - `$HERMES_HOME/skills/yellow-project-management/SKILL.md`
+ - `$HERMES_HOME/skills/yellow-control-governance/SKILL.md`
+ - `$HERMES_HOME/skills/yellow-project-management/SKILL.md`
 - `all`: includes `runtime-governance` + `skills`
 - Legacy compatibility scopes: `soul`, `policy`, `prompts`
 
@@ -965,14 +953,14 @@ Supported modes:
 - `--apply-staged`: **exception mode**, not routine; applies only when staged candidates were semantically reviewed and explicitly approved.
 
 Deploy is controlled copy/stage/apply with backups. It is **not** an automatic semantic merge.
-Sensitive differing files are backed up and staged for Oscar/Codex merge review with Robert approval before any apply decision.
+Sensitive differing files are backed up and staged for Oscar/Codex merge review with the owner approval before any apply decision.
 
 For mature/non-newborn runtimes, do not use `--apply-staged` as a bulk operation on sensitive governance files unless all of the following are true:
 
 1. staged candidates were reviewed;
 2. clean merged proposals were produced where needed;
 3. runtime-specific content was preserved or deliberately retired;
-4. Robert explicitly approved apply;
+4. the owner explicitly approved apply;
 5. backup and rollback path is known.
 
 Sensitive governance paths include:
@@ -981,9 +969,9 @@ Sensitive governance paths include:
 - `$HERMES_HOME/AGENTS.md`
 - `$HERMES_HOME/README.md`
 - `$HERMES_HOME/skills/*/SKILL.md`
-- `$HERMES_HOME/private-control-repo/config/*.yaml`
-- `$HERMES_HOME/private-control-repo/docs/security/*.md`
-- `$HERMES_HOME/private-control-repo/docs/skills/*.md`
+- `$HERMES_HOME/private runtime governance repository/config/*.yaml`
+- `$HERMES_HOME/private runtime governance repository/docs/security/*.md`
+- `$HERMES_HOME/private runtime governance repository/docs/skills/*.md`
 
 Missing runtime governance files may be copied during `--prepare-merge`.
 Existing different sensitive files must be staged, not overwritten.
@@ -999,7 +987,7 @@ Remote-audit evidence and other mutable runtime artifacts are not deployed from 
 
 `normalized-context.md` is the preferred compact context file for future work on the same target.
 
-Raw audit tarballs and host-local sensitive logs must not be committed to git. Default retention is 3 months; longer retention for incident/security evidence requires Robert approval.
+Raw audit tarballs and host-local sensitive logs must not be committed to git. Default retention is 3 months; longer retention for incident/security evidence requires the owner approval.
 
 Monthly recurring audits are persistent automation and require explicit approval before cron/systemd creation.
 
@@ -1017,7 +1005,7 @@ Backup target:
 
 Security constraints:
 
-- backup directory owner: `oscar:oscar`
+- backup directory owner: `agent:agent`
 - backup directory mode: `700`
 - artifact mode: `600` where practical
 - backups may contain sensitive runtime files and must never be committed, emailed, or sent to Telegram by default
@@ -1025,11 +1013,11 @@ Security constraints:
 
 Backup scope includes, when present:
 
-- private-control-repo git branch/HEAD/status/log and `git bundle --all`
-- private-control-repo working tree tarball (excluding `.git`, `.env`, caches, `node_modules`, `__pycache__`, `*.pyc`)
+- private runtime governance repository git branch/HEAD/status/log and `git bundle --all`
+- private runtime governance repository working tree tarball (excluding `.git`, `.env`, caches, `node_modules`, `__pycache__`, `*.pyc`)
 - Hermes critical runtime files (`SOUL.md`, `config.yaml`, `.env`, `auth.json`, checkpoints metadata)
 - Open WebUI critical runtime files (`open-webui.env`, user systemd unit, `webui.db`, `.webui_secret_key`)
-- privileged config snapshots (`/etc/sudoers.d/oscar-agent`, `/etc/sudoers.d/private-control-repo`) via `sudo -n`
+- privileged config snapshots (`/etc/sudoers.d/agent-runtime`, `/etc/sudoers.d/private runtime governance repository`) via `sudo -n`
 - runtime state report and `SHA256SUMS`
 
 ## Reviewed Yellow skill targeted apply helper
@@ -1040,8 +1028,8 @@ Example:
 
 ```bash
 ./scripts/apply-reviewed-skill.sh \
-  --skill yellow-control-governance \
-  --proposal <runtime-register-root>
+ --skill yellow-control-governance \
+ --proposal <runtime-register-root>
 ```
 
 Safety behavior:
@@ -1090,12 +1078,12 @@ Always review `runtime-state-report.txt`, `SHA256SUMS`, and `ROLLBACK-NOTES.txt`
 #!/usr/bin/env bash
 set -euo pipefail
 
-Author="F.M. Robert Vergnes / robert.vergnes@yahoo.fr"
-Assisted_by="ChatGPT: GPT-5.5 Thinking [deployment safety design], Oscar/Hermes and/or Codex [implementation]"
+Author="F.M. the owner Vergnes / robert.vergnes@yahoo.fr"
+Assisted_by="ChatGPT: GPT-5.5 Thinking [deployment safety design], governed agent / Hermes-compatible runtime and/or Codex [implementation]"
 
 DRY_RUN=0
 if [[ "${1:-}" == "--dry-run" ]]; then
-  DRY_RUN=1
+ DRY_RUN=1
 fi
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -1104,18 +1092,18 @@ TS="$(date -u +%Y%m%dT%H%M%SZ)"
 BACKUP_DIR="${BACKUP_BASE}/${TS}"
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
-  printf '%s\n' "$BACKUP_DIR"
-  exit 0
+ printf '%s\n' "$BACKUP_DIR"
+ exit 0
 fi
 
 # Mandatory sudo preflight before any sensitive backup copy work.
 if ! sudo -n true >/dev/null 2>&1; then
-  echo "ERROR: sudo -n preflight failed; non-interactive sudo is required before pre-apply backup. Remediation: restore oscar sudoers non-interactive access (for example /etc/sudoers.d/oscar-agent) and verify with: sudo -n true" >&2
-  exit 1
+ echo "ERROR: sudo -n preflight failed; non-interactive sudo is required before pre-apply backup. Remediation: restore agent sudoers non-interactive access (for example /etc/sudoers.d/agent-runtime) and verify with: sudo -n true" >&2
+ exit 1
 fi
 
 mkdir -p "$BACKUP_DIR"
-chown oscar:oscar "$BACKUP_BASE" "$BACKUP_DIR" 2>/dev/null || true
+chown agent:agent "$BACKUP_BASE" "$BACKUP_DIR" 2>/dev/null || true
 chmod 700 "$BACKUP_BASE" "$BACKUP_DIR"
 
 # Explicit backup subdirectories
@@ -1123,53 +1111,53 @@ mkdir -p "${BACKUP_DIR}/hermes" "${BACKUP_DIR}/open-webui" "${BACKUP_DIR}/system
 chmod 700 "${BACKUP_DIR}/hermes" "${BACKUP_DIR}/open-webui" "${BACKUP_DIR}/system"
 
 note_missing() {
-  local p="$1"
-  printf '%s\n' "$p" >>"${BACKUP_DIR}/missing-optional-files.txt"
+ local p="$1"
+ printf '%s\n' "$p" >>"${BACKUP_DIR}/missing-optional-files.txt"
 }
 
 safe_copy_if_present() {
-  local src="$1" dst="$2"
-  if [[ -f "$src" ]]; then
-    mkdir -p "$(dirname "$dst")"
-    cp "$src" "$dst"
-    chmod 600 "$dst" || true
-  else
-    note_missing "$src"
-  fi
+ local src="$1" dst="$2"
+ if [[ -f "$src" ]]; then
+ mkdir -p "$(dirname "$dst")"
+ cp "$src" "$dst"
+ chmod 600 "$dst" || true
+ else
+ note_missing "$src"
+ fi
 }
 
 sudo_copy_if_present() {
-  local src="$1" dst="$2"
-  if sudo -n test -f "$src" 2>/dev/null; then
-    mkdir -p "$(dirname "$dst")"
-    sudo -n cat "$src" >"$dst"
-    chmod 600 "$dst" || true
-  else
-    note_missing "$src"
-  fi
+ local src="$1" dst="$2"
+ if sudo -n test -f "$src" 2>/dev/null; then
+ mkdir -p "$(dirname "$dst")"
+ sudo -n cat "$src" >"$dst"
+ chmod 600 "$dst" || true
+ else
+ note_missing "$src"
+ fi
 }
 
 # 1) git metadata + bundle
 (
-  cd "$REPO_ROOT"
-  git branch --show-current >"${BACKUP_DIR}/private-control-repo-git-branch.txt"
-  git rev-parse HEAD >"${BACKUP_DIR}/private-control-repo-git-head.txt"
-  git status --short >"${BACKUP_DIR}/private-control-repo-git-status.txt"
-  git log --oneline -20 >"${BACKUP_DIR}/private-control-repo-git-log.txt"
-  git bundle create "${BACKUP_DIR}/private-control-repo-all.bundle" --all
+ cd "$REPO_ROOT"
+ git branch --show-current >"${BACKUP_DIR}/private runtime governance repository-git-branch.txt"
+ git rev-parse HEAD >"${BACKUP_DIR}/private runtime governance repository-git-head.txt"
+ git status --short >"${BACKUP_DIR}/private runtime governance repository-git-status.txt"
+ git log --oneline -20 >"${BACKUP_DIR}/private runtime governance repository-git-log.txt"
+ git bundle create "${BACKUP_DIR}/private runtime governance repository-all.bundle" --all
 
-  # 2) working tree tarball
-  tar \
-    --exclude='.git' \
-    --exclude='.env' \
-    --exclude='**/.env' \
-    --exclude='**/*.env' \
-    --exclude='**/node_modules' \
-    --exclude='**/__pycache__' \
-    --exclude='**/*.pyc' \
-    --exclude='**/.cache' \
-    -czf "${BACKUP_DIR}/private-control-repo-workingtree.tar.gz" \
-    .
+ # 2) working tree tarball
+ tar \
+ --exclude='.git' \
+ --exclude='.env' \
+ --exclude='**/.env' \
+ --exclude='**/*.env' \
+ --exclude='**/node_modules' \
+ --exclude='**/__pycache__' \
+ --exclude='**/*.pyc' \
+ --exclude='**/.cache' \
+ -czf "${BACKUP_DIR}/private runtime governance repository-workingtree.tar.gz" \
+ .
 )
 
 # 3) Hermes runtime files
@@ -1178,10 +1166,10 @@ safe_copy_if_present "<private-workspace-path> "${BACKUP_DIR}/hermes/config.yaml
 safe_copy_if_present "<private-workspace-path> "${BACKUP_DIR}/hermes/.env"
 safe_copy_if_present "<private-workspace-path> "${BACKUP_DIR}/hermes/auth.json"
 if [[ -d "<private-workspace-path> ]]; then
-  tar -czf "${BACKUP_DIR}/hermes/checkpoints-metadata.tar.gz" -C "<private-workspace-path> checkpoints
-  chmod 600 "${BACKUP_DIR}/hermes/checkpoints-metadata.tar.gz" || true
+ tar -czf "${BACKUP_DIR}/hermes/checkpoints-metadata.tar.gz" -C "<private-workspace-path> checkpoints
+ chmod 600 "${BACKUP_DIR}/hermes/checkpoints-metadata.tar.gz" || true
 else
-  note_missing "<private-workspace-path>
+ note_missing "<private-workspace-path>
 fi
 
 # 4) Open WebUI files
@@ -1191,52 +1179,52 @@ safe_copy_if_present "<private-workspace-path> "${BACKUP_DIR}/open-webui/webui.d
 safe_copy_if_present "<private-workspace-path> "${BACKUP_DIR}/open-webui/.webui_secret_key"
 
 # 5) sudoers and service config
-sudo_copy_if_present "/etc/sudoers.d/oscar-agent" "${BACKUP_DIR}/system/oscar-agent.sudoers"
-sudo_copy_if_present "/etc/sudoers.d/private-control-repo" "${BACKUP_DIR}/system/private-control-repo.sudoers"
+sudo_copy_if_present "/etc/sudoers.d/agent-runtime" "${BACKUP_DIR}/system/agent-runtime.sudoers"
+sudo_copy_if_present "/etc/sudoers.d/private runtime governance repository" "${BACKUP_DIR}/system/private runtime governance repository.sudoers"
 if [[ -d "<private-workspace-path> ]]; then
-  tar -czf "${BACKUP_DIR}/system/systemd-user-units.tar.gz" -C "<private-workspace-path> user
-  chmod 600 "${BACKUP_DIR}/system/systemd-user-units.tar.gz" || true
+ tar -czf "${BACKUP_DIR}/system/systemd-user-units.tar.gz" -C "<private-workspace-path> user
+ chmod 600 "${BACKUP_DIR}/system/systemd-user-units.tar.gz" || true
 else
-  note_missing "<private-workspace-path>
+ note_missing "<private-workspace-path>
 fi
 
 # 6) runtime report (no secret values)
-OSCAR_UID="$(id -u oscar)"
+OSCAR_UID="$(id -u agent)"
 {
-  echo "timestamp_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-  echo "hostname=$(hostname)"
-  echo "whoami=$(whoami)"
-  echo "id=$(id)"
-  echo "oscar_uid=${OSCAR_UID}"
-  echo
-  echo "[git]"
-  (cd "$REPO_ROOT" && echo "branch=$(git branch --show-current)" && echo "head=$(git rev-parse HEAD)" && git status --short)
-  echo
-  echo "[services-as-oscar]"
-  sudo -u oscar XDG_RUNTIME_DIR="/run/user/${OSCAR_UID}" systemctl --user status hermes-gateway.service --no-pager || true
-  sudo -u oscar XDG_RUNTIME_DIR="/run/user/${OSCAR_UID}" systemctl --user status open-webui.service --no-pager || true
-  echo
-  echo "[ports]"
-  ss -ltnp | grep -E ':3000\b|:8642\b' || true
-  echo
-  echo "[processes]"
-  ps -ef | grep -E 'hermes|open-webui' | grep -v grep || true
-  echo
-  echo "[docker-as-oscar]"
-  sudo -iu oscar bash -lc 'docker ps -a || true'
-  echo
-  echo "[sudo-check]"
-  sudo -n true && echo "sudo_n_true=ok" || echo "sudo_n_true=failed"
-  sudo -n -l || true
+ echo "timestamp_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+ echo "hostname=$(hostname)"
+ echo "whoami=$(whoami)"
+ echo "id=$(id)"
+ echo "oscar_uid=${OSCAR_UID}"
+ echo
+ echo "[git]"
+ (cd "$REPO_ROOT" && echo "branch=$(git branch --show-current)" && echo "head=$(git rev-parse HEAD)" && git status --short)
+ echo
+ echo "[services-as-agent]"
+ sudo -u agent XDG_RUNTIME_DIR="/run/user/${OSCAR_UID}" systemctl --user status hermes-gateway.service --no-pager || true
+ sudo -u agent XDG_RUNTIME_DIR="/run/user/${OSCAR_UID}" systemctl --user status open-webui.service --no-pager || true
+ echo
+ echo "[ports]"
+ ss -ltnp | grep -E ':3000\b|:8642\b' || true
+ echo
+ echo "[processes]"
+ ps -ef | grep -E 'hermes|open-webui' | grep -v grep || true
+ echo
+ echo "[docker-as-agent]"
+ sudo -iu agent bash -lc 'docker ps -a || true'
+ echo
+ echo "[sudo-check]"
+ sudo -n true && echo "sudo_n_true=ok" || echo "sudo_n_true=failed"
+ sudo -n -l || true
 } >"${BACKUP_DIR}/runtime-state-report.txt"
 
 # 7) checksums + rollback notes
 {
-  echo "Rollback baseline created at: ${BACKUP_DIR}"
-  echo "Suggested restore flow (manual, review-first):"
-  echo "1) Inspect runtime-state-report.txt and SHA256SUMS"
-  echo "2) Restore targeted files from ${BACKUP_DIR}/hermes, ${BACKUP_DIR}/open-webui, ${BACKUP_DIR}/system"
-  echo "3) Re-run service status and listener checks"
+ echo "Rollback baseline created at: ${BACKUP_DIR}"
+ echo "Suggested restore flow (manual, review-first):"
+ echo "1) Inspect runtime-state-report.txt and SHA256SUMS"
+ echo "2) Restore targeted files from ${BACKUP_DIR}/hermes, ${BACKUP_DIR}/open-webui, ${BACKUP_DIR}/system"
+ echo "3) Re-run service status and listener checks"
 } >"${BACKUP_DIR}/ROLLBACK-NOTES.txt"
 
 find "$BACKUP_DIR" -type f ! -name SHA256SUMS -print0 | xargs -0 sha256sum >"${BACKUP_DIR}/SHA256SUMS"
@@ -1258,23 +1246,23 @@ Use when asked to validate whether weekly Hermes maintenance will run, without e
 ## Runtime path discovery
 - `ls -l <private-workspace-path>`
 - `ls -l <private-workspace-path>`
-- `ls -l /usr/local/bin/oscar-hermes-check /usr/local/bin/oscar-hermes-update /usr/local/bin/oscar-hermes-weekly-maintenance`
+- `ls -l /usr/local/bin/agent-hermes-check /usr/local/bin/agent-hermes-update /usr/local/bin/agent-hermes-weekly-maintenance`
 
 ## Scheduler discovery
 - `crontab -l || true`
 - `sudo -n crontab -l -u root || true`
-- `grep -RInE 'hermes|oscar-hermes|weekly' /etc/cron.d /etc/crontab /etc/cron.daily /etc/cron.weekly 2>/dev/null || true`
-- `systemctl --user list-timers --all | grep -Ei 'hermes|oscar' || true`
-- `systemctl --user list-unit-files | grep -Ei 'hermes|oscar' || true`
-- `systemctl list-timers --all | grep -Ei 'hermes|oscar' || true`
+- `grep -RInE 'hermes|agent-hermes|weekly' /etc/cron.d /etc/crontab /etc/cron.daily /etc/cron.weekly 2>/dev/null || true`
+- `systemctl --user list-timers --all | grep -Ei 'hermes|agent' || true`
+- `systemctl --user list-unit-files | grep -Ei 'hermes|agent' || true`
+- `systemctl list-timers --all | grep -Ei 'hermes|agent' || true`
 
 ## Check-only execution
 - `./scripts/hermes-weekly-update-check.sh`
 - Capture exit code and whether output confirms:
-  - Hermes version
-  - config check status
-  - skills check status
-  - git maintenance mode disabled by default
+ - Hermes version
+ - config check status
+ - skills check status
+ - git maintenance mode disabled by default
 
 ## Supplemental health checks
 - `hermes --version`
@@ -1299,8 +1287,6 @@ Rollback path must exist before runtime-changing actions.
 
 # Secrets Management Policy (Skeleton)
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [repo governance review], Oscar/Hermes and/or Codex [documentation]
 
 ## Status
 
@@ -1329,7 +1315,7 @@ Provide a concise placeholder policy for secret classification, storage, and han
 - Do not inline Gmail app-password in Himalaya TOML auth commands.
 - Do not use nested `python -c` or layered one-liners for password extraction.
 - Use wrapper command path for Himalaya auth retrieval:
-  - `<private-workspace-path>`
+ - `<private-workspace-path>`
 - Wrapper must source env through Bash, strip whitespace, print only cleaned value to stdout, and fail with redacted error on missing/empty value.
 - Validation must not print secret values; use wrapper output length check only (`wc -c`).
 
@@ -1362,8 +1348,6 @@ Provide a concise placeholder policy for secret classification, storage, and han
 
 Status: supporting onboarding snapshot, not canonical source of truth. Canonical service entries live in docs/security/external-access-register.md. Canonical skill entries live in config/skill-register.yaml and docs/skills/skill-register.md.
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [architecture + governance], Oscar/Hermes and/or Codex [execution]
 
 ## Scope
 
@@ -1413,17 +1397,15 @@ This register is informational governance metadata and does not grant permission
 
 # External Access Register
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [policy design], Oscar/Hermes and/or Codex [implementation]
 
 Status: Phase 0
-Scope: Oscar/Hermes external access metadata only
+Scope: governed agent / Hermes-compatible runtime external access metadata only
 
 ---
 
 ## Purpose
 
-This register records Oscar/Hermes access metadata for systems, services, containers, sudo delegations, and proposed access changes.
+This register records governed agent / Hermes-compatible runtime access metadata for systems, services, containers, sudo delegations, and proposed access changes.
 
 It stores access metadata only and must contain no plaintext secrets.
 
@@ -1469,14 +1451,14 @@ External Access Register is the live governance register for external access kno
 
 ```yaml
 external_package:
-  available: true|false|unknown
-  repo: <repo identifier or URL>
-  path: <package path inside repo>
-  access_for_oscar: read-only|propose-only|none|unknown
-  manifest_path: <path to manifest.yaml>
-  install_authority: human-admin-only|unknown
-  last_reviewed_utc: <timestamp|null>
-  notes: []
+ available: true|false|unknown
+ repo: <repo identifier or URL>
+ path: <package path inside repo>
+ access_for_oscar: read-only|propose-only|none|unknown
+ manifest_path: <path to manifest.yaml>
+ install_authority: human-admin-only|unknown
+ last_reviewed_utc: <timestamp|null>
+ notes: []
 ```
 
 ### Generic External Package manifest concept
@@ -1485,22 +1467,22 @@ external_package:
 target_id: <canonical external target id>
 package_version: 1
 authority_model:
-  standing_authority: ADAL-2.5
-  temporary_elevation: ADAL-3T
-  install_authority: human-admin-only
+ standing_authority: ADAL-2.5
+ temporary_elevation: ADAL-3T
+ install_authority: human-admin-only
 wrappers:
-  - name: <wrapper name>
-    runtime_path: /usr/local/sbin/<wrapper>
-    category: diagnostics|audit|container-diagnostics|safe-read|maintenance
-    mode: read-only|state-changing
-    requires_sudo: true|false
-    allowed_under: ADAL-2.5|ADAL-3T|ADAL-4
-    state_changing: true|false
-    approval_required: true|false
+ - name: <wrapper name>
+ runtime_path: /usr/local/sbin/<wrapper>
+ category: diagnostics|audit|container-diagnostics|safe-read|maintenance
+ mode: read-only|state-changing
+ requires_sudo: true|false
+ allowed_under: ADAL-2.5|ADAL-3T|ADAL-4
+ state_changing: true|false
+ approval_required: true|false
 forbidden_without_elevation: []
 evidence:
-  audit_retention_days: 90
-  raw_artifacts_git_policy: never_commit
+ audit_retention_days: 90
+ raw_artifacts_git_policy: never_commit
 ```
 
 ---
@@ -1560,7 +1542,7 @@ Canonical quick reference for ADAL/CDEL/ESAL/PCL definitions and level tables:
 
 | System | Host/Alias | Residency | Asset Type | Criticality | ADAL target | Current runtime capability | CDEL | Agent User | Auth Method | Secret Location | Sudo Policy | Lockout Protection | Approved Scope | Owner | Rotation |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| runtime-agent | runtime-agent | Resident Host | Hetzner VM | Production control-plane / agent runtime | ADAL-2.5 / ADAL-2+ | Current runtime is ADAL-R3-level on runtime-agent while `/etc/sudoers.d/oscar-agent` grants `oscar` `NOPASSWD:ALL` and `oscar` remains in the docker group. Robert’s preferred policy target remains ADAL-2.5 / ADAL-2+; this broader runtime state is accepted for resident-host bootstrap/recovery and should be reviewed later for possible reduction to ADAL-2.5 allowlists/wrappers. Active Open WebUI deployment is `open-webui.service` (oscar user systemd service) using Python venv; Docker/Compose are installed and available but not active for Open WebUI. | Controlled resident Docker/container operations allowed for Hermes/runtime/sandbox management; high-risk CDEL-5 patterns require explicit approval or ADAL-R3 | oscar | local user / SSH key | external vault reference only | Non-interactive sudo for documented operations: package install, diagnostics, Docker/runtime ops, user-service management, recovery; preserve no-lockout/no-capture boundary | Robert retains rfv/admin access, SSH break-glass, Hetzner console, snapshots/backups, rescue/rebuild | Hermes runtime, Open WebUI, Docker/container stack, package installation required for Oscar operations, control-plane maintenance, resident-host runtime recovery | Robert | 90d (current) / TBD |
+| runtime-agent | runtime-agent | Resident Host | Hetzner VM | Production control-plane / agent runtime | ADAL-2.5 / ADAL-2+ | Current runtime is ADAL-R3-level on runtime-agent while `/etc/sudoers.d/agent-runtime` grants `agent` `NOPASSWD:ALL` and `agent` remains in the docker group. maintainer-preferred policy target remains ADAL-2.5 / ADAL-2+; this broader runtime state is accepted for resident-host bootstrap/recovery and should be reviewed later for possible reduction to ADAL-2.5 allowlists/wrappers. Active Open WebUI deployment is `open-webui.service` (agent user systemd service) using Python venv; Docker/Compose are installed and available but not active for Open WebUI. | Controlled resident Docker/container operations allowed for Hermes/runtime/sandbox management; high-risk CDEL-5 patterns require explicit approval or ADAL-R3 | agent | local user / SSH key | external vault reference only | Non-interactive sudo for documented operations: package install, diagnostics, Docker/runtime ops, user-service management, recovery; preserve no-lockout/no-capture boundary | the owner retains rfv/admin access, SSH break-glass, Hetzner console, snapshots/backups, rescue/rebuild | Hermes runtime, Open WebUI, Docker/container stack, package installation required for Oscar operations, control-plane maintenance, resident-host runtime recovery | the owner | 90d (current) / TBD |
 
 ---
 
@@ -1568,19 +1550,19 @@ Canonical quick reference for ADAL/CDEL/ESAL/PCL definitions and level tables:
 
 | Service | Purpose | Runtime access path | ADAL (operational) | ESAL/Secret level | Allowed actions | Forbidden actions | Runtime validation | Hermes weekly maintenance impact | Owner / approval authority | Recovery custody reference |
 |---|---|---|---|---|---|---|---|---|---|---|
-| GitHub / NousResearch Hermes upstream | Hermes core update source | `git -C <runtime-register-root> remote origin` | ADAL-4 | ESAL-4 operational; ESAL-5 account/recovery/admin | fetch, ls-remote, guarded update checks | push to NousResearch upstream, secret push, history rewrite | `git -C <runtime-register-root> ls-remote --heads origin main` | Blocking for Hermes update path | Robert approval for ESAL-5 actions | owner-controlled vault metadata reference (required; no secrets in Git) |
-| GitHub / Oscar fork | Autonomous proposal workspace | `origin` remote in `<private-workspace-path>`; `gh auth`/SSH | ADAL-4 | ESAL-4 operational; ESAL-5 account/recovery/admin | branch, commit, push to own fork, open/update PRs | merge upstream PRs, direct protected main pushes, force-push shared/protected branches, secret push | `git -C <private-workspace-path> remote -v`; `gh auth status` | Non-blocking for Hermes update; blocking only in git-maintenance/PR workflows | Robert | owner-controlled vault metadata reference (required) |
-| GitHub / Eurobotics upstream | Protected upstream repository and PR target | `upstream` remote in `<private-workspace-path>` | ADAL-4 for PR/open/update; ADAL-5 for direct push/merge/admin | ESAL-4 operational; ESAL-5 org/admin/recovery | fetch, compare, open/update PR | direct main push, merge, force-push/history rewrite without approval | `git -C <private-workspace-path> ls-remote --heads upstream main` | Non-blocking for Hermes update; blocking only in git-maintenance/PR workflows | Robert | owner-controlled vault metadata reference (required) |
-| Gmail / Himalaya | Operational mailbox read/send integration | `himalaya` + `<private-workspace-path>` + SMTP fallback wrapper | ADAL-4 read/send | ESAL-4 operational; ESAL-5 credentials/recovery/admin | list folders, list envelopes, read approved mail, send approved operational mail via approved fallback | print app password, native Himalaya send path until retested, blind retries after false-negative, credential rotation without approval | `scripts/validate-himalaya-gmail-wrapper.sh`; `scripts/validate-himalaya-send-workaround.sh` | Non-blocking for Hermes update | Robert | owner-controlled vault metadata reference (required) |
-| Telegram gateway | Operational command/report channel | Hermes gateway + `TELEGRAM_*` env | ADAL-4 | ESAL-4 operational; ESAL-5 token/admin/recovery | approved admin/channel messaging | token disclosure, unapproved external disclosure | `systemctl --user is-active hermes-gateway.service` + env-name presence check | Non-blocking for Hermes update | Robert | owner-controlled vault metadata reference (required) |
-| OpenRouter | Primary model provider/inference path | `OPENROUTER_API_KEY` + Hermes provider config | ADAL-4 | ESAL-4 operational; ESAL-5 billing/key/admin | approved inference/runtime task execution | key disclosure, unapproved spend/admin changes | `<private-workspace-path> config check` + env-name presence check | Non-blocking for Hermes update | Robert | owner-controlled vault metadata reference (required) |
-| OpenAI / Codex auth | Provider capability for coding/model tasks when configured | `<runtime-register-root>` and/or provider env variables | ADAL-4 | ESAL-4 operational; ESAL-5 billing/account/recovery | approved model operations | token disclosure, unapproved billing/admin changes | auth metadata presence check (no token output) | Non-blocking for Hermes update | Robert | owner-controlled vault metadata reference (required) |
-| Browserbase | Browser automation backend | `BROWSERBASE_API_KEY`, `BROWSERBASE_PROJECT_ID` | ADAL-4 | ESAL-4 operational; ESAL-5 key/project admin | approved browser automation runs | key disclosure, uncontrolled external interactions | `hermes config check` + env-name presence check | Non-blocking for Hermes update | Robert | owner-controlled vault metadata reference (required) |
-| Browser Use API | Browser automation backend | `BROWSER_USE_API_KEY` | ADAL-4 | ESAL-4 operational; ESAL-5 key/admin | approved browser automation runs | key disclosure, uncontrolled external interactions | `hermes config check` + env-name presence check | Non-blocking for Hermes update | Robert | owner-controlled vault metadata reference (required) |
-| ZeroTier | Private network path for runtime services | `zerotier-one.service` | ADAL-4 runtime connectivity | ESAL-4 operational; ESAL-5 network/account admin | private connectivity required for approved runtime paths | network secret disclosure, unauthorized topology/admin changes | `systemctl status zerotier-one --no-pager` | Non-blocking for Hermes update | Robert | owner-controlled vault metadata reference (required) |
-| OpenWebUI private control path | Local agent control interface over private network | `open-webui.service` and private bind address | ADAL-4 | ESAL-4 operational; ESAL-5 admin/reset/recovery | approved private frontend access | unapproved public exposure, auth weakening | `systemctl --user is-active open-webui.service`; `ss -ltnp | grep :3000` | Non-blocking for Hermes update | Robert | owner-controlled vault metadata reference (required) |
-| Local API server | Local runtime control API path | `API_SERVER_ENABLED`, `API_SERVER_HOST`, `API_SERVER_PORT`, `API_SERVER_KEY` | ADAL-4 | ESAL-4 operational; API key is ADAL-5 secret custody | approved local API operations | API key disclosure, unauthorized remote exposure | env-name presence check + runtime service checks | Non-blocking for Hermes update | Robert | owner-controlled vault metadata reference (required) |
-| Google Workspace (conditional) | Optional Google APIs via enabled skill | `google-workspace` skill + Google provider credentials if configured | ADAL-4 if enabled for operations | ESAL-4 operational; ESAL-5 account/admin/recovery | approved Gmail/Calendar/Drive/Docs operations when enabled | key/token disclosure, unauthorized admin/account changes | `hermes skills inspect google-workspace` + credential metadata presence check | Non-blocking for Hermes update | Robert; explicit human review before activation | pending human-review custody reference |
+| GitHub / NousResearch Hermes upstream | Hermes core update source | `git -C <runtime-register-root> remote origin` | ADAL-4 | ESAL-4 operational; ESAL-5 account/recovery/admin | fetch, ls-remote, guarded update checks | push to NousResearch upstream, secret push, history rewrite | `git -C <runtime-register-root> ls-remote --heads origin main` | Blocking for Hermes update path | the owner approval for ESAL-5 actions | owner-controlled vault metadata reference (required; no secrets in Git) |
+| GitHub / Oscar fork | Autonomous proposal workspace | `origin` remote in `<private-workspace-path>`; `gh auth`/SSH | ADAL-4 | ESAL-4 operational; ESAL-5 account/recovery/admin | branch, commit, push to own fork, open/update PRs | merge upstream PRs, direct protected main pushes, force-push shared/protected branches, secret push | `git -C <private-workspace-path> remote -v`; `gh auth status` | Non-blocking for Hermes update; blocking only in git-maintenance/PR workflows | the owner | owner-controlled vault metadata reference (required) |
+| GitHub / Eurobotics upstream | Protected upstream repository and PR target | `upstream` remote in `<private-workspace-path>` | ADAL-4 for PR/open/update; ADAL-5 for direct push/merge/admin | ESAL-4 operational; ESAL-5 org/admin/recovery | fetch, compare, open/update PR | direct main push, merge, force-push/history rewrite without approval | `git -C <private-workspace-path> ls-remote --heads upstream main` | Non-blocking for Hermes update; blocking only in git-maintenance/PR workflows | the owner | owner-controlled vault metadata reference (required) |
+| Gmail / Himalaya | Operational mailbox read/send integration | `himalaya` + `<private-workspace-path>` + SMTP fallback wrapper | ADAL-4 read/send | ESAL-4 operational; ESAL-5 credentials/recovery/admin | list folders, list envelopes, read approved mail, send approved operational mail via approved fallback | print app password, native Himalaya send path until retested, blind retries after false-negative, credential rotation without approval | `scripts/validate-himalaya-gmail-wrapper.sh`; `scripts/validate-himalaya-send-workaround.sh` | Non-blocking for Hermes update | the owner | owner-controlled vault metadata reference (required) |
+| Telegram gateway | Operational command/report channel | Hermes gateway + `TELEGRAM_*` env | ADAL-4 | ESAL-4 operational; ESAL-5 token/admin/recovery | approved admin/channel messaging | token disclosure, unapproved external disclosure | `systemctl --user is-active hermes-gateway.service` + env-name presence check | Non-blocking for Hermes update | the owner | owner-controlled vault metadata reference (required) |
+| OpenRouter | Primary model provider/inference path | `OPENROUTER_API_KEY` + Hermes provider config | ADAL-4 | ESAL-4 operational; ESAL-5 billing/key/admin | approved inference/runtime task execution | key disclosure, unapproved spend/admin changes | `<private-workspace-path> config check` + env-name presence check | Non-blocking for Hermes update | the owner | owner-controlled vault metadata reference (required) |
+| OpenAI / Codex auth | Provider capability for coding/model tasks when configured | `<runtime-register-root>` and/or provider env variables | ADAL-4 | ESAL-4 operational; ESAL-5 billing/account/recovery | approved model operations | token disclosure, unapproved billing/admin changes | auth metadata presence check (no token output) | Non-blocking for Hermes update | the owner | owner-controlled vault metadata reference (required) |
+| Browserbase | Browser automation backend | `BROWSERBASE_API_KEY`, `BROWSERBASE_PROJECT_ID` | ADAL-4 | ESAL-4 operational; ESAL-5 key/project admin | approved browser automation runs | key disclosure, uncontrolled external interactions | `hermes config check` + env-name presence check | Non-blocking for Hermes update | the owner | owner-controlled vault metadata reference (required) |
+| Browser Use API | Browser automation backend | `BROWSER_USE_API_KEY` | ADAL-4 | ESAL-4 operational; ESAL-5 key/admin | approved browser automation runs | key disclosure, uncontrolled external interactions | `hermes config check` + env-name presence check | Non-blocking for Hermes update | the owner | owner-controlled vault metadata reference (required) |
+| ZeroTier | Private network path for runtime services | `zerotier-one.service` | ADAL-4 runtime connectivity | ESAL-4 operational; ESAL-5 network/account admin | private connectivity required for approved runtime paths | network secret disclosure, unauthorized topology/admin changes | `systemctl status zerotier-one --no-pager` | Non-blocking for Hermes update | the owner | owner-controlled vault metadata reference (required) |
+| OpenWebUI private control path | Local agent control interface over private network | `open-webui.service` and private bind address | ADAL-4 | ESAL-4 operational; ESAL-5 admin/reset/recovery | approved private frontend access | unapproved public exposure, auth weakening | `systemctl --user is-active open-webui.service`; `ss -ltnp | grep :3000` | Non-blocking for Hermes update | the owner | owner-controlled vault metadata reference (required) |
+| Local API server | Local runtime control API path | `API_SERVER_ENABLED`, `API_SERVER_HOST`, `API_SERVER_PORT`, `API_SERVER_KEY` | ADAL-4 | ESAL-4 operational; API key is ADAL-5 secret custody | approved local API operations | API key disclosure, unauthorized remote exposure | env-name presence check + runtime service checks | Non-blocking for Hermes update | the owner | owner-controlled vault metadata reference (required) |
+| Google Workspace (conditional) | Optional Google APIs via enabled skill | `google-workspace` skill + Google provider credentials if configured | ADAL-4 if enabled for operations | ESAL-4 operational; ESAL-5 account/admin/recovery | approved Gmail/Calendar/Drive/Docs operations when enabled | key/token disclosure, unauthorized admin/account changes | `hermes skills inspect google-workspace` + credential metadata presence check | Non-blocking for Hermes update | the owner; explicit human review before activation | pending human-review custody reference |
 
 No ESAL-4/5 external service is fully production-ready until owner recovery custody metadata references are documented and approved.
 
@@ -1591,36 +1573,36 @@ No ESAL-4/5 external service is fully production-ready until owner recovery cust
 - Hostname: external-target-01-hel1
 - IP: <redacted-ip>
 - SSH port: 22
-- SSH username: oscar
+- SSH username: agent
 - SSH key path reference: <private-workspace-path>
-- Source package: Eurobotics-Association/oscar-external-systems-management/servers/external-target-a
+- Source package: Eurobotics-Association/agent-external-systems-management/servers/external-target-a
 - Active runtime evidence path: <private-workspace-path>
 - Initial/current approved posture: ADAL-2.5 controlled diagnostics
 - CDEL: package-defined controlled diagnostics / wrapper-limited
 - ESAL: SSH key and recovery material are sensitive; metadata only in register
 - Allowed actions:
-  - metadata registration
-  - first-contact identity/reachability checks
-  - package-approved ADAL-2.5 wrapper-limited baseline audit
-  - evidence summary generation
+ - metadata registration
+ - first-contact identity/reachability checks
+ - package-approved ADAL-2.5 wrapper-limited baseline audit
+ - evidence summary generation
 - Forbidden actions:
-  - no broad sudo
-  - no arbitrary sudo
-  - no sudo shell
-  - no docker group/direct Docker socket access
-  - no Docker exec/cp/run/stop/restart/prune/pull
-  - no Cloudron modifications
-  - no app/service restart
-  - no package install/upgrade
-  - no firewall/user/sudoers/SSHD changes
-  - no credential or secret readout
-  - no destructive commands
+ - no broad sudo
+ - no arbitrary sudo
+ - no sudo shell
+ - no docker group/direct Docker socket access
+ - no Docker exec/cp/run/stop/restart/prune/pull
+ - no Cloudron modifications
+ - no app/service restart
+ - no package install/upgrade
+ - no firewall/user/sudoers/SSHD changes
+ - no credential or secret readout
+ - no destructive commands
 - Wrapper baseline audit:
-  - sudo -n /usr/local/sbin/adal25-baseline-audit-wrapper
-  - completed at 20260506T202307Z
-  - audit tarball hash: a9f3d2d98c2b48b25775ffd4a429b19a8aca4814edbba086eefd151e7a2972c3
-- Owner/approval: Robert
-- Recovery/break-glass: Robert-controlled Hetzner/Cloudron/admin recovery; metadata only
+ - sudo -n /usr/local/sbin/adal25-baseline-audit-wrapper
+ - completed at 20260506T202307Z
+ - audit tarball hash: a9f3d2d98c2b48b25775ffd4a429b19a8aca4814edbba086eefd151e7a2972c3
+- Owner/approval: the owner
+- Recovery/break-glass: the owner-controlled Hetzner/Cloudron/admin recovery; metadata only
 - Maintenance impact: non-blocking for Hermes weekly maintenance
 - Status: ADAL-2.5 first-connect completed; further ADAL-3T/ADAL-4/ADAL-5 actions require explicit approval
 
@@ -1638,7 +1620,7 @@ Required reports where applicable:
 
 Preferred delivery order:
 
-1. Email to Robert/admin address if email is available.
+1. Email to the owner/admin address if email is available.
 2. Telegram home/admin channel if email is unavailable.
 3. Local Markdown report in control-plane/runtime report directory if neither external channel is available.
 
@@ -1652,9 +1634,9 @@ Reports must not include passwords, API keys, tokens, private keys, OAuth secret
 
 | Project / Repo | Location | Visibility | PCL | Allowed Disclosure | External Communication Allowed | Approval Required For | Notes |
 |---|---|---|---:|---|---|---|---|
-| private-control-repo | private operational control-plane repository | Private | PCL-3 | Internal/admin-only summaries; no external disclosure of confidential implementation/governance details | No external disclosure by default | Any external disclosure, publication, or third-party discussion | Contains governance and identity/control-plane material |
+| private runtime governance repository | private operational control-plane repository | Private | PCL-3 | Internal/admin-only summaries; no external disclosure of confidential implementation/governance details | No external disclosure by default | Any external disclosure, publication, or third-party discussion | Contains governance and identity/control-plane material |
 | runtime-agent resident host runtime/infrastructure | runtime-agent Hetzner VM and linked operational components | Private | PCL-3 | Need-to-know operational/admin context only | No external disclosure by default | Any external disclosure, architecture sharing, or incident details outside approved channels | Includes sudo, recovery, break-glass, and runtime governance context |
-| Hermes-Yellow-Control (future community candidate) | Future extracted/sanitized project (not current repo baseline) | TBD (candidate public/community) | PCL-2 until explicitly reclassified | No external disclosure as public/community project until sanitized extraction and Robert approval | Not allowed until approval/reclassification | Public release, repo visibility change, or external promotion | May become PCL-0 only after sanitized extraction and explicit Robert approval |
+| Hermes-Yellow-Control (future community candidate) | Future extracted/sanitized project (not current repo baseline) | TBD (candidate public/community) | PCL-2 until explicitly reclassified | No external disclosure as public/community project until sanitized extraction and the owner approval | Not allowed until approval/reclassification | Public release, repo visibility change, or external promotion | May become PCL-0 only after sanitized extraction and explicit the owner approval |
 | Unknown project/repo | TBD | Unknown | PCL-2 | Minimal internal/admin discussion only until classified | No external discussion by default | Any external sharing prior to classification | Default confidentiality rule applies |
 
 ---
@@ -1671,7 +1653,7 @@ Reports must not include passwords, API keys, tokens, private keys, OAuth secret
 
 | Host | User | ADAL target | Current runtime | Sudoers File | Allowed Commands/Wrappers | NOPASSWD | Risk Level | Approved By | Notes |
 |---|---|---|---|---|---|---|---|---|---|
-| runtime-agent | oscar | ADAL-2.5 / ADAL-2+ | Current runtime is ADAL-R3-level on runtime-agent while `/etc/sudoers.d/oscar-agent` grants `oscar` `NOPASSWD:ALL` and `oscar` remains in the docker group. Robert’s preferred policy target remains ADAL-2.5 / ADAL-2+; this broader runtime state is accepted for resident-host bootstrap/recovery and should be reviewed later for possible reduction to ADAL-2.5 allowlists/wrappers. | `/etc/sudoers.d/oscar-agent` and/or `/etc/sudoers.d/private-control-repo` | package installation, diagnostics, Docker/runtime operations, user-service management, Open WebUI/Hermes recovery; no owner lockout/capture operations | yes | medium-high; high if NOPASSWD:ALL | Robert | resident host only; not transferable to remote production systems; review later whether to reduce broad sudo to ADAL-2.5 allowlists/wrappers |
+| runtime-agent | agent | ADAL-2.5 / ADAL-2+ | Current runtime is ADAL-R3-level on runtime-agent while `/etc/sudoers.d/agent-runtime` grants `agent` `NOPASSWD:ALL` and `agent` remains in the docker group. maintainer-preferred policy target remains ADAL-2.5 / ADAL-2+; this broader runtime state is accepted for resident-host bootstrap/recovery and should be reviewed later for possible reduction to ADAL-2.5 allowlists/wrappers. | `/etc/sudoers.d/agent-runtime` and/or `/etc/sudoers.d/private runtime governance repository` | package installation, diagnostics, Docker/runtime operations, user-service management, Open WebUI/Hermes recovery; no owner lockout/capture operations | yes | medium-high; high if NOPASSWD:ALL | the owner | resident host only; not transferable to remote production systems; review later whether to reduce broad sudo to ADAL-2.5 allowlists/wrappers |
 
 ---
 
@@ -1679,7 +1661,7 @@ Reports must not include passwords, API keys, tokens, private keys, OAuth secret
 
 | Date | Requested By | Target | Needed Action | Proposed Mechanism | ADAL/CDEL Change | Status | Approved By | Notes |
 |---|---|---|---|---|---|---|---|---|
-| YYYY-MM-DD | Oscar | TBD | TBD | TBD | TBD | proposed | pending Robert | TBD |
+| YYYY-MM-DD | Oscar | TBD | TBD | TBD | TBD | proposed | pending the owner | TBD |
 
 ---
 
@@ -1692,18 +1674,16 @@ Reports must not include passwords, API keys, tokens, private keys, OAuth secret
 
 | Date | Change | Author | Assisted-by |
 |---|---|---|---|
-| 2026-05-02 | Initial Phase 0 skeleton | F.M. Robert Vergnes | ChatGPT: GPT-5.5 Thinking |
-| 2026-05-02 | Added ADAL-2.5/2+ target, runtime-agent resident-host runtime reality, ADAL-R3 risk clarification, and detailed sudo/container governance entries | F.M. Robert Vergnes | ChatGPT: GPT-5.5 Thinking [review], Oscar/Hermes/Codex [implementation] |
-| 2026-05-06 | Incident note: post-reboot Himalaya/Gmail failure traced to env/TOML/inline-command quoting boundary; fixed by wrapper-based `auth.cmd` pattern. Yellow skills not directly implicated (direct CLI reproduction). | F.M. Robert Vergnes | ChatGPT: GPT-5.5 Thinking [canmore] |
-| 2026-05-06 | Follow-up: Himalaya v1.2.0 `message send` reproduces mail-parser panic; `template send` transmits via SMTP but fails IMAP sent-copy (`Folder doesn't exist`, tries literal `Sent`). Temporary send workaround documented via SMTP wrapper pending Himalaya upgrade/retest. | F.M. Robert Vergnes | ChatGPT: GPT-5.5 Thinking [canmore] |
+| 2026-05-02 | Initial Phase 0 skeleton | F.M. the owner Vergnes | ChatGPT: GPT-5.5 Thinking |
+| 2026-05-02 | Added ADAL-2.5/2+ target, runtime-agent resident-host runtime reality, ADAL-R3 risk clarification, and detailed sudo/container governance entries | F.M. the owner Vergnes | ChatGPT: GPT-5.5 Thinking [review], governed agent / Hermes-compatible runtime/Codex [implementation] |
+| 2026-05-06 | Incident note: post-reboot Himalaya/Gmail failure traced to env/TOML/inline-command quoting boundary; fixed by wrapper-based `auth.cmd` pattern. Yellow skills not directly implicated (direct CLI reproduction). | F.M. the owner Vergnes | ChatGPT: GPT-5.5 Thinking [canmore] |
+| 2026-05-06 | Follow-up: Himalaya v1.2.0 `message send` reproduces mail-parser panic; `template send` transmits via SMTP but fails IMAP sent-copy (`Folder doesn't exist`, tries literal `Sent`). Temporary send workaround documented via SMTP wrapper pending Himalaya upgrade/retest. | F.M. the owner Vergnes | ChatGPT: GPT-5.5 Thinking [canmore] |
 
 
 # Runtime external services onboarding (runtime-agent)
 
 Status: supporting onboarding snapshot, not canonical source of truth. Canonical service entries live in docs/security/external-access-register.md. Canonical skill entries live in config/skill-register.yaml and docs/skills/skill-register.md.
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [architecture + governance], Oscar/Hermes and/or Codex [execution]
 
 ## Scope
 
@@ -1716,15 +1696,15 @@ No plaintext secrets are stored here.
 ## Runtime snapshot date
 
 - UTC snapshot: 2026-05-06
-- Runtime profile/work context: `default` / `oscar-dev`
+- Runtime profile/work context: `default` / `agent-dev`
 
 ## Service register
 
 | Service | Runtime purpose | Operational level | Secret/admin level | Access path(s) | Allowed actions | Forbidden actions | Validation command(s) | Runtime status |
 |---|---|---|---|---|---|---|---|---|
 | GitHub: NousResearch/hermes-agent upstream | Hermes core update source | ADAL-4 | ADAL-5 for account ownership/recovery | Hermes runtime git remote `origin` in `<runtime-register-root>` | `fetch`, `ls-remote`, guarded pull/update through maintenance wrapper | pushing to NousResearch upstream, history rewrite | `git -C <runtime-register-root> remote -v`; `git -C <runtime-register-root> ls-remote --heads origin main` | configured; reachability check implemented |
-| GitHub: Oscar fork/account | Oscar proposal workspace | ADAL-4 | ADAL-5 for account ownership/recovery/billing | `origin` remote in private-control-repo; `gh` auth; SSH git | branch/commit/push to own fork, open/update PR | force push to protected/shared branches, secret push, upstream merge without approval | `git -C <private-workspace-path> remote -v`; `gh auth status` | configured and authenticated |
-| GitHub: Eurobotics upstream repos | source-of-truth and PR target | ADAL-4 for fetch/compare/PR; ADAL-5 for direct push/merge to main | ADAL-5 for org admin/recovery | `upstream` remote in private-control-repo | fetch, compare, PR open/update | direct main push, merge, force-push/history rewrite without approval | `git -C <private-workspace-path> ls-remote --heads upstream main` | configured (push disabled in remote config) |
+| GitHub: Oscar fork/account | Oscar proposal workspace | ADAL-4 | ADAL-5 for account ownership/recovery/billing | `origin` remote in private runtime governance repository; `gh` auth; SSH git | branch/commit/push to own fork, open/update PR | force push to protected/shared branches, secret push, upstream merge without approval | `git -C <private-workspace-path> remote -v`; `gh auth status` | configured and authenticated |
+| GitHub: Eurobotics upstream repos | source-of-truth and PR target | ADAL-4 for fetch/compare/PR; ADAL-5 for direct push/merge to main | ADAL-5 for org admin/recovery | `upstream` remote in private runtime governance repository | fetch, compare, PR open/update | direct main push, merge, force-push/history rewrite without approval | `git -C <private-workspace-path> ls-remote --heads upstream main` | configured (push disabled in remote config) |
 | Gmail via Himalaya IMAP | mailbox read/list for operations | ADAL-4 | ADAL-5 for account recovery/app-password lifecycle | `himalaya` CLI using wrapper auth cmd | folder list, envelope list, read approved mail | print app password, rotate credentials without approval | `scripts/validate-himalaya-gmail-wrapper.sh` | validated working |
 | Gmail via SMTP fallback wrapper | controlled report send fallback | ADAL-4 | ADAL-5 for credential/recovery control | `<private-workspace-path>` + wrapper password retrieval | send approved operational messages | native Himalaya send path until retested; blind retries after template send false-negative | `scripts/validate-himalaya-send-workaround.sh` | validated working |
 | Telegram gateway | operational command/report interface | ADAL-4 | ADAL-5 for bot token/recovery/admin rights | Hermes gateway + TELEGRAM_* env vars | approved admin/channel messaging | token disclosure; unapproved external disclosure | `systemctl --user is-active hermes-gateway.service`; env-name presence check | active |
@@ -1741,7 +1721,7 @@ No plaintext secrets are stored here.
 - Never hardcode unauthenticated private HTTPS GitHub URLs in runtime guards.
 - Non-interactive maintenance scripts must never prompt for GitHub username/password.
 - Hermes core auto-update reachability gate must check Hermes upstream/origin only.
-- private-control-repo fork/upstream reachability is non-blocking for Hermes auto-update and only blocking in explicit git-maintenance/PR workflows.
+- private runtime governance repository fork/upstream reachability is non-blocking for Hermes auto-update and only blocking in explicit git-maintenance/PR workflows.
 
 ## Runtime truth notes
 
@@ -1771,28 +1751,28 @@ Use when runtime failures suggest an external integration exists but is not gove
 
 ## Default external-service authority chain
 
-For all external services/servers/packages/accounts/integrations, first check `oscar-external-systems-management` unless the task explicitly provides another reviewed source or explicitly states no pre-registration exists.
+For all external services/servers/packages/accounts/integrations, first check `agent-external-systems-management` unless the task explicitly provides another reviewed source or explicitly states no pre-registration exists.
 
-1) `oscar-external-systems-management`
+1) `agent-external-systems-management`
 - human-managed preparation source and pre-registration package
 - not a runtime register
 
 2) Yellow-control / Yellow skills
-- read and reconcile the pre-registration package with Robert's instruction
+- read and reconcile the pre-registration package with the owner's instruction
 - classify ADAL/CDEL/ESAL/PCL and apply guardrails
-- if pre-registration conflicts with Robert's instruction, stop and report mismatch
+- if pre-registration conflicts with the owner's instruction, stop and report mismatch
 
 3) Active Yellow runtime registers
 - write runtime-approved entries to `<runtime-register-root>`
 - especially `<runtime-register-root>`
 
-4) oscar-backup
+4) runtime-backup
 - take runtime backup before and after runtime register changes
 
 5) PR flow back to external-systems repo
 - Oscar must not invent missing metadata
-- Oscar must not directly modify Eurobotics upstream `oscar-external-systems-management`
-- corrections must be proposed by PR through operator-owned fork/branch for Robert review
+- Oscar must not directly modify Eurobotics upstream `agent-external-systems-management`
+- corrections must be proposed by PR through operator-owned fork/branch for the owner review
 
 external-target-a is one example only. This authority chain also applies to GitHub, Gmail/Himalaya, Telegram, OpenRouter, Browserbase, ZeroTier, OpenWebUI, local API server, Cloudron hosts, and future external servers.
 
@@ -1843,9 +1823,9 @@ Use this when patching Yellow runtime governance text for external-service autho
 
 2) Text presence validation
 - grep for section title:
-  - `grep -R -n "Default external-service authority chain" <runtime-register-root> <runtime-register-root> <runtime-register-root>`
+ - `grep -R -n "Default external-service authority chain" <runtime-register-root> <runtime-register-root> <runtime-register-root>`
 - grep for doctrine source reference:
-  - `grep -R -n "oscar-external-systems-management" <runtime-register-root> <runtime-register-root> <runtime-register-root>`
+ - `grep -R -n "agent-external-systems-management" <runtime-register-root> <runtime-register-root> <runtime-register-root>`
 
 3) Skill visibility check
 - `hermes skills list | grep -Ei 'yellow-control|yellow-skill|yellow-project'`
@@ -1872,8 +1852,6 @@ If runtime Yellow skill docs changed, preserve exact changed files under `<priva
 
 ## GitHub/repository gate
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.4 Thinking, Codex
 
 # GitHub safety
 
@@ -1894,14 +1872,14 @@ When work appears ready, Oscar requests submission/review rather than self-mergi
 - Runtime guards must use configured git remotes and authenticated transport where required.
 - Do not hardcode unauthenticated private HTTPS reachability checks for private GitHub repositories.
 - Hermes core maintenance dependency is Hermes upstream/origin reachability only.
-- private-control-repo fork/upstream reachability is maintenance-context dependent and non-blocking for Hermes core auto-update.
+- private runtime governance repository fork/upstream reachability is maintenance-context dependent and non-blocking for Hermes core auto-update.
 
 ## Autonomous maintenance guardrails
 
 - GitHub operational use for Oscar runtime workflows is ADAL-4.
 - Oscar may commit and push to branches in its own fork.
 - Oscar may prepare/open/update PRs to Eurobotics upstream.
-- Oscar must not merge into Eurobotics upstream/main without Robert approval.
+- Oscar must not merge into Eurobotics upstream/main without the owner approval.
 - Oscar must not push directly to Eurobotics main.
 - Oscar must not auto-merge PRs.
 - Oscar must not force-push shared/protected branches.
@@ -1914,8 +1892,6 @@ When work appears ready, Oscar requests submission/review rather than self-mergi
 Documentation must remain aligned with implementation changes in the same PR whenever behavior or controls change.
 
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.4 Thinking, Codex
 
 # Runtime governance sync boundaries
 
@@ -1934,16 +1910,16 @@ Runtime governance is composed of multiple aligned layers:
 The controlled deployment path supports these scopes:
 
 - `runtime-governance`:
-  - `profiles/global/SOUL.md` -> `$HERMES_HOME/SOUL.md`
-  - `AGENTS.md` -> `$HERMES_HOME/AGENTS.md`
-  - `README.md` -> `$HERMES_HOME/README.md`
-  - `config/*.yaml` -> `$HERMES_HOME/private-control-repo/config/`
-  - `docs/security/*.md` -> `$HERMES_HOME/private-control-repo/docs/security/`
-  - `docs/skills/*.md` -> `$HERMES_HOME/private-control-repo/docs/skills/`
+ - `profiles/global/SOUL.md` -> `$HERMES_HOME/SOUL.md`
+ - `AGENTS.md` -> `$HERMES_HOME/AGENTS.md`
+ - `README.md` -> `$HERMES_HOME/README.md`
+ - `config/*.yaml` -> `$HERMES_HOME/private runtime governance repository/config/`
+ - `docs/security/*.md` -> `$HERMES_HOME/private runtime governance repository/docs/security/`
+ - `docs/skills/*.md` -> `$HERMES_HOME/private runtime governance repository/docs/skills/`
 - `skills`:
-  - `skills/yellow-control-governance/SKILL.md` -> `$HERMES_HOME/skills/yellow-control-governance/SKILL.md`
-  - `skills/yellow-project-management/SKILL.md` -> `$HERMES_HOME/skills/yellow-project-management/SKILL.md`
-  - `skills/yellow-skill-registry/SKILL.md` -> `$HERMES_HOME/skills/yellow-skill-registry/SKILL.md`
+ - `skills/yellow-control-governance/SKILL.md` -> `$HERMES_HOME/skills/yellow-control-governance/SKILL.md`
+ - `skills/yellow-project-management/SKILL.md` -> `$HERMES_HOME/skills/yellow-project-management/SKILL.md`
+ - `skills/yellow-skill-registry/SKILL.md` -> `$HERMES_HOME/skills/yellow-skill-registry/SKILL.md`
 - `all`: includes `runtime-governance` and `skills`
 - Legacy compatibility scopes remain available: `soul`, `policy`, `prompts`
 
@@ -1971,7 +1947,7 @@ Mutable evidence is not deployed from git and should be kept under XDG state pat
 - Recommended files: `audit.tar.zst`, `audit.sha256`, `manifest.json`, `summary.md`, `findings.md`, `normalized-context.md`
 - `normalized-context.md` is the preferred compact context handoff for future work on the same target.
 - Raw tarballs/logs/secrets remain runtime-only and must not be committed.
-- Default retention is 3 months; incident/security evidence may be retained longer with Robert approval.
+- Default retention is 3 months; incident/security evidence may be retained longer with the owner approval.
 - Future audits should compare against the prior baseline and report meaningful drift.
 - Monthly recurring audits are persistent automation and require explicit approval before cron/systemd creation.
 - Legacy-looking paths under `<runtime-register-root>` are not the preferred current path.
@@ -2001,8 +1977,6 @@ Automatic runtime-to-git sync risks exfiltrating secrets, committing volatile ar
 
 # Yellow skill development workflow
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [Yellow skills development workflow], Oscar/Hermes and/or Codex [documentation]
 
 ## Purpose and scope
 
@@ -2022,12 +1996,12 @@ It is a repository and runtime-governance workflow. It is **not** an external se
 2. Validate YAML front matter and metadata (`Author`, `Assisted-by`, routing references).
 3. Commit to fork, open PR, merge upstream, and sync local/fork/upstream.
 4. Run runtime deployment dry-run:
-   - `./scripts/deploy.sh skills --dry-run`
+ - `./scripts/deploy.sh skills --dry-run`
 5. Run prepare-merge (normal mode for mature runtimes):
-   - `./scripts/deploy.sh skills --prepare-merge`
+ - `./scripts/deploy.sh skills --prepare-merge`
 6. If runtime skill exists and differs, generate a clean semantic merge proposal under staging.
 7. Apply only reviewed target skill files (targeted manual apply), not generic bulk apply:
-   - `./scripts/apply-reviewed-skill.sh --skill <skill> --proposal <.../SKILL.md.merged.proposal.md>`
+ - `./scripts/apply-reviewed-skill.sh --skill <skill> --proposal <.../SKILL.md.merged.proposal.md>`
 8. Reset/reload Hermes session context (`/reset`) if needed so runtime uses updated guidance.
 9. Run behavior tests using `docs/skills/yellow-skill-test-protocol.md`.
 10. Feed findings back into repo source files; avoid runtime-only drift.

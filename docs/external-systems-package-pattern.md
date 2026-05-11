@@ -6,10 +6,10 @@ Public-safe pattern using fictional targets only.
 
 # External ADAL-2.5 first-connect checklist (runtime execution)
 
-Use when Robert explicitly approves controlled diagnostics for an external host.
+Use when the owner explicitly approves controlled diagnostics for an external host.
 
 ## Preconditions
-- Read target package workflow under `oscar-external-systems-management/servers/<target>/`.
+- Read target package workflow under `agent-external-systems-management/servers/<target>/`.
 - Confirm host/user/port/key from approved task.
 - Verify local key exists and has restricted mode (private key `600`).
 
@@ -38,8 +38,6 @@ Use when Robert explicitly approves controlled diagnostics for an external host.
 - No doctrine reinterpretation during execution.
 
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [governance + verification], Oscar/Hermes and/or Codex [execution]
 
 # External onboarding completion verification (local-only)
 
@@ -67,26 +65,26 @@ Prove local Yellow-control onboarding closure with auditable artifacts and backu
 4) Compacted summary artifact
 - Check for `summary*.md`, `context*.md`, `first-connect-summary*.md`, or `onboarding-summary*.md` in evidence directory.
 - If missing and task allows, create one from already-collected local evidence only (no reconnect):
-  - target identity
-  - timestamp
-  - package source
-  - commands executed
-  - audit tarball hash
-  - key findings
-  - Cloudron status summary
-  - remaining warnings
-  - forbidden actions not executed
-  - next recommended step
+ - target identity
+ - timestamp
+ - package source
+ - commands executed
+ - audit tarball hash
+ - key findings
+ - Cloudron status summary
+ - remaining warnings
+ - forbidden actions not executed
+ - next recommended step
 
 5) Backup coverage
-- Identify latest `oscar-backup` snapshot stamp/commit/push status.
+- Identify latest `runtime-backup` snapshot stamp/commit/push status.
 - Confirm backup includes runtime register path.
 - Confirm whether evidence path and/or compacted summary are included.
 - If evidence paths are excluded by backup scope, explicitly report that and ensure a compact summary is available in a backed-up governed location when required by policy/task.
 
 ## Action rule
 - If a summary was newly created, run:
-  `/usr/local/bin/runtime-backup-tool --event post-external-onboarding --reason "post <target> onboarding completion summary"`
+ `/usr/local/bin/runtime-backup-tool --event post-external-onboarding --reason "post <target> onboarding completion summary"`
 
 ## Reporting format
 Include:

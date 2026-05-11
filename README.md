@@ -135,33 +135,33 @@ This v0.1.2 branch uses a source-preserving extraction approach:
 ## Repository map
 
 - docs/
-  - governance-model.md
-  - runtime-classification.md
-  - policy-gates.md
-  - authority-model.md
-  - external-service-governance.md
-  - secrets-handling.md
-  - backup-and-rollback.md
-  - runtime-maintenance-governance.md
-  - github-governance.md
-  - governance-telemetry.md
-  - external-systems-package-pattern.md
-  - scope-boundaries.md
-  - hermes-skill-submission-readiness.md
+ - governance-model.md
+ - runtime-classification.md
+ - policy-gates.md
+ - authority-model.md
+ - external-service-governance.md
+ - secrets-handling.md
+ - backup-and-rollback.md
+ - runtime-maintenance-governance.md
+ - github-governance.md
+ - governance-telemetry.md
+ - external-systems-package-pattern.md
+ - scope-boundaries.md
+ - hermes-skill-submission-readiness.md
 - skills/
-  - yellow-control-governance/SKILL.md
-  - yellow-control-governance/references/index.md
+ - yellow-control-governance/SKILL.md
+ - yellow-control-governance/references/index.md
 - examples/hermes/
-  - policy-gated-maintenance-wrapper.sh
-  - systemd/yellow-control-maintenance.service
-  - systemd/yellow-control-maintenance.timer
+ - policy-gated-maintenance-wrapper.sh
+ - systemd/yellow-control-maintenance.service
+ - systemd/yellow-control-maintenance.timer
 - examples/external-systems-package/
-  - governance-decision-record-sample.md
-  - external-service-register-sample.md
-  - server-package-sample.md
-  - backup-gate-checklist.md
+ - governance-decision-record-sample.md
+ - external-service-register-sample.md
+ - server-package-sample.md
+ - backup-gate-checklist.md
 - examples/notifications/
-  - governance-report-template.md
+ - governance-report-template.md
 
 ## What is intentionally private forever
 
@@ -197,6 +197,6 @@ v0.1.x is an early operational series. Terminology and API surface may evolve be
 
 ## Authorship and AI assistance
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+Author: F.M. the owner Vergnes / robert.vergnes@yahoo.fr
 
 Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex

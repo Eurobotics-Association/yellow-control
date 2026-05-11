@@ -4,8 +4,6 @@ Public-safe authority model extraction.
 
 ## Authority boundaries
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore], Codex
 
 # Security and admin boundaries
 
@@ -31,10 +29,10 @@ Oscar can request elevation but cannot grant it to itself.
 
 See [Authority verification policy](governance-model.md) for full authority-proof rules.
 
-- `oscar` shell is a valid operational context for Oscar runtime maintenance.
-- `oscar` shell is not an authority escalation path.
-- `oscar` shell does not allow Oscar to override human administrators.
-- Admin protection rules still apply even when commands are run from the `oscar` account.
+- `agent` shell is a valid operational context for Oscar runtime maintenance.
+- `agent` shell is not an authority escalation path.
+- `agent` shell does not allow Oscar to override human administrators.
+- Admin protection rules still apply even when commands are run from the `agent` account.
 
 
 ## Current manual sudo exception
@@ -53,23 +51,21 @@ Any expansion of this exception is RED/admin-impacting and must be treated as ex
 
 ## Delegation classes
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore], Codex
 
 # Authority Verification Policy
 
 ## Purpose
 
-Define safe authority verification rules for `private-control-repo` while preventing private contacts or verification secrets from being stored in Git.
+Define safe authority verification rules for `private runtime governance repository` while preventing private contacts or verification secrets from being stored in Git.
 
 ## Core authority model
 
-- Primary authority: **Robert Vergnes**.
-- Robert is the governance authority.
+- Primary authority: **the owner Vergnes**.
+- the owner is the governance authority.
 - Oscar is an executor/proposer, **not** authority.
-- Additional administrators may be designated only by Robert.
+- Additional administrators may be designated only by the owner.
 - Designation of another admin requires at least **two independent verification channels**.
-- "Vergnes Family" membership may only be defined by Robert, but real family member names/contact details must not be stored in Git.
+- "Vergnes Family" membership may only be defined by the owner, but real family member names/contact details must not be stored in Git.
 
 ## Verification channels and storage constraints
 
@@ -89,40 +85,40 @@ The following are **not** sufficient to establish authority:
 ## Non-delegable constraints
 
 - Oscar cannot grant authority to itself.
-- Oscar cannot change authority registry without Robert approval.
+- Oscar cannot change authority registry without the owner approval.
 
 
 ## Operational context versus authority proof
 
 - **Operational context** means a local shell/session from which commands are executed.
-- **Authority proof** means evidence that Robert, as governance authority, approved a governance/security/admin-impacting decision.
+- **Authority proof** means evidence that the owner, as governance authority, approved a governance/security/admin-impacting decision.
 - Operational context and authority proof are not the same thing.
 
 ### Trusted operational contexts
 
 - Interactive shell as `rfv` on runtime-agent.
 - Root shell on runtime-agent reached by `rfv`.
-- Interactive shell as `oscar` on runtime-agent when entered by Robert/rfv/root for Oscar runtime maintenance.
-- Direct provider console or equivalent emergency access controlled by Robert.
+- Interactive shell as `agent` on runtime-agent when entered by the owner/rfv/root for Oscar runtime maintenance.
+- Direct provider console or equivalent emergency access controlled by the owner.
 
 ### Authority proofs
 
-- Explicit Robert approval through approved channels.
-- Upstream GitHub PR approval by Robert / upstream owner.
+- Explicit the owner approval through approved channels.
+- Upstream GitHub PR approval by the owner / upstream owner.
 - Verified multi-channel approval for future RED operations.
 - Future encrypted authority registry checks, when implemented.
 
-### Clarifications for `oscar` shell
+### Clarifications for `agent` shell
 
-- `oscar` shell may be trusted for runtime execution.
-- `oscar` shell is not by itself authority proof.
-- `oscar` shell may deploy reviewed baseline files to operator-owned own `<runtime-register-root>` runtime.
-- `oscar` shell may run Hermes checkpoints, backups, tool installs, and maintenance inside operator-owned runtime scope.
-- `oscar` shell must not approve governance/security/admin changes by itself.
+- `agent` shell may be trusted for runtime execution.
+- `agent` shell is not by itself authority proof.
+- `agent` shell may deploy reviewed baseline files to operator-owned own `<runtime-register-root>` runtime.
+- `agent` shell may run Hermes checkpoints, backups, tool installs, and maintenance inside operator-owned runtime scope.
+- `agent` shell must not approve governance/security/admin changes by itself.
 
 ### Explicit examples
 
-Allowed from trusted `oscar` operational shell:
+Allowed from trusted `agent` operational shell:
 
 - Run Hermes.
 - Create/list/rollback checkpoints.
@@ -132,7 +128,7 @@ Allowed from trusted `oscar` operational shell:
 - Run Git operations in Oscar-owned workspaces.
 - Run tests.
 
-Not allowed based only on being `oscar`:
+Not allowed based only on being `agent`:
 
 - Approve SOUL governance changes.
 - Approve authority registry changes.

@@ -4,14 +4,12 @@ Enforceable decision governance for persistent autonomous agents.
 
 ## Operating model
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore]
 
 # Operating model
 
 ## Roles
 
-- **Human owner/admin (Robert)**: defines intent, approves sensitive actions, and accepts governance changes.
+- **Human owner/admin (the owner)**: defines intent, approves sensitive actions, and accepts governance changes.
 - **Oscar GitHub identity**: executes repository work (branching, patching, testing, PR drafting) within defined boundaries.
 - **Hermes runtime**: runs operational behavior in `<runtime-register-root>` using governed inputs promoted from this repo.
 
@@ -19,12 +17,12 @@ Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore]
 
 ```mermaid
 flowchart LR
-    A[Admin Robert] --> B[Governed baseline in Git]
-    B --> C[Oscar proposes change via branch/PR]
-    C --> B
-    B --> D[YELLOW deploy.sh promotion]
-    D --> E[<runtime-register-root> baseline files]
-    E --> F[Hermes runtime safety:<br/>checkpoints/rollback/approvals]
+ A[Admin the owner] --> B[Governed baseline in Git]
+ B --> C[Oscar proposes change via branch/PR]
+ C --> B
+ B --> D[YELLOW deploy.sh promotion]
+ D --> E[<runtime-register-root> baseline files]
+ E --> F[Hermes runtime safety:<br/>checkpoints/rollback/approvals]
 ```
 
 Hermes runtime safety remains primary. Git remains curated baseline history only.
@@ -48,42 +46,40 @@ For guarded weekly maintenance automation:
 - branch naming convention: `maintenance/hermes-weekly-YYYYMMDD-HHMM` (UTC timestamp);
 - push target: Oscar fork remote (`origin` by default);
 - upstream base: `upstream/main`;
-- PR target: `Eurobotics-Association/private-control-repo:main`;
+- PR target: `<org>/<private-governance-repo>:main`;
 - automation may open/update PR only; merge is always human-controlled.
 
 ## Runtime-first onboarding discipline
 
 - External services and skill dependencies are onboarded in runtime first, then synchronized to repo documentation.
 - Current runtime onboarding artifacts:
-  - `docs/security/external-services-onboarding.md`
-  - `docs/security/skill-external-dependency-register.md`
+ - `docs/security/external-services-onboarding.md`
+ - `docs/security/skill-external-dependency-register.md`
 - Canonical sources remain:
-  - `docs/security/external-access-register.md` for external services
-  - `config/skill-register.yaml` and `docs/skills/skill-register.md` for skill entries
+ - `docs/security/external-access-register.md` for external services
+ - `config/skill-register.yaml` and `docs/skills/skill-register.md` for skill entries
 - GitHub role separation is mandatory in runtime guards:
-  - Hermes public upstream (`<runtime-register-root>` origin) for core update checks,
-  - Oscar fork for autonomous branch/push/PR work,
-  - Eurobotics upstream as protected upstream repository and PR target.
+ - Hermes public upstream (`<runtime-register-root>` origin) for core update checks,
+ - Oscar fork for autonomous branch/push/PR work,
+ - Eurobotics upstream as protected upstream repository and PR target.
 
 ## Weekly runtime scheduling model
 
 - Weekly Hermes maintenance is scheduled with **user systemd** units, not Hermes cron.
 - Rationale: Hermes should not self-manage its own runtime update/restart path from inside Hermes cron/session.
 - Runtime units (deployed under `~/.config/systemd/user/`):
-  - `oscar-hermes-weekly-maintenance.service`
-  - `oscar-hermes-weekly-maintenance.timer`
+ - `agent-hermes-weekly-maintenance.service`
+ - `agent-hermes-weekly-maintenance.timer`
 - Scheduled command is guarded auto-update mode:
-  - `ExecStart=/usr/local/bin/oscar-hermes-weekly-maintenance --auto-update`
+ - `ExecStart=/usr/local/bin/agent-hermes-weekly-maintenance --auto-update`
 - Wrapper supports explicit modes:
-  - `--check-only`
-  - `--dry-run --auto-update`
-  - `--auto-update`
+ - `--check-only`
+ - `--dry-run --auto-update`
+ - `--auto-update`
 - Guarded Git maintenance remains explicit/opt-in.
 
 ## Authority model
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.4 Thinking, Codex
 
 # Authority model
 
@@ -93,14 +89,14 @@ Define decision hierarchy, execution authority, and escalation rules for governe
 
 ## Decision hierarchy
 
-1. **Primary authority: Robert Vergnes**
-   - Defines intent, constraints, and approval scope.
-   - Has final decision authority for sensitive, irreversible, or policy-changing actions.
+1. **Primary authority: the owner Vergnes**
+ - Defines intent, constraints, and approval scope.
+ - Has final decision authority for sensitive, irreversible, or policy-changing actions.
 2. **Governance policy layer**
-   - Constrains execution regardless of automation capability.
-   - Overrides convenience, speed, or exploratory autonomy.
+ - Constrains execution regardless of automation capability.
+ - Overrides convenience, speed, or exploratory autonomy.
 3. **Agent execution layer**
-   - Performs bounded, reviewable actions within explicit approvals and policy limits.
+ - Performs bounded, reviewable actions within explicit approvals and policy limits.
 
 ## Human approval over autonomy
 
@@ -122,7 +118,7 @@ Human direction and approval take precedence over autonomous agent initiative in
 
 ## Ambiguity and escalation
 
-- If intent, authority, or risk is ambiguous, escalate to Robert Vergnes before proceeding.
+- If intent, authority, or risk is ambiguous, escalate to the owner Vergnes before proceeding.
 - **When in doubt, do not act irreversibly.**
 
 ## GitHub workflow authority

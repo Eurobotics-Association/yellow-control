@@ -4,14 +4,12 @@ Telemetry schema and reporting expectations.
 
 ## Telemetry model
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore]
 
 # Operating model
 
 ## Roles
 
-- **Human owner/admin (Robert)**: defines intent, approves sensitive actions, and accepts governance changes.
+- **Human owner/admin (the owner)**: defines intent, approves sensitive actions, and accepts governance changes.
 - **Oscar GitHub identity**: executes repository work (branching, patching, testing, PR drafting) within defined boundaries.
 - **Hermes runtime**: runs operational behavior in `<runtime-register-root>` using governed inputs promoted from this repo.
 
@@ -19,12 +17,12 @@ Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore]
 
 ```mermaid
 flowchart LR
-    A[Admin Robert] --> B[Governed baseline in Git]
-    B --> C[Oscar proposes change via branch/PR]
-    C --> B
-    B --> D[YELLOW deploy.sh promotion]
-    D --> E[<runtime-register-root> baseline files]
-    E --> F[Hermes runtime safety:<br/>checkpoints/rollback/approvals]
+ A[Admin the owner] --> B[Governed baseline in Git]
+ B --> C[Oscar proposes change via branch/PR]
+ C --> B
+ B --> D[YELLOW deploy.sh promotion]
+ D --> E[<runtime-register-root> baseline files]
+ E --> F[Hermes runtime safety:<br/>checkpoints/rollback/approvals]
 ```
 
 Hermes runtime safety remains primary. Git remains curated baseline history only.
@@ -48,36 +46,36 @@ For guarded weekly maintenance automation:
 - branch naming convention: `maintenance/hermes-weekly-YYYYMMDD-HHMM` (UTC timestamp);
 - push target: Oscar fork remote (`origin` by default);
 - upstream base: `upstream/main`;
-- PR target: `Eurobotics-Association/private-control-repo:main`;
+- PR target: `<org>/<private-governance-repo>:main`;
 - automation may open/update PR only; merge is always human-controlled.
 
 ## Runtime-first onboarding discipline
 
 - External services and skill dependencies are onboarded in runtime first, then synchronized to repo documentation.
 - Current runtime onboarding artifacts:
-  - `docs/security/external-services-onboarding.md`
-  - `docs/security/skill-external-dependency-register.md`
+ - `docs/security/external-services-onboarding.md`
+ - `docs/security/skill-external-dependency-register.md`
 - Canonical sources remain:
-  - `docs/security/external-access-register.md` for external services
-  - `config/skill-register.yaml` and `docs/skills/skill-register.md` for skill entries
+ - `docs/security/external-access-register.md` for external services
+ - `config/skill-register.yaml` and `docs/skills/skill-register.md` for skill entries
 - GitHub role separation is mandatory in runtime guards:
-  - Hermes public upstream (`<runtime-register-root>` origin) for core update checks,
-  - Oscar fork for autonomous branch/push/PR work,
-  - Eurobotics upstream as protected upstream repository and PR target.
+ - Hermes public upstream (`<runtime-register-root>` origin) for core update checks,
+ - Oscar fork for autonomous branch/push/PR work,
+ - Eurobotics upstream as protected upstream repository and PR target.
 
 ## Weekly runtime scheduling model
 
 - Weekly Hermes maintenance is scheduled with **user systemd** units, not Hermes cron.
 - Rationale: Hermes should not self-manage its own runtime update/restart path from inside Hermes cron/session.
 - Runtime units (deployed under `~/.config/systemd/user/`):
-  - `oscar-hermes-weekly-maintenance.service`
-  - `oscar-hermes-weekly-maintenance.timer`
+ - `agent-hermes-weekly-maintenance.service`
+ - `agent-hermes-weekly-maintenance.timer`
 - Scheduled command is guarded auto-update mode:
-  - `ExecStart=/usr/local/bin/oscar-hermes-weekly-maintenance --auto-update`
+ - `ExecStart=/usr/local/bin/agent-hermes-weekly-maintenance --auto-update`
 - Wrapper supports explicit modes:
-  - `--check-only`
-  - `--dry-run --auto-update`
-  - `--auto-update`
+ - `--check-only`
+ - `--dry-run --auto-update`
+ - `--auto-update`
 - Guarded Git maintenance remains explicit/opt-in.
 
 
@@ -87,12 +85,10 @@ description: Runtime reference for security/control-plane governance — privile
 version: 0.1.0
 platforms: [linux]
 metadata:
-  hermes:
-    tags: [governance, security, pam-iam, adal, cdel, esal, pcl, external-access, automation-guard, baseline-audit]
-    related_skills: [yellow-project-management, yellow-skill-registry]
+ hermes:
+ tags: [governance, security, pam-iam, adal, cdel, esal, pcl, external-access, automation-guard, baseline-audit]
+ related_skills: [yellow-project-management, yellow-skill-registry]
 ---
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking [skills architecture], Oscar/Hermes and/or Codex [implementation]
 
 # yellow-control-governance
 
@@ -145,12 +141,12 @@ Reference: `references/public-safety-scan-self-match-guard.md` for avoiding self
 
 For all external services, external servers, external packages, SaaS accounts, remote hosts, API providers, and integrations:
 
-1. First check `oscar-external-systems-management` unless the task explicitly provides another reviewed source or explicitly states no pre-registration exists.
-2. Treat `oscar-external-systems-management` as a human-managed preparation source, not as a runtime register.
-3. Yellow-control must read and reconcile the pre-registration package with Robert's instruction; if the package conflicts with Robert's instruction, stop and report the mismatch.
+1. First check `agent-external-systems-management` unless the task explicitly provides another reviewed source or explicitly states no pre-registration exists.
+2. Treat `agent-external-systems-management` as a human-managed preparation source, not as a runtime register.
+3. Yellow-control must read and reconcile the pre-registration package with the owner's instruction; if the package conflicts with the owner's instruction, stop and report the mismatch.
 4. Yellow-control writes runtime-approved entries to `<runtime-register-root>` (especially `docs/security/external-access-register.md`).
 5. Oscar must not invent missing external-service metadata.
-6. Oscar must not directly modify the Eurobotics upstream `oscar-external-systems-management` repository; corrections must be proposed by PR through operator-owned fork/branch for Robert review.
+6. Oscar must not directly modify the Eurobotics upstream `agent-external-systems-management` repository; corrections must be proposed by PR through operator-owned fork/branch for the owner review.
 7. Take runtime backup before and after runtime register changes.
 
 external-target-a is one example only. This chain also applies to GitHub, Gmail/Himalaya, Telegram, OpenRouter, Browserbase, ZeroTier, OpenWebUI, local API servers, Cloudron hosts, and future external servers.
@@ -172,18 +168,18 @@ Runtime register root (runtime-agent):
 - Consult `docs/security/governance-levels-reference.md` before applying ADAL/CDEL/ESAL/PCL in decisions.
 - Consult the External Access Register before external, privileged, or security-sensitive actions.
 - For private GitHub External Package repositories, verify configured authenticated access methods before declaring inaccessibility:
-  - `gh auth status`
-  - `gh repo view OWNER/REPO`
-  - `git ls-remote git@github.com:OWNER/REPO.git HEAD`
-  - `git -C <repo> ls-remote --heads origin main`
-  - `git -C <repo> ls-remote --heads upstream main`
+ - `gh auth status`
+ - `gh repo view OWNER/REPO`
+ - `git ls-remote git@github.com:OWNER/REPO.git HEAD`
+ - `git -C <repo> ls-remote --heads origin main`
+ - `git -C <repo> ls-remote --heads upstream main`
 - HTTPS Git failure alone is not definitive if authenticated GH/SSH access exists.
 - For runtime maintenance guards, avoid hard-coding unauthenticated HTTPS private-repo checks as a blocking network gate. Prefer remote-aware checks (`origin`/`upstream`) and classify non-critical repo reachability checks as non-blocking when the maintenance objective is Hermes core update.
 - When runtime onboarding creates snapshot/supporting docs, immediately consolidate authoritative entries into canonical registers. Do not let snapshot docs become shadow authorities.
-- For runtime-agent doctrine, avoid using “source of truth/source-of-truth” to imply runtime authority. Runtime state is inspected live; `oscar-backup` stores rollback snapshots; `private-control-repo` is temporary staging.
+- For runtime-agent doctrine, avoid using “source of truth/source-of-truth” to imply runtime authority. Runtime state is inspected live; `runtime-backup` stores rollback snapshots; `private runtime governance repository` is temporary staging.
 - Use role-safe wording for GitHub governance references: prefer “Eurobotics upstream PR target” or “protected upstream repository”; reserve “authoritative” only when explicitly describing merge authority.
 - Canonical precedence for Oscar governance: external services in `docs/security/external-access-register.md`; skills in `config/skill-register.yaml` plus `docs/skills/skill-register.md`. Snapshot docs must carry explicit "supporting, not canonical" status headers.
-- In governance consolidation tasks, validate both documentation integrity and runtime alignment: `git diff --check`, no-secret pattern scan on diff, and maintenance dry-run (`/usr/local/bin/oscar-hermes-weekly-maintenance --dry-run --auto-update`) without executing real update.
+- In governance consolidation tasks, validate both documentation integrity and runtime alignment: `git diff --check`, no-secret pattern scan on diff, and maintenance dry-run (`/usr/local/bin/agent-hermes-weekly-maintenance --dry-run --auto-update`) without executing real update.
 - External Access Register entries may reference External Packages; consult the package manifest/wrappers before privileged or remote operational work when referenced.
 - If target access metadata is missing/incomplete, propose a register update before operational use.
 - Mark uncertain inferred metadata as `unknown` and report uncertainty explicitly.
@@ -203,7 +199,7 @@ Runtime register root (runtime-agent):
 - Before merging a public-governance PR derived from private/runtime sources, run a source-coverage audit matrix across runtime skill, private repo source set, and public branch content. Classify each source item as copied/summarized/sanitized/omitted/placeholder/missing, include omission risk, and recommend must-fix-before-merge vs can-wait.
 - During publication-readiness checks, verify `README.md` and `SKILL.md` from raw GitHub URLs (not local only): confirm real line counts, multiline frontmatter rendering, and absence of GitHub bidi/control-character warnings in the PR files view.
 - Do not overpromise exact Hermes install/tap/load commands unless they were tested against the currently installed Hermes version; when unverified, explicitly direct readers to current Hermes documentation for version-specific steps.
-- Preserve naming boundaries in delegation design docs: existing ADAL-2.5 wrappers remain `oscar-adal25-*`; ADAL-3T temporary wrappers/procedures must use `oscar-adal3t-*` naming to avoid authority ambiguity.
+- Preserve naming boundaries in delegation design docs: existing ADAL-2.5 wrappers remain `agent-adal25-*`; ADAL-3T temporary wrappers/procedures must use `agent-adal3t-*` naming to avoid authority ambiguity.
 - If repo AGENTS/governance checklist references a missing file, report the missing path and proceed with available required governance docs inside the approved scope; do not invent replacement doctrine.
 - Wrapper existence does not equal permission; capability does not equal authority.
 - Use `sudo -n`; never request the Governance Authority’s or Runtime Owner’s interactive sudo password.
@@ -243,8 +239,6 @@ Runtime register root (runtime-agent):
 - Operationalize missing authority by assumption.
 
 
-Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
-Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
 
 # Post-merge containment + runtime-impact review (broad PR payload)
 
