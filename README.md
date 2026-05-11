@@ -197,6 +197,6 @@ v0.1.x is an early operational series. Terminology and API surface may evolve be
 
 ## Authorship and AI assistance
 
-Author: F.M. the owner Vergnes / robert.vergnes@yahoo.fr
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
 
 Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
