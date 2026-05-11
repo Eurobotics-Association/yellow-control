@@ -5,7 +5,7 @@ Public-safe governance for maintenance lifecycle.
 ## Weekly maintenance governance pattern
 
 #!/usr/bin/env bash
-# Author: F.M. the owner Vergnes / robert.vergnes@yahoo.fr
+# Author: F.M. Robert Vergnes
 # Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore]
 set -euo pipefail
 
@@ -376,7 +376,7 @@ exit "$status"
 
 
 #!/usr/bin/env bash
-# Author: F.M. the owner Vergnes / robert.vergnes@yahoo.fr
+# Author: F.M. Robert Vergnes
 # Assisted-by: ChatGPT: GPT-5.5 Thinking [canmore]
 set -euo pipefail
 

@@ -46,7 +46,7 @@ External Access Register is the live governance register for external access kno
 - Entries may reference an **External Package** when one exists.
 - If an External Package is referenced for a target, Oscar must consult it before privileged or remote operational work.
 - If an External Package is missing, incomplete, or inaccessible, Oscar must report the governance gap and must not assume authority.
-- For private GitHub package repositories, HTTPS Git failure alone is not definitive; Oscar must check configured authenticated methods (`gh auth status`, `gh repo view OWNER/REPO`, `git ls-remote git@github.com:OWNER/REPO.git HEAD`) before declaring inaccessible.
+- For private GitHub package repositories, HTTPS Git failure alone is not definitive; Oscar must check configured authenticated methods (`gh auth status`, `gh repo view OWNER/REPO`, `git ls-remote https://github.com/OWNER/REPO.git HEAD`) before declaring inaccessible.
 - If authenticated access later succeeds during a requested dry-run simulation, Oscar should continue the original simulation request automatically.
 - External Packages are context/implementation boundaries, not permission by themselves.
 - Wrapper existence does not equal permission.

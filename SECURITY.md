@@ -4,7 +4,7 @@
 
 Please report vulnerabilities privately by email to:
 
-- robert.vergnes@yahoo.fr
+- Use GitHub Security Advisory or a private maintainer contact channel documented in this repository
 
 Include:
 

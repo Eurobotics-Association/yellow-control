@@ -171,7 +171,7 @@ Runtime register root (runtime-agent):
 - For private GitHub External Package repositories, verify configured authenticated access methods before declaring inaccessibility:
  - `gh auth status`
  - `gh repo view OWNER/REPO`
- - `git ls-remote git@github.com:OWNER/REPO.git HEAD`
+ - `git ls-remote https://github.com/OWNER/REPO.git HEAD`
  - `git -C <repo> ls-remote --heads origin main`
  - `git -C <repo> ls-remote --heads upstream main`
 - HTTPS Git failure alone is not definitive if authenticated GH/SSH access exists.

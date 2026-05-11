@@ -235,7 +235,7 @@ Always review `runtime-state-report.txt`, `SHA256SUMS`, and `ROLLBACK-NOTES.txt`
 #!/usr/bin/env bash
 set -euo pipefail
 
-Author="F.M. the owner Vergnes / robert.vergnes@yahoo.fr"
+Author="F.M. Robert Vergnes"
 Assisted_by="ChatGPT: GPT-5.5 Thinking [deployment safety design], governed agent / Hermes-compatible runtime and/or Codex [implementation]"
 
 DRY_RUN=0
