@@ -50,6 +50,15 @@ Yellow-Control is a governance layer, not a runtime installer or external packag
 - external package management is a separate and optional implementation layer;
 - Telegram, OpenWebUI, gateway services, dashboards, and similar integrations are optional runtime integrations, not Yellow-Control requirements.
 
+
+## Packaged skill and human-facing mirrors
+
+The `docs/` directory is the human-facing mirror of Yellow-Control governance doctrine for repository readers, review, and maintenance.
+
+The `skills/yellow-control-governance/` directory is the installable Hermes skill. It is designed to be copied or installed as a self-contained skill directory under a Hermes-compatible skills location.
+
+The `skills/yellow-control-governance/references/` directory contains the packaged operational doctrine used by the skill at runtime, so the installed skill does not depend on repository-relative `docs/` paths.
+
 ## Repository map
 
 | Path | Purpose |
@@ -68,6 +77,7 @@ Yellow-Control is a governance layer, not a runtime installer or external packag
 | `docs/github-governance.md` | GitHub access governed as external access. |
 | `docs/governance-telemetry.md` | Decision, gate, and outcome telemetry. |
 | `skills/yellow-control-governance/SKILL.md` | Hermes-compatible governance skill entry point. |
+| `skills/yellow-control-governance/references/` | Packaged operational doctrine for the self-contained installable skill. |
 
 ## Default decision posture
 
