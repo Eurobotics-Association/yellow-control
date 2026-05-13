@@ -45,44 +45,49 @@ Use this skill before actions involving:
 
 ## Required classification
 
-Classify every governed request with:
+Before privileged, external, server, confidential, persistent, or repository-affecting work, classify the request with:
 
-- ADAL: administrative delegation and authority level
-- CDEL: containerized delegated execution level
-- ESAL: external service authority level
-- PCL: privacy and confidentiality level
+- ADAL: Agent Delegated Administration Level
+- CDEL: Container Delegated Execution Level
+- ESAL: External Service Authority Level
+- PCL: Project Confidentiality Level
 
 Unknown authority or confidentiality is not permissive. Defer or block until safely classified.
 
 ## Required gates
 
-Evaluate these gates before execution:
+Before execution, consult the packaged references, then evaluate the applicable gates:
 
 - authority_gate
-- scope_gate
-- backup_gate
-- rollback_gate
-- confidentiality_gate
-- external_access_gate
-- repository_gate
-- persistence_gate
+- classification_scope_gate
+- backup_rollback_gate
+- external_access_register_gate
+- confidentiality_publication_gate
+- automation_persistence_gate
+- repository_github_gate
 - telemetry_gate
 
-Allow only when every required gate passes. Defer when evidence is incomplete. Block when the request violates policy, would expose secrets or private operational state, or attempts to bypass governance.
+For external services, APIs, repositories, servers, webhooks, dashboards, or accounts, consult the external-access register. For new or unknown servers, enforce server-first-contact before mutation. Require backup and rollback evidence before risky privileged, external, persistent, or runtime-governance changes.
+
+Allow only when every required gate passes. Defer when evidence is incomplete. Block when the request violates policy, would expose secrets or private operational state, self-grants authority, or attempts to bypass governance.
 
 ## Output format
 
 Return a concise decision record:
 
-- decision: allow | defer | block
 - classification: ADAL, CDEL, ESAL, PCL
-- gate_results: pass | defer | block for each required gate
+- gates_evaluated: applicable gates
+- gate_results: pass | defer | block for each gate
+- decision: allow | defer | block
 - rationale: public-safe reason
-- required_evidence: missing evidence or empty list
-- rollback: checkpoint, rollback owner, rollback steps, or reason not applicable
+- missing_evidence: missing evidence or empty list
+- required_approval: owner, security, maintainer, reviewer, recovery custodian, or empty list
+- rollback_checkpoint_requirement: checkpoint, rollback owner, stop condition, or reason not applicable
 - remediation: next safe step
-- telemetry: public-safe decision identifier or proposed record
+- telemetry_summary: public-safe decision and outcome summary
 
 ## References
 
-Use the files in `references/` for quick links to canonical policy documents.
+Use the skill-local files in `references/` as the packaged operational doctrine. Start with `references/index.md`, then consult the specific reference needed for authority, ADAL, CDEL, ESAL, PCL, gates, backup, rollback, external access, secrets, repository governance, server first contact, onboarding, or telemetry.
+
+Top-level `docs/` files are human-facing mirrors and must not be required for an installed skill to operate.
