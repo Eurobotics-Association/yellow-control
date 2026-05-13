@@ -1,23 +1,27 @@
 # Changelog
 
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
+
 All notable changes to this project are documented in this file.
 
-## v0.1.1 (Unreleased)
+## v0.1.3 (Unreleased)
+
+Minimal Yellow-Control skill rebuild.
+
+- Rebuilt the repository around authority, ADAL, CDEL, ESAL, PCL, policy gates, backup/rollback, external access, secrets, GitHub governance, telemetry, and Hermes skill compatibility.
+- Removed project-management, skill-registry, runtime-register, dumped policy, runtime-specific, and external-package implementation material.
+- Kept documentation public-safe and table formatting reviewable.
+- Added validation-oriented prerequisites, ADAL authority detail, ESAL server caution, and a complete external-access register schema.
+
+## v0.1.2
+
+Public-safe source extraction and documentation cleanup.
+
+## v0.1.1
 
 Readability and submission-readiness hardening release.
-
-- Markdown readability pass across repository docs
-- `README.md` structure upgrade for public navigation and governance onboarding
-- `skills/yellow-control-governance/SKILL.md` frontmatter normalization and version bump to `0.1.1`
-- Added `SECURITY.md`
-- Added contribution templates for issues and pull requests
-- Added minimal GitHub Actions validation workflow
 
 ## v0.1.0
 
 Initial public release.
-
-- Early public-safe governance layer for persistent autonomous agents
-- Hermes-compatible governance skill package
-- ADAL/CDEL/ESAL/PCL classification references
-- Policy gates, backup and rollback controls, external-service governance, and governance telemetry

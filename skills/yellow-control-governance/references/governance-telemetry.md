@@ -1,9 +1,8 @@
-# Governance telemetry reference pointer
+# Governance telemetry reference
 
-This reference points to the canonical public documentation under `docs/`.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
 
-Primary document: `../../docs/governance-telemetry.md`
+Canonical document: `../../../docs/governance-telemetry.md`
 
-Use this file from the skill context when you need a stable relative link. The canonical policy content is maintained in the target document to avoid duplicated thin summaries.
-
-Public-safe note: examples remain fictional and redacted by design.
+Record public-safe decision, gate, and outcome telemetry without storing secrets or private operational state.

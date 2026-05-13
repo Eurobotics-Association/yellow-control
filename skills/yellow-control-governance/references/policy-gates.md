@@ -1,9 +1,8 @@
-# Policy gates reference pointer
+# Policy gates reference
 
-This reference points to the canonical public documentation under `docs/`.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
 
-Primary document: `../../docs/policy-gates.md`
+Canonical document: `../../../docs/policy-gates.md`
 
-Use this file from the skill context when you need a stable relative link. The canonical policy content is maintained in the target document to avoid duplicated thin summaries.
-
-Public-safe note: examples remain fictional and redacted by design.
+Evaluate gates after ADAL, CDEL, ESAL, and PCL classification. Allow only when every required gate passes.
