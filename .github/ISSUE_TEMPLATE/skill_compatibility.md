@@ -6,6 +6,9 @@ labels: skill-compatibility
 assignees: ""
 ---
 
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
+
 ## Compatibility context
 
 Hermes version / runtime context:

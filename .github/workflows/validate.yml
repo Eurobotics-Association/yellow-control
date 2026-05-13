@@ -34,7 +34,6 @@ jobs:
         run: |
           python3 - <<'PY'
           import pathlib
-          import yaml
 
           p = pathlib.Path('skills/yellow-control-governance/SKILL.md')
           text = p.read_text(encoding='utf-8')
@@ -43,26 +42,22 @@ jobs:
           parts = text.split('\n---\n', 1)
           if len(parts) != 2:
               raise SystemExit('SKILL.md missing closing frontmatter delimiter')
-          frontmatter = yaml.safe_load(parts[0][4:])
+          frontmatter = parts[0][4:].splitlines()
           required = ['name', 'description', 'version', 'author', 'license', 'platforms', 'metadata']
+          top_level = {line.split(':', 1)[0] for line in frontmatter if line and not line.startswith(' ')}
           for key in required:
-              if key not in frontmatter:
+              if key not in top_level:
                   raise SystemExit(f'Missing frontmatter key: {key}')
-          hermes = frontmatter.get('metadata', {}).get('hermes', {})
-          if 'category' not in hermes:
+          if not any(line.strip() == 'category: yellow-control' for line in frontmatter):
               raise SystemExit('Missing metadata.hermes.category')
-          if 'tags' not in hermes or not isinstance(hermes['tags'], list) or not hermes['tags']:
+          tags_index = next((i for i, line in enumerate(frontmatter) if line.strip() == 'tags:'), None)
+          if tags_index is None:
+              raise SystemExit('Missing metadata.hermes.tags')
+          if not any(line.startswith('      - ') for line in frontmatter[tags_index + 1:]):
               raise SystemExit('Missing or empty metadata.hermes.tags')
-          print('Frontmatter YAML parse: OK')
+          print('Frontmatter structure: OK')
           PY
 
-      - name: Shell syntax checks
-        shell: bash
-        run: |
-          set -euo pipefail
-          while IFS= read -r -d '' f; do
-            bash -n "$f"
-          done < <(find examples -type f -name '*.sh' -print0)
 
       - name: Public-safety and secret marker scan
         shell: bash

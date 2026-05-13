@@ -1,10 +1,13 @@
 ---
 name: Bug report
-about: Report a defect in docs, governance logic, examples, or skill behavior
+about: Report a defect in docs, governance logic, validation, or skill behavior
 title: "[BUG] "
 labels: bug
 assignees: ""
 ---
+
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
 
 ## Summary
 
@@ -15,7 +18,7 @@ Describe the bug clearly.
 - [ ] Documentation
 - [ ] Governance policy gates
 - [ ] Skill compatibility
-- [ ] Example scripts
+- [ ] Governance telemetry
 - [ ] CI/validation
 
 ## Reproduction steps

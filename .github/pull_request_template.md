@@ -1,22 +1,23 @@
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
+
 ## Summary
 
 Describe the patch and intent.
 
+## Governance scope
+
+- [ ] Change stays inside the narrow Yellow-Control scope.
+- [ ] Authority, classification, gates, and skill behavior remain coherent.
+- [ ] No de-scoped project-management, skill-registry, runtime-register, dumped policy, runtime-specific, or external-package implementation material was added.
+
 ## Validation
 
-- [ ] Public-safe confirmation completed
-- [ ] Docs updated and rendered correctly
-- [ ] Skill compatibility checked
-- [ ] Examples remain dry-run-first and non-production
-- [ ] No secrets or private runtime data included
-
-## Checklist
-
-- [ ] Markdown formatting verified (headings/tables/mermaid/frontmatter)
-- [ ] `skills/yellow-control-governance/SKILL.md` frontmatter validated
-- [ ] Shell examples pass `bash -n`
-- [ ] Public-safety scan run and clean
+- [ ] Markdown formatting verified, including tables and any Mermaid fences.
+- [ ] `skills/yellow-control-governance/SKILL.md` frontmatter validated.
+- [ ] Public-safety scan run and clean.
+- [ ] No secrets or private runtime data included.
 
 ## Notes for reviewers
 
-Any constraints, known follow-ups, or non-goals for this patch.
+Add review notes here.
