@@ -1,9 +1,8 @@
-# Backup and rollback reference pointer
+# Backup and rollback reference
 
-This reference points to the canonical public documentation under `docs/`.
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
 
-Primary document: `../../docs/backup-and-rollback.md`
+Canonical document: `../../../docs/backup-and-rollback.md`
 
-Use this file from the skill context when you need a stable relative link. The canonical policy content is maintained in the target document to avoid duplicated thin summaries.
-
-Public-safe note: examples remain fictional and redacted by design.
+Require backup and rollback evidence before persistent state changes at ADAL-2, CDEL-2, ESAL-2, or higher.

@@ -6,6 +6,9 @@ labels: governance
 assignees: ""
 ---
 
+Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
+Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
+
 ## Proposal summary
 
 Describe the governance improvement you propose.
@@ -23,7 +26,7 @@ What operational or safety problem does this address?
 ## Compatibility and risk
 
 - [ ] Preserves Hermes-compatible behavior
-- [ ] Keeps dry-run-first and non-production defaults
+- [ ] Keeps allow/defer/block behavior enforceable
 - [ ] No private runtime data required
 
 ## Public-safe confirmation

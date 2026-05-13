@@ -1,7 +1,0 @@
-[Unit]
-Description=Yellow-control example maintenance wrapper (policy gated)
-
-[Service]
-Type=oneshot
-WorkingDirectory=%h/yellow-control-example
-ExecStart=%h/yellow-control-example/policy-gated-maintenance-wrapper.sh --live

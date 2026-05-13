@@ -1,9 +1,0 @@
-[Unit]
-Description=Run Yellow-control example maintenance weekly
-
-[Timer]
-OnCalendar=Sat *-*-* 01:00:00 UTC
-Persistent=true
-
-[Install]
-WantedBy=timers.target
