@@ -10,6 +10,14 @@ Repository automation can alter public content, release artifacts, branch histor
 This reference governs repository workflows without adding project-management or skill-registry sprawl.
 Use it with ESAL, PCL, policy gates, and secrets handling.
 
+## Relationship to standard Hermes GitHub skills
+
+Yellow-Control does not replace standard Hermes GitHub skills or repository-operation skills.
+Those skills remain responsible for authentication, issues, pull requests, repository operations, code review behavior, and platform-specific workflows.
+Yellow-Control gates whether those operations are allowed, deferred, or blocked.
+It classifies account type, repository authority, fork, branch, upstream, protected-branch risk, confidentiality, backup needs, approval needs, and telemetry readiness.
+If a standard Hermes GitHub skill can perform an operation but Yellow-Control gates are missing, the operation must defer or block.
+
 ## Account classes
 
 An agent-owned account is provisioned for automated repository work and should have least privilege.
@@ -43,6 +51,12 @@ The agent must not bypass required reviews.
 The agent must not alter status-check requirements unless owner and maintainer authority approve that repository policy change.
 A protected branch setting change is ESAL-4 and may also affect authority custody.
 Missing merge authority means defer, not improvise.
+
+## Repository backup artifacts
+
+Hermes backups are sensitive runtime artifacts and must not be pushed to public repositories.
+If GitHub or GitLab is used as a backup target, the repository must be private, access-controlled, and owner-approved, with encryption or restricted artifact storage considered when backups may contain secrets.
+Yellow-Control may govern the repository authority and retention policy, but it does not implement backup upload or deletion.
 
 ## No secret push
 

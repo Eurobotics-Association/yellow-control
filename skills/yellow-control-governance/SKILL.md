@@ -22,6 +22,16 @@ metadata:
       - backup-rollback
       - external-access
       - telemetry
+    config:
+      - key: yellow_control.external_access_register_path
+        description: Path to the private runtime external-access register.
+        default: "~/.hermes/yellow-control/registers/external-access-register.yaml"
+      - key: yellow_control.governance_decision_log_dir
+        description: Directory for private runtime governance decision records.
+        default: "~/.hermes/yellow-control/decision-records"
+      - key: yellow_control.server_first_contact_dir
+        description: Directory for private runtime server-first-contact records.
+        default: "~/.hermes/yellow-control/server-first-contact"
 ---
 
 # yellow-control-governance
@@ -67,7 +77,7 @@ Before execution, consult the packaged references, then evaluate the applicable 
 - repository_github_gate
 - telemetry_gate
 
-For external services, APIs, repositories, servers, webhooks, dashboards, or accounts, consult the external-access register. For new or unknown servers, enforce server-first-contact before mutation. Require backup and rollback evidence before risky privileged, external, persistent, or runtime-governance changes.
+For external services, APIs, repositories, servers, webhooks, dashboards, or accounts, consult the external-access register. For new or unknown servers, enforce server-first-contact before mutation. Require backup and rollback evidence before risky privileged, external, persistent, or runtime-governance changes. Separate local checkpoint hygiene from backup archive creation: use native `hermes checkpoints` and govern default pruning with `hermes checkpoints prune --retention-days 30 --max-size-mb 500`; use native `hermes backup` for backup archives; use `hermes update --backup` or `updates.pre_update_backup: true` for Hermes updates. Do not wrap, replace, or reimplement those native mechanisms.
 
 Allow only when every required gate passes. Defer when evidence is incomplete. Block when the request violates policy, would expose secrets or private operational state, self-grants authority, or attempts to bypass governance.
 
@@ -88,6 +98,6 @@ Return a concise decision record:
 
 ## References
 
-Use the skill-local files in `references/` as the packaged operational doctrine. Start with `references/index.md`, then consult the specific reference needed for authority, ADAL, CDEL, ESAL, PCL, gates, backup, rollback, external access, secrets, repository governance, server first contact, onboarding, or telemetry.
+Use the skill-local files in `references/` as the packaged operational doctrine. Start with `references/index.md`, then consult the specific reference needed for authority, ADAL, CDEL, ESAL, PCL, gates, backup, rollback, external access, secrets, repository governance, server first contact, onboarding, telemetry, native Hermes backup governance, or repository gating.
 
 Top-level `docs/` files are human-facing mirrors and must not be required for an installed skill to operate.

@@ -1,0 +1,33 @@
+# Yellow-Control governance decision record template.
+# Copy this template to a private runtime decision-record directory before use.
+# Live records must remain outside the public skill package and public repository.
+# Do not commit raw evidence, credentials, tokens, private paths, private hosts,
+# private addresses, usernames, or confidential operational data.
+
+decision_id: "decision-placeholder-id"
+timestamp_utc: "YYYY-MM-DDTHH:MM:SSZ"
+request_summary: "Public-safe summary of the requested action."
+actor: "placeholder actor role"
+target: "placeholder target category or register id"
+classification:
+  adal: "ADAL-0 | ADAL-1 | ADAL-2 | ADAL-3 | ADAL-4"
+  cdel: "CDEL-0 | CDEL-1 | CDEL-2 | CDEL-3 | CDEL-4"
+  esal: "ESAL-0 | ESAL-1 | ESAL-2 | ESAL-3 | ESAL-4"
+  pcl: "PCL-0 | PCL-1 | PCL-2 | PCL-3 | PCL-4"
+gates_evaluated:
+  - "authority_gate"
+  - "classification_scope_gate"
+gate_results:
+  authority_gate: "pass | defer | block | not_applicable"
+  classification_scope_gate: "pass | defer | block | not_applicable"
+decision: "allow | defer | block"
+rationale: "Public-safe governance rationale."
+missing_evidence:
+  - "placeholder missing evidence or empty list item"
+required_approval:
+  - "placeholder approval role or empty list item"
+rollback_checkpoint_requirement: "checkpoint requirement, stop condition, or not applicable"
+remediation: "Next safe step for defer or block, or follow-up for allow."
+telemetry_summary: "Public-safe decision and outcome summary."
+secret_handling: "Only non-secret references were recorded; live secrets stay in approved private custody."
+notes: "Public-safe notes only. Put live record details in private runtime storage."

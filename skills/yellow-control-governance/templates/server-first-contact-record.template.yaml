@@ -1,0 +1,27 @@
+# Yellow-Control server-first-contact record template.
+# Copy this template to a private runtime first-contact directory before use.
+# Live records must remain outside the public skill package and public repository.
+# Never commit real hosts, IP addresses, usernames, key paths, logs, tokens,
+# credentials, private evidence, or private runtime state.
+
+record_id: "first-contact-placeholder-id"
+timestamp_utc: "YYYY-MM-DDTHH:MM:SSZ"
+target_id: "placeholder-target-id"
+requested_by: "placeholder requester role"
+accountable_authority: "placeholder accountable role"
+pre_contact_checkpoint: "checkpoint-ref/placeholder-or-not-applicable"
+register_entry_status: "missing | draft | complete | blocked"
+target_identity_check: "placeholder identity evidence summary"
+reachability_check: "placeholder reachability summary"
+allowed_scope:
+  - "read-only baseline discovery"
+forbidden_actions_confirmed:
+  - "mutation before approval"
+baseline_audit: "public-safe baseline summary reference"
+reverse_risk_assessment: "public-safe summary of target-to-agent risk"
+evidence_summary_ref: "evidence-ref/placeholder/first-contact-summary"
+raw_evidence_policy: "Raw evidence remains private and is not committed to the public repo."
+rollback_or_stop_condition: "stop condition or rollback requirement before further action"
+decision: "allow_discovery | defer | block | complete"
+next_review_date: "YYYY-MM-DD-or-blank"
+notes: "Public-safe notes only. Put live contact details in private runtime storage."
