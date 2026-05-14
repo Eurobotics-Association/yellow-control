@@ -17,10 +17,22 @@ Consult `authority-model.md` to identify accountable roles and whether context i
 Classify ADAL, CDEL, ESAL, and PCL using the four classification references.
 If the task touches a new or uncertain external server, consult `server-first-contact.md` before any mutation.
 If the task uses a service, server, API, repository, account, webhook, or dashboard, consult `external-access-register.md` and `external-access-onboarding.md`.
-If the task can change persistent state, consult `backup-and-rollback.md`.
+If the task can change persistent state, consult `backup-and-rollback.md`; if it touches Hermes local checkpoints, checkpoint pruning, backup archives, updates, archive retention, or weekly verification, also consult `hermes-backup-snapshot-policy.md`.
 Evaluate the decision with `policy-gates.md`.
 Use `secrets-handling.md`, `github-governance.md`, and `governance-telemetry.md` whenever those concerns apply.
 Return allow, defer, or block with missing evidence, required approval, rollback requirement, and telemetry summary.
+
+## Runtime templates and private state
+
+Public YAML templates live in `skills/yellow-control-governance/templates/` and are packaged with the installable skill. They describe record shapes only and contain fictional placeholders.
+
+| Template | Use | Default private runtime location from `SKILL.md` metadata.config |
+| --- | --- | --- |
+| `templates/external-access-register.template.yaml` | Starter for the external-access register. | `yellow_control.external_access_register_path` defaults to `~/.hermes/yellow-control/registers/external-access-register.yaml`. |
+| `templates/governance-decision-record.template.yaml` | Starter for decision and gate telemetry records. | `yellow_control.governance_decision_log_dir` defaults to `~/.hermes/yellow-control/decision-records`. |
+| `templates/server-first-contact-record.template.yaml` | Starter for server-first-contact records. | `yellow_control.server_first_contact_dir` defaults to `~/.hermes/yellow-control/server-first-contact`. |
+
+Live registers, decision records, first-contact records, raw evidence, real target entries, credentials, private hostnames, private addresses, private usernames, and private runtime paths must remain outside the public repository and outside the public skill package. Runtime register paths are configurable through Hermes skill config.
 
 ## Reference map
 
@@ -33,6 +45,7 @@ Return allow, defer, or block with missing evidence, required approval, rollback
 | `pcl.md` | Classifying project confidentiality, default-private handling, publication, redaction, private runtime data, secret data, recovery data, and examples. |
 | `policy-gates.md` | Applying authority, classification and scope, backup and rollback, external-access register, confidentiality, persistence, repository, and telemetry gates. |
 | `backup-and-rollback.md` | Preparing checkpoints, rollback plans, stop conditions, validation checks, first-contact readiness, runtime governance rollback, and failure handling. |
+| `hermes-backup-snapshot-policy.md` | Governing native `hermes checkpoints`, `hermes checkpoints prune --retention-days 30 --max-size-mb 500`, `hermes backup`, `hermes update --backup`, update backup settings, private backup targets, mandatory archive retention, weekly verification, and backup telemetry without implementing backup tooling. |
 | `external-access-register.md` | Creating or validating register entries, required fields, secret references, server examples, service examples, and missing metadata outcomes. |
 | `server-first-contact.md` | Handling new or unknown servers, pre-contact checkpoint, authority, identity confirmation, hostile output risk, read-only baseline audit, and revoke path. |
 | `external-access-onboarding.md` | Onboarding external targets through intake, classification, registration, approval, validation, execution handoff, and review. |
@@ -56,5 +69,5 @@ Return allow, defer, or block with missing evidence, required approval, rollback
 
 Use these skill-local files as the operational doctrine when the skill is installed.
 Do not depend on repository-relative `docs/` paths at runtime.
-Do not add private operational state, real target entries, or runtime-specific material to these packaged references.
+Do not add private operational state, real target entries, runtime-specific material, backup archives, raw checkpoint stores, wrapper scripts, cron jobs, or systemd timers to these packaged references.
 Do not claim official Hermes or Nous approval; this repository provides a Hermes-compatible skill layout and public-safe governance doctrine.

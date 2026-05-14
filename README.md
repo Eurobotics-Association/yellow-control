@@ -3,92 +3,126 @@
 Author: F.M. Robert Vergnes / robert.vergnes@yahoo.fr
 Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
 
-Yellow-Control is a narrow, public-safe governance skill repository for persistent autonomous agents.
+Yellow-Control is a public-safe, Hermes-compatible governance layer for classifying and gating persistent autonomous-agent actions.
 
-Status: v0.1.3 minimal Yellow-Control skill rebuild.
+## Status
 
-## Purpose
+| Item | Status |
+| --- | --- |
+| Version | v0.1.3 |
+| Scope | Narrow Yellow-Control governance skill and human-facing documentation |
+| Hermes compatibility | Compatible skill layout; not officially endorsed by Hermes or Nous Research unless accepted by them |
+| Runtime state | Private, operator-managed, and outside this public repository |
 
-Yellow-Control defines the governance controls an agent must apply before it changes systems, crosses authority boundaries, handles confidential material, or integrates external services. It is intentionally limited to policy classification, policy gates, rollback readiness, external-access governance, secrets handling, GitHub governance, telemetry, and a Hermes-compatible `SKILL.md`.
+## What this is
 
-## In scope
+Yellow-Control defines reusable governance doctrine for agents that may change systems, use external services, handle confidential material, or operate persistently. It provides classification rules, policy gates, backup and rollback expectations, external-access governance, secrets-handling rules, repository workflow guidance, and telemetry expectations.
 
-- authority model
-- ADAL: Administrative Delegation and Authority Level
-- CDEL: Containerized Delegated Execution Level
-- ESAL: External Service Authority Level
-- PCL: Privacy and Confidentiality Level
-- policy gates
-- backup and rollback governance
-- external-access register
-- server-first-contact procedure
-- external-access onboarding
-- secrets handling
-- GitHub governance as an external-access workflow
-- governance telemetry
-- Hermes-compatible skill behavior
+The canonical classifications are:
 
-## Out of scope
+| Acronym | Expansion | Use |
+| --- | --- | --- |
+| ADAL | Agent Delegated Administration Level | Host, identity, administrative, and system-impact authority. |
+| CDEL | Container Delegated Execution Level | Containers, runners, sandboxes, sockets, and delegated execution. |
+| ESAL | External Service Authority Level | APIs, SaaS, repositories, dashboards, servers, accounts, and webhooks. |
+| PCL | Project Confidentiality Level | Information read, written, logged, transmitted, or published. |
 
-- project-management governance
-- skill-registry governance
-- project, runtime, or skill registers
-- dumped operational policy files
-- runtime-specific private material
-- external package implementation details
+## What this is not
 
+Yellow-Control is not a runtime installer, package manager, secret store, project-management framework, skill registry, incident archive, or operational register repository. It does not contain private hosts, private paths, credentials, logs, real register entries, or Oscar-specific runtime material.
 
-## Prerequisites and non-requirements
+## Who this is for
 
-Yellow-Control is a governance layer, not a runtime installer or external package manager. Before using it for live agent work, confirm:
+Yellow-Control is for maintainers and operators who want a public, installable governance skill for persistent autonomous agents while keeping live operational state private. It is also useful for reviewers who need readable policy mirrors under `docs/`.
 
-- a Hermes-compatible runtime is already installed and operating;
-- Git is available for repository workflows;
-- GitHub, GitLab, or a similar repository service is available if repository automation is used;
-- the agent uses its own account, bot identity, or fork for Git automation instead of borrowing a human maintainer session;
-- backup or checkpoint capability exists before risky actions;
-- external package management is a separate and optional implementation layer;
-- Telegram, OpenWebUI, gateway services, dashboards, and similar integrations are optional runtime integrations, not Yellow-Control requirements.
+## How it works
 
+1. Classify the requested action with ADAL, CDEL, ESAL, and PCL.
+2. Check authority, scope, confidentiality, backup, rollback, external-access, persistence, repository, and telemetry gates.
+3. Allow only when required evidence and approvals are present.
+4. Defer when evidence is incomplete.
+5. Block when a request violates policy, exposes private state, self-grants authority, or bypasses governance.
 
-## Packaged skill and human-facing mirrors
+```mermaid
+flowchart LR
+  A[Request] --> B[Classify ADAL CDEL ESAL PCL]
+  B --> C[Evaluate policy gates]
+  C --> D{Decision}
+  D -->|Pass| E[Allow]
+  D -->|Missing evidence| F[Defer]
+  D -->|Policy violation| G[Block]
+```
 
-The `docs/` directory is the human-facing mirror of Yellow-Control governance doctrine for repository readers, review, and maintenance.
-
-The `skills/yellow-control-governance/` directory is the installable Hermes skill. It is designed to be copied or installed as a self-contained skill directory under a Hermes-compatible skills location.
-
-The `skills/yellow-control-governance/references/` directory contains the packaged operational doctrine used by the skill at runtime, so the installed skill does not depend on repository-relative `docs/` paths.
-
-## Repository map
+## Repository layout
 
 | Path | Purpose |
 | --- | --- |
-| `docs/authority-model.md` | Authority classes and required evidence. |
-| `docs/adal.md` | Administrative authority levels for host and system operations. |
-| `docs/cdel.md` | Delegated execution levels for containers and constrained runtimes. |
-| `docs/esal.md` | External service authority and custody levels. |
-| `docs/pcl.md` | Privacy and confidentiality levels. |
-| `docs/policy-gates.md` | Mandatory allow/defer/block gates. |
-| `docs/backup-and-rollback.md` | Backup checkpoints and rollback readiness. |
-| `docs/external-access-register.md` | Minimal register schema for external access. |
-| `docs/server-first-contact.md` | First-contact procedure for new servers. |
-| `docs/external-access-onboarding.md` | Onboarding workflow for external services. |
-| `docs/secrets-handling.md` | Public-safe secret handling rules. |
-| `docs/github-governance.md` | GitHub access governed as external access. |
-| `docs/governance-telemetry.md` | Decision, gate, and outcome telemetry. |
-| `skills/yellow-control-governance/SKILL.md` | Hermes-compatible governance skill entry point. |
-| `skills/yellow-control-governance/references/` | Packaged operational doctrine for the self-contained installable skill. |
+| `skills/yellow-control-governance/` | Installable Hermes-compatible skill package. |
+| `skills/yellow-control-governance/SKILL.md` | Skill entry point and Hermes metadata. |
+| `skills/yellow-control-governance/references/` | Packaged operational doctrine used by the installed skill. |
+| `skills/yellow-control-governance/templates/` | Public-safe YAML templates and schema starters for private runtime records. |
+| `skills/yellow-control-governance/references/hermes-backup-snapshot-policy.md` | Packaged governance for native Hermes backup and snapshot readiness. |
+| `docs/` | Human-facing mirrors and explanations for repository readers and maintainers. |
+| `CONTRIBUTING.md` | Contribution expectations. |
+| `SECURITY.md` | Public-safe security reporting guidance. |
+| `CHANGELOG.md` | Version history. |
 
-## Default decision posture
+## Installable Hermes skill
 
-Yellow-Control is conservative by default:
+`skills/yellow-control-governance/` is the installable skill package. Copy or install that directory into a Hermes-compatible skills location according to the runtime's skill-install workflow.
 
-1. Classify the action with ADAL, CDEL, ESAL, and PCL.
-2. Evaluate mandatory policy gates.
-3. Allow only when authority, scope, confidentiality, backup, rollback, external-access, and telemetry prerequisites are satisfied.
-4. Defer when evidence is incomplete.
-5. Block when the action violates policy or attempts to bypass governance.
+`skills/yellow-control-governance/references/` contains the packaged operational doctrine so the skill remains self-contained after installation. The top-level `docs/` directory mirrors relevant explanations for humans, but installed skill behavior must rely on the skill-local references.
 
-## Public-safe rule
+Yellow-Control uses Hermes-compatible skill metadata and non-secret `metadata.hermes.config` settings for runtime register locations. It does not declare required environment variables and does not require secrets to install.
 
-Do not commit credentials, tokens, private hostnames, private addresses, private runtime paths, internal incident records, or operational state. Use role names, fictional identifiers, and redacted examples.
+## Runtime registers and templates
+
+The public skill contains templates and schema only. Live runtime registers and decision records must remain private and outside the public skill package and public repository. Runtime register paths are configurable.
+
+| Template | Private runtime target |
+| --- | --- |
+| `skills/yellow-control-governance/templates/external-access-register.template.yaml` | External-access register at `yellow_control.external_access_register_path`. |
+| `skills/yellow-control-governance/templates/governance-decision-record.template.yaml` | Decision records under `yellow_control.governance_decision_log_dir`. |
+| `skills/yellow-control-governance/templates/server-first-contact-record.template.yaml` | Server-first-contact records under `yellow_control.server_first_contact_dir`. |
+
+Default private runtime locations are configurable through Hermes skill config:
+
+| Config key | Default |
+| --- | --- |
+| `yellow_control.external_access_register_path` | `~/.hermes/yellow-control/registers/external-access-register.yaml` |
+| `yellow_control.governance_decision_log_dir` | `~/.hermes/yellow-control/decision-records` |
+| `yellow_control.server_first_contact_dir` | `~/.hermes/yellow-control/server-first-contact` |
+
+Do not commit live register files, decision records, first-contact records, private evidence, or local runtime paths to the public repository.
+
+## Prerequisites
+
+| Requirement | Notes |
+| --- | --- |
+| Hermes-compatible runtime | Must already be installed and operating. Yellow-Control does not install Hermes. |
+| Git | Required for repository workflows. |
+| GitHub, GitLab, or similar | Required only when repository automation is used. |
+| Dedicated agent account or fork | Recommended for repository automation instead of borrowing a human maintainer session. |
+| Backup/checkpoint capability | Required before risky privileged, external, persistent, or runtime-governance actions. |
+| Optional integrations | Telegram, OpenWebUI, gateway, and dashboard integrations are optional runtime integrations, not Yellow-Control requirements. |
+| Optional package layer | External package management is a separate optional implementation layer for target-specific server packages. |
+
+## Native Hermes backup governance
+
+Yellow-Control does not implement or wrap Hermes backup. Local rollback/checkpoint hygiene uses native `hermes checkpoints` and the default governance recommendation `hermes checkpoints prune --retention-days 30 --max-size-mb 500`. Hermes runtime backup archives use native `hermes backup`, optionally `hermes backup -o <path>` or `hermes backup --quick --label <name>` when appropriate. Hermes updates use `hermes update --backup` or the native `updates.pre_update_backup: true` setting when owner policy requires full pre-update backup by default.
+
+Checkpoint pruning is not backup archive retention. Backup repositories and artifact stores are for private backup archives, manifests, and metadata, not raw `~/.hermes/checkpoints/` shadow stores. Backup archive retention is mandatory because unbounded archive growth can fill disk or repository storage. Yellow-Control only governs whether a backup or checkpoint is required, whether native or owner-approved mechanisms exist, whether targets are private, whether archive retention is approved, and what public-safe telemetry must be recorded.
+
+## Safety model
+
+Yellow-Control is conservative by default. Unknown authority, unknown confidentiality, missing external-access registration, missing rollback evidence, or unclear operator custody causes defer or block rather than silent execution.
+
+Public documentation and packaged references must use fictional identifiers, role names, placeholders, and redacted examples. Credentials, tokens, private keys, private hostnames, private addresses, private runtime paths, raw logs, and real register entries must stay out of the public repository.
+
+## Community / contributions
+
+Contributions should patch the existing governance layer rather than redesign it. Keep documentation in English, preserve metadata lines, keep examples generic and public-safe, and maintain alignment between `docs/` and `skills/yellow-control-governance/references/`.
+
+## Authorship and AI assistance
+
+Yellow-Control is authored by F.M. Robert Vergnes. This repository records AI assistance from ChatGPT / Codex in the document metadata lines. Compatibility with Hermes does not imply official approval, endorsement, or acceptance by Hermes or Nous Research.

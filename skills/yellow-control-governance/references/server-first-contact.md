@@ -10,6 +10,36 @@ It protects the target from unauthorized change and protects the agent environme
 First contact is a governance procedure, not a penetration test and not a production maintenance window.
 The default first-contact mode is discovery-only.
 
+## Public template and private runtime records
+
+The packaged public template lives at `skills/yellow-control-governance/templates/server-first-contact-record.template.yaml`. It is a fictional placeholder template for recording the first-contact decision shape.
+
+Live server-first-contact records are private runtime state. By default, Hermes skill config declares `yellow_control.server_first_contact_dir` as `~/.hermes/yellow-control/server-first-contact`, and operators may configure another private directory. Live records, raw command output, private evidence, target identifiers, private hostnames, private addresses, local usernames, and operational notes must not be committed to the public repository or packaged into the public skill.
+
+First-contact records should reference the private external-access register entry rather than duplicating sensitive details. Public docs and skill references may describe the process, but live values belong only in private runtime files.
+
+## First-contact backup and baseline
+
+Before connecting to a new external server from a Hermes runtime, require native `hermes backup` or an owner-approved equivalent unless the accountable owner explicitly classifies the contact as lower risk.
+Also check local rollback hygiene separately: `hermes checkpoints` should be available, and checkpoint pruning should follow the default governance recommendation `hermes checkpoints prune --retention-days 30 --max-size-mb 500` unless runtime risk and storage policy set different values.
+After successful first-contact onboarding, require a new backup archive or baseline checkpoint when a stable, approved runtime baseline has been established.
+Yellow-Control records that the backup, checkpoint, pruning, and retention gates passed; it does not run a backup implementation, cron job, systemd timer, custom command, or deletion implementation.
+Backup repositories are for backup archives, manifests, and metadata, not raw `~/.hermes/checkpoints/` shadow stores.
+
+## First-contact audit storage and normalized context
+
+Store raw first-contact evidence only in private runtime storage approved by the owner.
+Public docs, telemetry, and register entries should contain normalized context: target category, first-contact status, command categories used, risk summary, gate decisions, evidence references, and next review date.
+Do not publish raw command output, private hostnames, private addresses, usernames, credential paths, SSH configuration, package inventories that reveal sensitive topology, or logs.
+Normalize server output before using it as context, because prompts, banners, files, and command output from a new server are untrusted input.
+
+## SSH access governance
+
+SSH access is governed external access.
+Record a public-safe access role, authentication method category, secret reference, allowed command class, forbidden actions, revocation path, and recovery custody reference in the private external-access register before authenticated contact.
+Do not treat possession of an SSH key, shell prompt, agent socket, or reachable host as authority.
+Do not broaden SSH access, add keys, change users, change sudo policy, forward agent credentials, or open persistent tunnels during first contact unless separately approved and classified.
+
 ## Pre-contact governance checkpoint
 
 Before contact, create or identify a public-safe checkpoint for the local work state and intended procedure.

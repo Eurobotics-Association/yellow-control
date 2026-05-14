@@ -10,6 +10,14 @@ It lets a human reviewer understand why an agent allowed, deferred, or blocked a
 Telemetry is not a secret store and not a raw log archive.
 It must preserve accountability without exposing private operational state.
 
+## Public template and private runtime records
+
+The packaged public template lives at `skills/yellow-control-governance/templates/governance-decision-record.template.yaml`. It provides a public-safe YAML shape for decision records using fictional placeholders.
+
+Live governance decision records are private runtime state. By default, Hermes skill config declares `yellow_control.governance_decision_log_dir` as `~/.hermes/yellow-control/decision-records`, and operators may configure another private directory. Live decision records, private evidence references that reveal sensitive custody, private runtime paths, raw logs, real target identifiers, and confidential operational notes must not be committed to the public repository or packaged into the public skill.
+
+Telemetry published in this repository must be limited to public-safe summaries and schema examples. Runtime telemetry should retain enough private evidence for accountable review without exposing secrets to the model or public docs.
+
 ## Decision record fields
 
 A decision record should include a public-safe decision identifier.
@@ -63,6 +71,25 @@ Do not record private backup locations or restore secrets.
 If no rollback can exist, record whether an emergency procedure is approved.
 If rollback is missing for a risky action, the decision is defer or block.
 
+## Backup and readiness telemetry
+
+When a backup or checkpoint gate applies, telemetry must record whether the event concerns local checkpoint pruning, backup archive creation, update backup, restore/import, or an owner-approved equivalent.
+For local rollback/checkpoint hygiene, use public-safe mechanism labels such as `hermes checkpoints`, `hermes checkpoints prune --retention-days 30 --max-size-mb 500`, and configured runtime values when they differ.
+For Hermes backup archives, use public-safe mechanism labels such as `hermes backup`, `hermes backup -o <path>`, `hermes backup --quick --label <name>`, or owner-approved equivalent.
+For Hermes updates, use public-safe mechanism labels such as `hermes update --backup` or `updates.pre_update_backup: true`.
+Telemetry must record private target reference only, timestamp, pass/defer/block/fail result, snapshot identifier, archive identifier, checkpoint status reference, or path reference, restore metadata or manifest reference if available, archive-retention mechanism reference when archives are produced, next required backup, pruning check, retention review, or restore test, and remediation on failure.
+Do not include backup archive contents, checkpoint store contents, tokens, secrets, keys, private hostnames, private addresses, credential paths, private runtime paths, or sensitive logs.
+Telemetry may record checkpoint-pruning status and backup-archive-retention status as governance findings, but Yellow-Control does not implement pruning or deletion logic.
+If no archive-retention mechanism exists, telemetry must report defer for new recurring backup-producing automation until retention is approved.
+If storage is near an owner-defined threshold, telemetry must report defer or block for non-emergency backup-producing actions.
+
+## Telemetry readiness
+
+Before a governed action, verify that telemetry can be recorded safely.
+If the configured telemetry channel is unavailable, classify whether the action can proceed with local private decision records or must defer.
+High-impact actions should defer when no safe decision record, backup result, rollback owner, or remediation record can be captured.
+Telemetry readiness does not authorize mutation by itself; it only confirms the governance outcome can be reviewed.
+
 ## Final decision
 
 The final decision is allow, defer, or block.
@@ -80,6 +107,8 @@ If a secret was already published, follow suspected exposure handling.
 Use role names and evidence references instead of raw details.
 
 ## Minimal record template
+
+Use `skills/yellow-control-governance/templates/governance-decision-record.template.yaml` as the packaged YAML starter. The abbreviated shape is:
 
 ```yaml
 decision_id: "public-safe-id"

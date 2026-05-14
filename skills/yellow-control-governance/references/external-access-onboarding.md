@@ -61,6 +61,26 @@ Validate that secrets are available only through secure references.
 Validate that telemetry can be recorded without private data.
 Validate that external package use does not broaden scope.
 
+## External package management governance
+
+External package management is a separate optional implementation layer for target-specific packages, CLIs, SDKs, connectors, scanners, backup artifact uploaders, or SSH helpers.
+Yellow-Control may classify and gate package use, but it must not implement package installation, package update, backup transfer, or target-specific package management.
+Before package use or installation, classify ADAL, CDEL, ESAL, and PCL; verify owner approval, external package reference, backup and rollback evidence, secret handling, and telemetry readiness.
+Defer package installation when the package broadens authority, changes persistence, requires privileged access, or lacks rollback evidence.
+
+## SSH onboarding governance
+
+SSH onboarding must be registered as external access before authenticated use.
+Record only public-safe role and reference fields: access role, auth method category, secret custody reference, allowed command classes, forbidden actions, revocation path, accountable authority, and recovery custody reference.
+First SSH contact remains discovery-only unless owner and security authority approve mutation.
+Agent forwarding, key installation, sudo elevation, tunnel persistence, and remote package installation require separate classification and approval.
+
+## High-impact service backup readiness
+
+Before onboarding a high-impact external service, require native `hermes backup` or an owner-approved equivalent for the Hermes runtime that will hold configuration, sessions, skills, credentials, or persistent automation related to that service.
+Record only the backup mechanism and private target reference in telemetry.
+Do not copy backup archives or live register entries into Yellow-Control docs or the public skill.
+
 ## Execution handoff
 
 After onboarding passes, the agent may execute only the approved action class.

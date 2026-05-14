@@ -10,6 +10,14 @@ It exists to separate authority proof from operational access.
 A credential, shell, account session, or reachable endpoint is not enough.
 The register tells the agent what target class exists, what actions are allowed, what actions are forbidden, which roles are accountable, and where secret references are held without exposing secrets.
 
+## Public template and private runtime register
+
+The packaged public template lives at `skills/yellow-control-governance/templates/external-access-register.template.yaml`. It is a schema starter with fictional placeholders only.
+
+Live external-access register values are private runtime state. By default, Hermes skill config declares `yellow_control.external_access_register_path` as `~/.hermes/yellow-control/registers/external-access-register.yaml`, and operators may configure another private location. Live registers must not be committed to the public repository or packaged into the public skill.
+
+The public skill and repository contain templates, schema language, and public-safe examples only. Operational target entries, private hostnames, private addresses, local usernames, credential references that reveal sensitive custody, raw logs, and real approval records belong only in private runtime files.
+
 ## Register-first authority
 
 Register-first means the agent confirms or drafts a target record before authenticated or mutating access.
@@ -38,6 +46,7 @@ A repository may need ESAL for hosted service authority, PCL for content, and re
 | --- | --- |
 | target_id | Public-safe unique identifier for the register entry. |
 | target_type | Server, repository, API, SaaS, dashboard, webhook, identity provider, or other category. |
+| environment | Public-safe environment label, such as lab, staging, production, or redacted environment reference. |
 | hostname | Public-safe hostname category or redacted hostname reference. |
 | ip_address | Public-safe address category or redacted address reference. |
 | port | Port or port category when safe; otherwise redacted reference. |
@@ -64,11 +73,14 @@ A repository may need ESAL for hosted service authority, PCL for content, and re
 | recovery_custody_ref | Non-secret reference for recovery and revocation custody. |
 | notes | Public-safe notes only. |
 
-## Empty YAML template
+## Template
+
+Use `skills/yellow-control-governance/templates/external-access-register.template.yaml` as the packaged YAML starter. Copy it to the private runtime path before entering live values. The abbreviated shape is:
 
 ```yaml
 target_id: ""
 target_type: ""
+environment: ""
 hostname: ""
 ip_address: ""
 port: ""

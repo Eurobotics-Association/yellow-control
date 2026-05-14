@@ -1,0 +1,37 @@
+# Yellow-Control external-access register template.
+# Copy this template to a private runtime register location before use.
+# Live values must remain outside the public skill package and public repository.
+# Use fictional placeholders here; never commit real hostnames, IP addresses,
+# usernames, key paths, tokens, credentials, logs, or private runtime state.
+
+target_id: "example-target-id"
+target_type: "server | repository | api | saas | dashboard | webhook | account | other"
+environment: "example-environment"
+hostname: "placeholder-hostname.invalid"
+ip_address: "redacted-address-ref"
+port: "placeholder-port-or-category"
+access_user: "placeholder-role-or-account-class"
+auth_method: "ssh-key-reference | oauth | app-token-reference | sso | other"
+ssh_key_ref: "secret-ref/placeholder/ssh-key"
+api_key_ref: "secret-ref/placeholder/api-key"
+secret_location_ref: "secret-store-ref/placeholder"
+external_package_ref: "approved-package-or-connector-ref"
+adal_level: "ADAL-0 | ADAL-1 | ADAL-2 | ADAL-3 | ADAL-4"
+cdel_level: "CDEL-0 | CDEL-1 | CDEL-2 | CDEL-3 | CDEL-4"
+esal_level: "ESAL-0 | ESAL-1 | ESAL-2 | ESAL-3 | ESAL-4"
+pcl_level: "PCL-0 | PCL-1 | PCL-2 | PCL-3 | PCL-4"
+first_contact_status: "not_started | discovery_only | completed | blocked | not_applicable"
+first_contact_date: "YYYY-MM-DD-or-blank"
+last_contact_date: "YYYY-MM-DD-or-blank"
+last_audited_date: "YYYY-MM-DD-or-blank"
+last_audit_evidence_ref: "evidence-ref/placeholder/audit-summary"
+allowed_actions:
+  - "placeholder allowed action class"
+forbidden_actions:
+  - "placeholder forbidden action class"
+approval_required:
+  - "placeholder approval role"
+accountable_authority: "placeholder accountable role"
+operator: "placeholder operator role"
+recovery_custody_ref: "custody-ref/placeholder/recovery"
+notes: "Public-safe notes only. Put live details in the private runtime register."
