@@ -47,6 +47,7 @@ Live registers, decision records, first-contact records, raw evidence, real targ
 | `backup-and-rollback.md` | Preparing checkpoints, rollback plans, stop conditions, validation checks, first-contact readiness, runtime governance rollback, and failure handling. |
 | `hermes-backup-snapshot-policy.md` | Governing native `hermes checkpoints`, `hermes checkpoints prune --retention-days 30 --max-size-mb 500`, `hermes backup`, `hermes update --backup`, update backup settings, private backup targets, mandatory archive retention, weekly verification, and backup telemetry without implementing backup tooling. |
 | `runtime-deployment-pattern.md` | Deploying Yellow-Control to a real Hermes runtime, separating public package vs private runtime overlay, adapting private AGENTS/SOUL context, adding optional local policy gates or narrow wrappers, and validating doctrine vs private enforcement boundaries. |
+| `hermes-test-bench-validation-plan.md` | Planning public-safe non-production Hermes test-bench validation, including decision-only tests, first-contact/elevation checks, adversarial remote-output handling, and allow/defer/block acceptance criteria. |
 | `external-access-register.md` | Creating or validating register entries, required fields, secret references, server examples, service examples, and missing metadata outcomes. |
 | `server-first-contact.md` | Handling new or unknown servers, pre-contact checkpoint, authority, identity confirmation, hostile output risk, read-only baseline audit, and revoke path. |
 | `external-server-operations-control-plane.md` | Operating external-server governance flow, SSH reach-vs-authority controls, elevation boundaries, package-management references, and allow/defer/block execution decisions. |
@@ -71,6 +72,7 @@ Live registers, decision records, first-contact records, raw evidence, real targ
 | Publishing, logging, telemetry, or repository commits | `pcl.md`, `secrets-handling.md`, `github-governance.md`, `governance-telemetry.md` |
 | Persistent automation or scheduled operation | `authority-model.md`, `policy-gates.md`, `backup-and-rollback.md`, `esal.md`, `cdel.md` |
 | Runtime deployment and private enforcement alignment | `runtime-deployment-pattern.md`, `backup-and-rollback.md`, `hermes-backup-snapshot-policy.md`, `policy-gates.md`, `authority-model.md` |
+| Non-production Hermes validation bench planning | `hermes-test-bench-validation-plan.md`, `runtime-deployment-pattern.md`, `server-first-contact.md`, `adal.md`, `policy-gates.md` |
 
 ## Packaged-reference rule
 
