@@ -28,6 +28,15 @@ Hermes backup archives exclude `checkpoints/`.
 Do not treat a backup archive as a copy of the local checkpoint shadow store.
 Do not treat checkpoint pruning as backup archive retention.
 
+
+## Autonomy and local enforcement layering
+
+Yellow-Control determines and records whether backup/readiness evidence is required for the classified risk.
+Owner-approved local policy gates may enforce backup prerequisites on runtime-changing operations.
+Optional wrappers are private runtime overlay controls and must stay narrow, gating only their own known mutation flow.
+Local-only backup is degraded break-glass evidence unless owner-approved and explicitly documented in telemetry.
+Public Yellow-Control does not ship private backup scripts, private backup repositories, or runtime-specific enforcement wrappers.
+
 ## Checkpoint pruning is not backup archive retention
 
 `hermes checkpoints` manages `~/.hermes/checkpoints/`, the local shadow store used by `/rollback`.

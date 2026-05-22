@@ -24,6 +24,15 @@ Do not create a backup command under Yellow-Control, wrapper script, cron job, o
 Do not replace native Hermes backup, checkpoint pruning, import, or update backup behavior.
 Do not store Hermes backup archives or raw `~/.hermes/checkpoints/` shadow stores in this public repository or in the packaged public skill.
 
+
+## Autonomy and local enforcement layering
+
+Yellow-Control decides and records whether backup evidence is required for a requested action.
+Owner-approved local policy gates and wrappers may enforce backup/readiness behavior on the target runtime.
+Wrappers must remain narrow in scope and gate only their own known mutation flows.
+Local-only backup is degraded break-glass evidence unless explicitly owner-approved with logged reason.
+Public Yellow-Control must not ship private backup scripts, private backup repository paths, or runtime-private enforcement artifacts.
+
 ## Checkpoint pruning is not backup archive retention
 
 `hermes checkpoints` manages the local `~/.hermes/checkpoints/` shadow store used by `/rollback`.
