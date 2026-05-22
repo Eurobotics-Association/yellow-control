@@ -27,6 +27,21 @@ The canonical classifications are:
 | ESAL | External Service Authority Level | APIs, SaaS, repositories, dashboards, servers, accounts, and webhooks. |
 | PCL | Project Confidentiality Level | Information read, written, logged, transmitted, or published. |
 
+## Why this matters for SysOps, CyberOps, and SSH-based work
+
+Yellow-Control is designed for Hermes runtimes that may connect to external servers through SSH, APIs, repositories, dashboards, or service accounts and perform real operational work.
+
+Yellow-Control keeps a human-controlled governance plane around:
+
+- external server contact;
+- SSH access and credential custody;
+- delegated elevation such as sudo, constrained wrappers, service restarts, package actions, and recovery paths;
+- backup and rollback readiness;
+- allow/defer/block decisions before mutation.
+
+Possession of a shell, SSH key, token, dashboard session, or sudo-capable command is not authority by itself.
+Yellow-Control separates technical reach from accountable authority.
+
 ## What this is not
 
 Yellow-Control is not a runtime installer, package manager, secret store, project-management framework, skill registry, incident archive, or operational register repository. It does not contain private hosts, private paths, credentials, logs, real register entries, or Oscar-specific runtime material.

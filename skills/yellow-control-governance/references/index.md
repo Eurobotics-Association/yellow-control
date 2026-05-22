@@ -49,6 +49,7 @@ Live registers, decision records, first-contact records, raw evidence, real targ
 | `runtime-deployment-pattern.md` | Deploying Yellow-Control to a real Hermes runtime, separating public package vs private runtime overlay, adapting private AGENTS/SOUL context, adding optional local policy gates or narrow wrappers, and validating doctrine vs private enforcement boundaries. |
 | `external-access-register.md` | Creating or validating register entries, required fields, secret references, server examples, service examples, and missing metadata outcomes. |
 | `server-first-contact.md` | Handling new or unknown servers, pre-contact checkpoint, authority, identity confirmation, hostile output risk, read-only baseline audit, and revoke path. |
+| `external-server-operations-control-plane.md` | Operating external-server governance flow, SSH reach-vs-authority controls, elevation boundaries, package-management references, and allow/defer/block execution decisions. |
 | `external-access-onboarding.md` | Onboarding external targets through intake, classification, registration, approval, validation, execution handoff, and review. |
 | `secrets-handling.md` | Handling no-plaintext-secret policy, secret references, runtime injection, credential files, recovery custody, log leakage, and suspected exposure. |
 | `github-governance.md` | Governing GitHub or GitLab workflows, agent-owned accounts, forks, branches, pull requests, protected branches, force-push restrictions, and merge authority. |
@@ -62,7 +63,11 @@ Live registers, decision records, first-contact records, raw evidence, real targ
 | Sudo, package, service, network, identity, or recovery change | `adal.md`, `authority-model.md`, `backup-and-rollback.md`, `policy-gates.md`, `secrets-handling.md` |
 | Container, runner, CI, sandbox, or Docker socket work | `cdel.md`, `adal.md`, `pcl.md`, `backup-and-rollback.md`, `policy-gates.md` |
 | External API, SaaS, repository service, webhook, or account work | `esal.md`, `external-access-register.md`, `external-access-onboarding.md`, `secrets-handling.md`, `policy-gates.md` |
-| New or uncertain server contact | `server-first-contact.md`, `external-access-register.md`, `esal.md`, `adal.md`, `pcl.md`, `backup-and-rollback.md` |
+| New or uncertain server contact | `server-first-contact.md`, `external-server-operations-control-plane.md`, `external-access-register.md`, `esal.md`, `adal.md`, `pcl.md`, `backup-and-rollback.md` |
+| External server SSH operations | `external-server-operations-control-plane.md`, `server-first-contact.md`, `external-access-register.md`, `esal.md`, `adal.md`, `policy-gates.md` |
+| Privileged server operations and elevation paths | `external-server-operations-control-plane.md`, `adal.md`, `authority-model.md`, `backup-and-rollback.md`, `policy-gates.md` |
+| Package, service, systemd, sudo, or wrapper changes | `external-server-operations-control-plane.md`, `adal.md`, `backup-and-rollback.md`, `policy-gates.md`, `secrets-handling.md` |
+| External package-management integration | `external-server-operations-control-plane.md`, `esal.md`, `external-access-register.md`, `policy-gates.md` |
 | Publishing, logging, telemetry, or repository commits | `pcl.md`, `secrets-handling.md`, `github-governance.md`, `governance-telemetry.md` |
 | Persistent automation or scheduled operation | `authority-model.md`, `policy-gates.md`, `backup-and-rollback.md`, `esal.md`, `cdel.md` |
 | Runtime deployment and private enforcement alignment | `runtime-deployment-pattern.md`, `backup-and-rollback.md`, `hermes-backup-snapshot-policy.md`, `policy-gates.md`, `authority-model.md` |
