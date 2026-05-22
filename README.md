@@ -113,6 +113,14 @@ Yellow-Control does not implement or wrap Hermes backup. Local rollback/checkpoi
 
 Checkpoint pruning is not backup archive retention. Backup repositories and artifact stores are for private backup archives, manifests, and metadata, not raw `~/.hermes/checkpoints/` shadow stores. Backup archive retention is mandatory because unbounded archive growth can fill disk or repository storage. Yellow-Control only governs whether a backup or checkpoint is required, whether native or owner-approved mechanisms exist, whether targets are private, whether archive retention is approved, and what public-safe telemetry must be recorded.
 
+## Deploying on a real Hermes runtime
+
+This public repository provides the installable skill package, governance doctrine, and public-safe templates.
+Real runtime deployment still requires a private runtime overlay for local AGENTS/SOUL adaptation, private registers, private evidence, and owner-approved local enforcement implementation.
+
+Use `docs/runtime-deployment-pattern.md` for the deployment phases, governance boundaries, and validation checklist.
+Do not commit runtime registers, decision evidence, private paths, or other runtime-private operational material to this public repository.
+
 ## Safety model
 
 Yellow-Control is conservative by default. Unknown authority, unknown confidentiality, missing external-access registration, missing rollback evidence, or unclear operator custody causes defer or block rather than silent execution.
