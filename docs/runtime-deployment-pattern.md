@@ -7,6 +7,8 @@ Assisted-by: ChatGPT: GPT-5.5 Thinking; Codex
 
 This document explains how to deploy the public Yellow-Control skill package on a real Hermes runtime while keeping runtime-private enforcement and evidence outside this repository.
 
+For external server SSH/elevation governance flow details, see `docs/external-server-operations-control-plane.md`.
+
 ## Deployment boundary: public package vs private overlay
 
 Yellow-Control is a public-safe governance doctrine and installable Hermes-compatible skill package.

@@ -1,0 +1,41 @@
+# Example skeleton only. Fictional placeholders.
+packages:
+  - package_id: pkg-cli-falcon
+    package_type: cli
+    target_class:
+      - linux-app-node
+    approved_use:
+      - "Read-only diagnostics during approved maintenance windows"
+    forbidden_use:
+      - "Privilege escalation"
+      - "Unapproved data exfiltration"
+    required_approval:
+      owner: required
+      security: required
+    classification_expectation:
+      adal: "Typically low-to-medium unless privileged flags are used"
+      cdel: "N/A unless executed in delegated container context"
+      esal: "Depends on external service reach"
+      pcl: "At least internal handling for outputs"
+    rollback_requirement: "Must define uninstall/revert path before rollout"
+    external_package_ref: "private-pkg-repo://team-runtime/packages/pkg-cli-falcon@1.x"
+
+  - package_id: pkg-wrapper-aurora
+    package_type: wrapper
+    target_class:
+      - linux-control-node
+    approved_use:
+      - "Narrow owner-approved maintenance action"
+    forbidden_use:
+      - "General-purpose sudo shell"
+      - "Agent-writable execution path"
+    required_approval:
+      owner: required
+      security: required
+    classification_expectation:
+      adal: "High when wrapper touches service identity, auth, or system state"
+      cdel: "Evaluate if wrapper can invoke container runtime or socket"
+      esal: "Evaluate if wrapper reaches external services"
+      pcl: "Private evidence handling required for runtime outputs"
+    rollback_requirement: "Document remove/disable procedure and post-change validation"
+    external_package_ref: "private-pkg-repo://team-runtime/packages/pkg-wrapper-aurora@2.x"

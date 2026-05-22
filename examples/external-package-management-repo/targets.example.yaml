@@ -1,0 +1,32 @@
+# Example skeleton only. Fictional placeholders.
+targets:
+  - target_class: linux-app-node
+    allowed_package_types:
+      - cli
+      - sdk
+      - connector
+      - scanner
+    forbidden_package_types:
+      - wrapper
+    approved_use:
+      - "Application-layer diagnostics and controlled integrations"
+    forbidden_use:
+      - "Host auth-path mutation"
+    required_approval:
+      owner: required
+      security: conditional
+
+  - target_class: linux-control-node
+    allowed_package_types:
+      - system-package
+      - wrapper
+      - scanner
+    forbidden_package_types:
+      - connector
+    approved_use:
+      - "Owner-approved runtime maintenance"
+    forbidden_use:
+      - "Unreviewed privilege path changes"
+    required_approval:
+      owner: required
+      security: required
